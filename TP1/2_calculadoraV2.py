@@ -51,20 +51,16 @@ else:# Termina ejecución si la opción para el menú es inválida.
     exit()
 
 
-
-import numpy as np
-
-
 # Imprime resultados.
-if( opcion==1 ):
+if( opcion==1 ):# Suma.
     print("Su resultado es: a+b=%d" %(a+b))
-elif( opcion==2 ):
+elif( opcion==2 ):# Resta.
     print("Su resultado es: a-b=%d" %(a-b))
-elif( opcion==3 ):
+elif( opcion==3 ): # Multiplicación.
     print("Su resultado es: a*b=%d" %(a*b))
-elif( opcion==4 ):
+elif( opcion==4 ):# División
     print("Su resultado es: a/b=%f" %float(a/b))
-elif( opcion==5 ):
+elif( opcion==5 ): #Iteración.
     
     print("Su resultado es:", end=" ")
     if( opcionIter=='a' ):# Iteración de suma.
@@ -99,9 +95,9 @@ elif( opcion==5 ):
 
     print("%d" %resultado)
 
-elif( opcion==6 ):
+elif( opcion==6 ):# Producto punto.
 
-    if( opcionProdPunto=='a' ):
+    if( opcionProdPunto=='a' ):# Producto punto entre vectores.
         # Pasaje de string a vector de string.
         a = a.split(',')
         b = b.split(',')
@@ -120,6 +116,6 @@ elif( opcion==6 ):
         productoPunto = np.dot(np.array(a),np.array(b))
         print('El resultado es: a.b =', productoPunto)
         
-    else:
+    else:                      # Producto punto entre matrices.
         print("En contstrucciń")
 

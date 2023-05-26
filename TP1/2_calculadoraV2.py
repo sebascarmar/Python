@@ -1,5 +1,13 @@
 
 import numpy as np
+from os import system, name 
+
+
+def clear(): 
+    if name == 'nt': 
+        x = system('cls') 
+    else: 
+        x = system('clear') 
 
 # Imprime menú principal.
 print("********************* CALCULADORA *********************")
@@ -14,6 +22,9 @@ if( opcion==1 or opcion==2 or opcion==3 or opcion==4 ):# Ingreso de operandos pa
     b = int( input("Ingrese b=") )
 
 elif( opcion==5 ):# Opción de iteración.
+    # Limpieza de pantalla.
+    clear()
+
     # Imprime submenú de iteración.
     print("\n\tDesea:\n\t\ta-Sumar \n\t\tb-Restar \n\t\tc-Multiplicar")
     opcionIter = input("Ingrese una opcion: ")
@@ -28,6 +39,9 @@ elif( opcion==5 ):# Opción de iteración.
     b = int( input("Ingrese iter=") )
 
 elif( opcion==6 ):
+    # Limpieza de pantalla.
+    clear()
+
     # Imprime submenú de producto punto.
     print("\n\tDesea operar con:\n\t\ta-Vectores \n\t\tb-Matrices")
     opcionProdPunto = input("Ingrese una opcion: ")

@@ -3,6 +3,7 @@ import numpy as np
 from os import system, name 
 
 
+ ########################################### Definición de funciones ###########################################
 def clear(): 
     if name == 'nt': 
         x = system('cls') 
@@ -47,6 +48,7 @@ def ingresoMatriz(name):
     return vector
 
 
+ ######################################## Bucle principal del programa #########################################
 sigueEnPrograma = 1
 while( sigueEnPrograma==1 ):
 
@@ -58,11 +60,13 @@ while( sigueEnPrograma==1 ):
     opcion = int( input("Ingrese una opción: ") )
     
     
+    ######################################### Opción de no iteración ###########################################
     if( opcion==1 or opcion==2 or opcion==3 or opcion==4 ):# Ingreso de operandos para las operaciones no iterativas.
         a = int( input("\nIngrese a=") )
         b = int( input("Ingrese b=") )
-    
-    elif( opcion==5 ):# Opción de iteración.
+     
+     ######################################### Opción de iteración  ############################################
+    elif( opcion==5 ):
         # Limpieza de pantalla.
         clear()
             
@@ -75,6 +79,7 @@ while( sigueEnPrograma==1 ):
             a = int( input("\nIngrese step=") )
             b = int( input("Ingrese iter=") )
      
+     ####################################### Opción de producto punto  #########################################
     elif( opcion==6 ):
         # Limpieza de pantalla.
         clear()
@@ -83,7 +88,9 @@ while( sigueEnPrograma==1 ):
         print("Desea realizar el producto punto entre:\n\t\ta-Vectores \n\t\tb-Matrices")
         opcionProdPunto = input("Ingrese una opcion: ")
      
-        if( opcionProdPunto=='a' ):  # Producto punto entre vectores.
+        
+        #################################### Producto punto entre vectores #####################################
+        if( opcionProdPunto=='a' ):
             
             vectoresMismoTamaño=0
             while( vectoresMismoTamaño==0 ):
@@ -105,7 +112,8 @@ while( sigueEnPrograma==1 ):
                 a[i] = int(a[i])
                 b[i] = int(b[i])
             
-        elif( opcionProdPunto=='b' ):# Producto punto entre matrices.
+         #################################### Producto punto entre matrices #####################################
+        elif( opcionProdPunto=='b' ):
             matricesDimensionesCompatibles=0
             while( matricesDimensionesCompatibles==0 ):
                 a = ingresoMatriz('a')
@@ -130,7 +138,7 @@ while( sigueEnPrograma==1 ):
         exit()
     
     
-    # Imprime resultados.
+    ######################################### Impresión de resultado ###########################################
     if( opcion==1 ):# Suma.
         print("Su resultado es: a+b=%d" %(a+b))
     elif( opcion==2 ):# Resta.

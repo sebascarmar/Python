@@ -112,10 +112,18 @@ elif( opcion==6 ):
             b[i] = int(b[i])
         
     else:                      # Producto punto entre matrices.
+        matricesDimensionesCompatibles=0
+        while( matricesDimensionesCompatibles==0 ):
+            a = ingresoMatriz('a')
+            b = ingresoMatriz('b')
          
+            if( len(a)!=len(b[0]) ):
+                print("Los dimensiones de las matrices (m1xn1 y n2xm2) no son compatibles (m1!=m2).")
+            elif( len(a[0])!=len(b) ):
+                print("Los dimensiones de las matrices (m1xn1 y n2xm2) no son compatibles (n1!=n2).")
+            else:
+                matricesDimensionesCompatibles=1
         
-        print(len(a))
-        print(len(a[0]))
        # resultado = np.dot(a, a)
        # print(resultado)
        # matrix1 = np.asmatrix(a)

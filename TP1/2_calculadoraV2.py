@@ -46,8 +46,10 @@ def ingresoMatriz(name):
  
     return vector
 
+
 sigueEnPrograma = 1
 while( sigueEnPrograma==1 ):
+
     # Imprime menú principal.
     print("********************* CALCULADORA *********************")
     print("\t1-Sumar \n\t2-Restar \n\t3-Multiplicar \n\t4-Dividir \n\t5-Iterativo \n\t6-Producto punto")
@@ -63,34 +65,25 @@ while( sigueEnPrograma==1 ):
     elif( opcion==5 ):# Opción de iteración.
         # Limpieza de pantalla.
         clear()
-    
+            
         # Imprime submenú de iteración.
         print("Desea iterar con:\n\t\ta-Sumar \n\t\tb-Restar \n\t\tc-Multiplicar")
         opcionIter = input("Ingrese una opcion: ")
-    
-        # Termina ejecución si la opción para el submenú es inválida.
-        if( not(opcionIter=='a' or opcionIter=='b' or opcionIter=='c') ):
-            print("Opción inválida")
-            exit()
-        
+     
         # Ingreso de operandos para operaciones iterativas. También  formatea como int.
-        a = int( input("\nIngrese step=") )
-        b = int( input("Ingrese iter=") )
-    
+        if( opcionIter=='a' or opcionIter=='b' or opcionIter=='c' ):
+            a = int( input("\nIngrese step=") )
+            b = int( input("Ingrese iter=") )
+     
     elif( opcion==6 ):
         # Limpieza de pantalla.
         clear()
-    
+     
         # Imprime submenú de producto punto.
         print("Desea realizar el producto punto entre:\n\t\ta-Vectores \n\t\tb-Matrices")
         opcionProdPunto = input("Ingrese una opcion: ")
-    
-        # Termina ejecución si la opción para el submenú es inválida.
-        if( not(opcionProdPunto=='a' or opcionProdPunto=='b') ):
-            print("Opción inválida")
-            exit()
-    
-        if( opcionProdPunto=='a' ):# Producto punto entre vectores.
+     
+        if( opcionProdPunto=='a' ):  # Producto punto entre vectores.
             
             vectoresMismoTamaño=0
             while( vectoresMismoTamaño==0 ):
@@ -112,7 +105,7 @@ while( sigueEnPrograma==1 ):
                 a[i] = int(a[i])
                 b[i] = int(b[i])
             
-        else:                      # Producto punto entre matrices.
+        elif( opcionProdPunto=='b' ):# Producto punto entre matrices.
             matricesDimensionesCompatibles=0
             while( matricesDimensionesCompatibles==0 ):
                 a = ingresoMatriz('a')
@@ -127,7 +120,11 @@ while( sigueEnPrograma==1 ):
             
            # matrix1 = np.asmatrix(a) #Pasaje de array bidimensional a matriz
            # print(type(matrix1))
-    
+             
+        else:
+            print("Opción inválida")
+
+
     else:# Termina ejecución si la opción para el menú es inválida.
         print("Opción inválida")
         exit()
@@ -144,54 +141,58 @@ while( sigueEnPrograma==1 ):
         print("Su resultado es: a/b=%f" %float(a/b))
     elif( opcion==5 ): #Iteración.
         
-        print("Su resultado es:", end=" ")
-        if( opcionIter=='a' ):# Iteración de suma.
-            resultado = 0
-            
-            for i in range(b):
-                resultado += a
-                if( i<(b-1) ):
-                    print(a,end='+')
-                else:
-                    print(a,end='=')
-     
-        if( opcionIter=='b' ):# Iteración de la resta.
-            resultado = a
-            
-            for i in range(b):
-                resultado -= a
-                if( i<(b-1) ):
-                    print(a,end='-')
-                else:
-                    print(a,end='=')
-     
-        if( opcionIter=='c' ):# Iteración de la multiplicación.
-            resultado = 1
-            
-            for i in range(b):
-                resultado *= a
-                if( i<(b-1) ):
-                    print(a,end='*')
-                else:
-                    print(a,end='=')
-     
-        print("%d" %resultado)
+        if( opcionIter=='a' or opcionIter=='b' or opcionIter=='c' ):
+            print("Su resultado es:", end=" ")
+            if( opcionIter=='a' ):# Iteración de suma.
+                resultado = 0
+                
+                for i in range(b):
+                    resultado += a
+                    if( i<(b-1) ):
+                        print(a,end='+')
+                    else:
+                        print(a,end='=')
+         
+            if( opcionIter=='b' ):# Iteración de la resta.
+                resultado = a
+                
+                for i in range(b):
+                    resultado -= a
+                    if( i<(b-1) ):
+                        print(a,end='-')
+                    else:
+                        print(a,end='=')
+         
+            if( opcionIter=='c' ):# Iteración de la multiplicación.
+                resultado = 1
+                
+                for i in range(b):
+                    resultado *= a
+                    if( i<(b-1) ):
+                        print(a,end='*')
+                    else:
+                        print(a,end='=')
+         
+            print("%d" %resultado)
+         
+        else:
+            print("Opción inválida")
      
     elif( opcion==6 ):# Producto punto.
      
-        if( opcionProdPunto=='a' ):# Producto punto entre vectores.
+        if( opcionProdPunto=='a' ):  # Producto punto entre vectores.
             
             # Cálculo e impresión del resultado.
             productoPunto = np.dot(np.array(a),np.array(b))
             print('El resultado es: a.b =', productoPunto)
             
-        else:                      # Producto punto entre matrices.
+        elif( opcionProdPunto=='b' ):# Producto punto entre matrices.
             
             # Cálculo e impresión del resultado.
             productoPunto = np.dot(a,b)
             print('\nEl resultado es: a.b =\n', productoPunto)
     
-    if( input("\n\nPara salir del programa ingrese 0. Para continuar, cualquier tecla\n: ") != '0' ):
+    if( input("\n\nPara salir del programa ingrese 0. Para continuar, cualquier tecla:\n ") != '0' ):
         clear()
     else:
         sigueEnPrograma = 0

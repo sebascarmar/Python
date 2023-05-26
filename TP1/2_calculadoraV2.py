@@ -124,19 +124,8 @@ elif( opcion==6 ):
             else:
                 matricesDimensionesCompatibles=1
         
-       # resultado = np.dot(a, a)
-       # print(resultado)
-       # matrix1 = np.asmatrix(a)
-       # print(type(a))
-       # print(a)
+       # matrix1 = np.asmatrix(a) #Pasaje de array bidimensional a matriz
        # print(type(matrix1))
-       # print(matrix1)
-       # print("En construcción")
-       # resultado = np.dot(matrix1, matrix1)
-       # print(resultado)
-
-    #COMO CARGAR UN ARRAY BIDIMENSIONAL EN PYTHON
-    #REVISAR LOS 3 MODIFICADORES DE FORMATO VISTOS EN CLASE
 
 else:# Termina ejecución si la opción para el menú es inválida.
     print("Opción inválida")

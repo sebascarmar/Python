@@ -64,7 +64,7 @@ elif( opcion==5 ):# Opción de iteración.
     clear()
 
     # Imprime submenú de iteración.
-    print("\n\tDesea:\n\t\ta-Sumar \n\t\tb-Restar \n\t\tc-Multiplicar")
+    print("Desea iterar con:\n\t\ta-Sumar \n\t\tb-Restar \n\t\tc-Multiplicar")
     opcionIter = input("Ingrese una opcion: ")
 
     # Termina ejecución si la opción para el submenú es inválida.
@@ -81,7 +81,7 @@ elif( opcion==6 ):
     clear()
 
     # Imprime submenú de producto punto.
-    print("\n\tDesea operar con:\n\t\ta-Vectores \n\t\tb-Matrices")
+    print("Desea realizar el producto punto entre:\n\t\ta-Vectores \n\t\tb-Matrices")
     opcionProdPunto = input("Ingrese una opcion: ")
 
     # Termina ejecución si la opción para el submenú es inválida.

@@ -196,5 +196,8 @@ elif( opcion==6 ):# Producto punto.
         print('El resultado es: a.b =', productoPunto)
         
     else:                      # Producto punto entre matrices.
-        print("En contstrucciń")
+        
+        # Cálculo e impresión del resultado.
+        productoPunto = np.dot(a,b)
+        print('\nEl resultado es: a.b =\n', productoPunto)
 

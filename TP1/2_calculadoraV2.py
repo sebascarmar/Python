@@ -60,7 +60,47 @@ elif( opcion==6 ):
             b[i] = int(b[i])
         
     else:
-        print("En construcción")
+        
+        aux='0'
+        i=0
+        listaFilas = []
+        tamañoPrimerVector = 0
+        print("\nIngrese separando por comas ('x' para terminar)")
+        while( aux!='x' ):
+            aux = input("\tVector a%d=" %i)
+         
+            if( aux!='x'):
+                aux = aux.split(',')
+                
+                for j in range(len(aux)):
+                    aux[j] = int(aux[j])
+                
+                if( i==0 ):
+                    tamañoPrimerVector = len(aux)
+                
+                if( tamañoPrimerVector==len(aux) ):
+    
+                    listaFilas.append(aux)
+                    
+                    a = np.array([np.array(k) for k in listaFilas])
+               
+                    i+=1
+
+                else:
+                        print("\tEl tamaño del vector debe ser igual al primero ingresado")
+
+        print(len(a))
+        print(len(a[0]))
+       # resultado = np.dot(a, a)
+       # print(resultado)
+       # matrix1 = np.asmatrix(a)
+       # print(type(a))
+       # print(a)
+       # print(type(matrix1))
+       # print(matrix1)
+       # print("En construcción")
+       # resultado = np.dot(matrix1, matrix1)
+       # print(resultado)
 
     #COMO CARGAR UN ARRAY BIDIMENSIONAL EN PYTHON
     #REVISAR LOS 3 MODIFICADORES DE FORMATO VISTOS EN CLASE

@@ -9,6 +9,44 @@ def clear():
     else: 
         x = system('clear') 
 
+def ingresoMatriz(name):
+    aux='0'
+    i=0
+    listaFilas = []
+    tamañoPrimerVector = 0
+    
+    print("\nIngrese separando por comas ('x' para terminar)")
+    while( aux!='x' ):
+        print('\tVector', name, end='')
+        aux = input('%d=' %i)
+     
+        if( aux!='x'):
+            # Pasaje de lista a vector de string.
+            aux = aux.split(',')
+            
+            # Pasaje de lista de string a lista de int.
+            for j in range(len(aux)):
+                aux[j] = int(aux[j])
+            
+            # Almacena el tamaño de la 1er lista ingresada.
+            if( i==0 ):
+                tamañoPrimerVector = len(aux)
+            
+            # Impide que se ingrese un nuevo elemento a la lista si es de disnto tamaño.
+            if( tamañoPrimerVector==len(aux) ):
+             
+                listaFilas.append(aux)
+                
+                vector = np.array([np.array(k) for k in listaFilas])
+             
+                i+=1
+            
+            else:
+                    print("\tEl tamaño del vector debe ser igual al primero ingresado")
+ 
+    return vector
+
+
 # Imprime menú principal.
 print("********************* CALCULADORA *********************")
 print("\t1-Sumar \n\t2-Restar \n\t3-Multiplicar \n\t4-Dividir \n\t5-Iterativo \n\t6-Producto punto")
@@ -74,37 +112,7 @@ elif( opcion==6 ):
             b[i] = int(b[i])
         
     else:                      # Producto punto entre matrices.
-        
-        aux='0'
-        i=0
-        listaFilas = []
-        tamañoPrimerVector = 0
-        
-        print("\nIngrese separando por comas ('x' para terminar)")
-        while( aux!='x' ):
-            aux = input("\tVector a%d=" %i)
          
-            if( aux!='x'):
-                # Pasaje de lista a vector de string.
-                aux = aux.split(',')
-                
-                # Pasaje de lista de string a lista de int.
-                for j in range(len(aux)):
-                    aux[j] = int(aux[j])
-                
-                if( i==0 ):
-                    tamañoPrimerVector = len(aux)
-                
-                if( tamañoPrimerVector==len(aux) ):
-                 
-                    listaFilas.append(aux)
-                    
-                    a = np.array([np.array(k) for k in listaFilas])
-                 
-                    i+=1
-                
-                else:
-                        print("\tEl tamaño del vector debe ser igual al primero ingresado")
         
         print(len(a))
         print(len(a[0]))

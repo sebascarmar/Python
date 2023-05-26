@@ -37,14 +37,14 @@ elif( opcion==6 ):
         print("Opción inválida")
         exit()
 
-    if( opcionProdPunto=='a' ):
+    if( opcionProdPunto=='a' ):# Producto punto entre vectores.
         
         vectoresMismoTamaño=0
         while( vectoresMismoTamaño==0 ):
             a = input("\nIngrese, separado por comas, el vector a=")
             b = input("Ingrese, separado por comas, el vector b=")
             
-            # Pasaje de string a vector de string.
+            # Pasaje de lista a vector de string.
             a = a.split(',')
             b = b.split(',')
             
@@ -54,24 +54,27 @@ elif( opcion==6 ):
             else:
                 vectoresMismoTamaño=1
         
-        # Pasaje de string a int.
+        # Pasaje de lista de string a lista de int.
         for i in range(len(a)):
             a[i] = int(a[i])
             b[i] = int(b[i])
         
-    else:
+    else:                      # Producto punto entre matrices.
         
         aux='0'
         i=0
         listaFilas = []
         tamañoPrimerVector = 0
+        
         print("\nIngrese separando por comas ('x' para terminar)")
         while( aux!='x' ):
             aux = input("\tVector a%d=" %i)
          
             if( aux!='x'):
+                # Pasaje de lista a vector de string.
                 aux = aux.split(',')
                 
+                # Pasaje de lista de string a lista de int.
                 for j in range(len(aux)):
                     aux[j] = int(aux[j])
                 
@@ -79,16 +82,16 @@ elif( opcion==6 ):
                     tamañoPrimerVector = len(aux)
                 
                 if( tamañoPrimerVector==len(aux) ):
-    
+                 
                     listaFilas.append(aux)
                     
                     a = np.array([np.array(k) for k in listaFilas])
-               
+                 
                     i+=1
-
+                
                 else:
                         print("\tEl tamaño del vector debe ser igual al primero ingresado")
-
+        
         print(len(a))
         print(len(a[0]))
        # resultado = np.dot(a, a)

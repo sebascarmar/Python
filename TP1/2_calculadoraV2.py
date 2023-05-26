@@ -1,5 +1,8 @@
+
+import numpy as np
+
 # Imprime menú principal.
-print("******** CALCULADORA ********")
+print("********************* CALCULADORA *********************")
 print("\t1-Sumar \n\t2-Restar \n\t3-Multiplicar \n\t4-Dividir \n\t5-Iterativo \n\t6-Producto punto")
 
 # Ingreso de opción principal. Además formateado como int

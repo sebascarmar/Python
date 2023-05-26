@@ -38,8 +38,27 @@ elif( opcion==6 ):
         exit()
 
     if( opcionProdPunto=='a' ):
-        a = input("\nIngrese, separado por comas, el vector a=")
-        b = input("Ingrese, separado por comas, el vector b=")
+        
+        vectoresMismoTamaño=0
+        while( vectoresMismoTamaño==0 ):
+            a = input("\nIngrese, separado por comas, el vector a=")
+            b = input("Ingrese, separado por comas, el vector b=")
+            
+            # Pasaje de string a vector de string.
+            a = a.split(',')
+            b = b.split(',')
+            
+            # Validación de tamaños de los vectores.
+            if( len(a)!=len(b) ):
+                print("Los tamaños de los vectores no son iguales.")
+            else:
+                vectoresMismoTamaño=1
+        
+        # Pasaje de string a int.
+        for i in range(len(a)):
+            a[i] = int(a[i])
+            b[i] = int(b[i])
+        
     else:
         print("En construcción")
 
@@ -98,19 +117,6 @@ elif( opcion==5 ): #Iteración.
 elif( opcion==6 ):# Producto punto.
 
     if( opcionProdPunto=='a' ):# Producto punto entre vectores.
-        # Pasaje de string a vector de string.
-        a = a.split(',')
-        b = b.split(',')
-        
-        # Validación de tamaños de los vectores.
-        if( len(a)!=len(b) ):
-            print("Los tamaños de los vectores no son iguales.")
-            exit()
-        
-        # Pasaje de string a int.
-        for i in range(len(a)):
-            a[i] = int(a[i])
-            b[i] = int(b[i])
         
         # Cálculo e impresión del resultado.
         productoPunto = np.dot(np.array(a),np.array(b))

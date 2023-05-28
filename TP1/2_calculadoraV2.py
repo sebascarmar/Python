@@ -37,14 +37,13 @@ def ingresoMatriz(name):
             if( tamañoPrimerVector==len(aux) ):
              
                 listaFilas.append(aux)
-                
-                vector = np.array([np.array(k) for k in listaFilas])
              
                 i+=1
             
             else:
                     print("\tEl tamaño del vector debe ser igual al primero ingresado")
  
+    vector = np.array([np.array(k) for k in listaFilas])
     return vector
 
 

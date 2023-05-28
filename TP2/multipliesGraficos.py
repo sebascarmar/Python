@@ -11,53 +11,74 @@ def figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylab
 
     pl.figure(figsize=[14,14])
     pl.figure(numplot)
-    for i in range(len(x)):
-        pl.subplot(row, col, joinVec[i])
+    for i in range(4):
+        pl.subplot(row,col,joinVec[i])
         
         if( typeGraf[i]=='p' ):
-            pl.plot(x[i], y[i])
+            pl.plot(x[i], y[i], linewidth=1.0,)
         else:
             pl.stem(x[i], y[i])
         
-        pl.xlim( xlim[i] )
-        pl.ylim( ylim[i] )
+        pl.xlim(xlim[i])
+        pl.ylim(ylim[i])
         
-        pl.ylabel(xlabel)
-        pl.xlabel(ylabel)
+        pl.ylabel(ylabel)
+        pl.xlabel(xlabel)
+        
+        pl.grid()
+
+    #pl.plot(x[i],y[i],'rx-'label='Phase')
+    #pl.xlim(xlim[i])
+    #pl.ylim(ylim[i])
+    #pl.ylabel('Amplitud')
+    #pl.xlabel('Tiempo')
+    #pl.legend()
 
     if( show=="true" ):
         pl.show()
     
 
+###########################################################################################
 
-x = np.array([])
+x = []
 for i in range(4): #Esto sería para 4 gráficos
-    x = np.append(x, np.arange(0.,2.,0.01))
+    x.append(np.arange(0.,2.,0.01))
+
+#print(len(x))
+#print(len(x[0]))
+#print(type(x))
+#print(type(x[0]))
+#print(x[0])
 
 phase = 0.
 freq = 1.
-y = np.array([])
-for i in range(4): #Esto sería para 4 gráficos
-    y = np.append(y, np.sin(2.*np.pi*freq*x + phase))
+y=[]
+for i in range(len(x)): #Esto sería para 4 gráficos
+    auxY=np.sin(2.*np.pi*freq*x[0] + phase)
     phase += np.pi/10.
     freq += 1.
+    y.append(auxY)
 
-print(y)
+#print(len(y))
+#print(len(y[0]))
+#print(type(y))
+#print(type(y[0]))
+#print(y[0])
 
 row = 3
 col = 3
 
-joinVec=((1,2),3,(4,5,6),(7,8,9))
+joinVec=((1,2),3,(4,6),(7,9))
 
 numplot=1
 
 typeGraf=['s','p','p','s']
 
-xlim = [[0.,2.], [0.,2.], [0.,2.], [0.,2.]]
-ylim = [[-2.,2.], [-2.,2.], [-2.,2.], [-2.,2.]]
+xlim = ((0.,1.), (0.,2.), (0.,2.), (0.,0.5))
+ylim = ((-2.,2.), (-2.,2.), (-2.,2.), (-2.,2.))
 
-xlabel = "Amplitud"
-ylabel = "Tiempo"
+xlabel = "Tiempo"
+ylabel = "Amplitud"
 
 figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylabel, "true")
 

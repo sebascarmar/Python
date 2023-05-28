@@ -7,7 +7,29 @@ import numpy as np
 import matplotlib.pyplot as pl
 
 
+def figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylabel, show="False"):
+
+    pl.figure(figsize=[14,14])
+    pl.figure(numplot)
+    for i in range(len(x)):
+        pl.subplot(row, col, joinVec[i])
+        
+        if( typeGraf[i]=='p' ):
+            pl.plot(x[i], y[i])
+        else:
+            pl.stem(x[i], y[i])
+        
+        pl.xlim( xlim[i] )
+        pl.ylim( ylim[i] )
+        
+        pl.ylabel(xlabel)
+        pl.xlabel(ylabel)
+
+    if( show=="true" ):
+        pl.show()
     
+
+
 x = np.array([])
 for i in range(4): #Esto sería para 4 gráficos
     x = np.append(x, np.arange(0.,2.,0.01))
@@ -25,15 +47,20 @@ print(y)
 row = 3
 col = 3
 
-joinVec=[[1,2],3,[4,5,6],[7,8,9]]
+joinVec=((1,2),3,(4,5,6),(7,8,9))
 
-numPlot=1
+numplot=1
 
 typeGraf=['s','p','p','s']
 
-xlabel = 
+xlim = [[0.,2.], [0.,2.], [0.,2.], [0.,2.]]
+ylim = [[-2.,2.], [-2.,2.], [-2.,2.], [-2.,2.]]
 
-def figPlot(x, y, row, col, joinVec, numplot, show=False, typeGraf, xlim, ylim, xlabel, ylabel)
+xlabel = "Amplitud"
+ylabel = "Tiempo"
+
+figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylabel, "true")
+
 
 
 ##define las dimensiones de las figuras por defecto (en pulgadas)

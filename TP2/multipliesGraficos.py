@@ -82,7 +82,7 @@ print(len(joinVec))
 
 
 ############################### VALIDACION DEL joinVec ###################################################33
-if( len(joinVec)>=(row*col) ): #cantidad de elementos debe ser menor o igual al máximo (row*col)
+if( len(joinVec)>(row*col) ): #cantidad de elementos debe ser menor o igual al máximo (row*col)
     ingreseOtraVez=1
     
 else: #acceso a cada elemento de las agrupaciones. Se debe ver si son repetidos y si son horizontales

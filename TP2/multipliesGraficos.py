@@ -87,12 +87,12 @@ if( len(joinVec)>=(row*col) ): #cantidad de elementos debe ser menor o igual al 
     
 else: #acceso a cada elemento de las agrupaciones. Se debe ver si son repetidos y si son horizontales
     for aux in joinVec:
-    if( isinstance(aux, tuple) ):
-        if( len(aux) > 1 ):
-            for aux2 in aux:
-                print(aux2)
-    else:
-        print(aux)
+        if( isinstance(aux, tuple) ):
+            if( len(aux) > 1 ):
+                for aux2 in aux:
+                    print(aux2)
+        else:
+            print(aux)
     
 
 

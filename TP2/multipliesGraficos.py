@@ -27,12 +27,6 @@ def figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylab
         
         pl.grid()
 
-    #pl.plot(x[i],y[i],'rx-'label='Phase')
-    #pl.xlim(xlim[i])
-    #pl.ylim(ylim[i])
-    #pl.ylabel('Amplitud')
-    #pl.xlabel('Tiempo')
-    #pl.legend()
 
     if( show=="true" ):
         pl.show()
@@ -44,11 +38,6 @@ x = []
 for i in range(4): #Esto sería para 4 gráficos
     x.append(np.arange(0.,2.,0.01))
 
-#print(len(x))
-#print(len(x[0]))
-#print(type(x))
-#print(type(x[0]))
-#print(x[0])
 
 phase = 0.
 freq = 1.
@@ -59,16 +48,61 @@ for i in range(len(x)): #Esto sería para 4 gráficos
     freq += 1.
     y.append(auxY)
 
-#print(len(y))
-#print(len(y[0]))
-#print(type(y))
-#print(type(y[0]))
-#print(y[0])
+row = int(input("Ingrese el número de filas: "))
+col = int(input("\nIngrese el número de columnas: "))
 
-row = 3
-col = 3
+##################################################### INGRESO DE joinVec #################################################
+##########################################################################################################################
+# Paso 1: Solicitar al usuario los elementos de la tupla anidada
+ingresoAgrupaciones = input("Ingrese los elementos de la tupla anidada separados por comas y los elementos internos separados por espacios: ")
 
-joinVec=((1,2),3,(4,6),(7,9))
+# Paso 2: Dividir los elementos ingresados por comas y almacenarlos en una lista
+listaAgrupaciones = ingresoAgrupaciones.split(",")
+
+# Paso 3: Crear una lista para almacenar las tuplas internas
+tuplaInternaAgrupaciones = []
+
+# Paso 4: Recorrer la lista de elementos y dividir cada elemento interno por espacios para crear las tuplas internas
+#         y convertir los elementos individuales en enteros
+for elementoLista in listaAgrupaciones:
+    valores = elementoLista.split()
+    if len(valores) > 1:
+        tuplaAux = tuple(int(aux) for aux in valores)
+        tuplaInternaAgrupaciones.append(tuplaAux)
+    else:
+        elementoInt = int(valores[0])
+        tuplaInternaAgrupaciones.append(elementoInt)
+
+# Paso 5: Convertir la lista de tuplas internas en una tupla anidada
+joinVec = tuple(tuplaInternaAgrupaciones)
+
+# Imprimir la tupla anidada resultante
+print("La tupla anidada ingresada es:", joinVec)
+print(len(joinVec))
+
+
+############################### VALIDACION DEL joinVec ###################################################33
+if( len(joinVec)>=(row*col) ): #cantidad de elementos debe ser menor o igual al máximo (row*col)
+    ingreseOtraVez=1
+    
+else: #acceso a cada elemento de las agrupaciones. Se debe ver si son repetidos y si son horizontales
+    for aux in joinVec:
+    if( isinstance(aux, tuple) ):
+        if( len(aux) > 1 ):
+            for aux2 in aux:
+                print(aux2)
+    else:
+        print(aux)
+    
+
+
+
+#joinVec=((1,2),3,(4,6),(7,9))
+
+
+##########################################################################################################################
+
+
 
 numplot=1
 
@@ -82,70 +116,3 @@ ylabel = "Amplitud"
 
 figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylabel, "true")
 
-
-
-##define las dimensiones de las figuras por defecto (en pulgadas)
-#pl.rcParams['figure.figsize']= [16.0,10.0]
-#
-#
-#
-### Graficos usando matplotlib.pyplot
-#phase0 = 0.
-#phase1 = np.pi/2.
-#f0     = 2.
-#f1     = 2.
-#f2     = 4.
-#
-#t  = np.arange(0.,f0,0.01)
-#y0 = np.sin(2.*np.pi*f0*t + phase0)
-#y1 = np.sin(2.*np.pi*f1*t + phase1)
-#y2 = np.cos(2.*np.pi*f2*t + phase0)
-#
-#
-#
-#pl.figure(figsize=[14,14])
-#
-#pl.subplot(3,3,(1,3))
-#pl.plot(t,y0,'.-',linewidth=2.0,label='Phase: %1.2f'%phase0)
-#pl.ylabel('Amplitud')
-#pl.xlabel('Tiempo')
-#pl.legend()
-#pl.grid()
-#
-#pl.subplot(3,3,(4,7))
-#pl.plot(t,y1,'rx-',linewidth=1.0,label='Phase: %1.2f'%phase1)
-#pl.ylabel('Amplitud')
-#pl.xlabel('Tiempo')
-#pl.legend()
-#pl.grid()
-#
-#pl.subplot(3,3,5)
-#pl.stem(t,y2,'y',markerfmt='C1o')
-#pl.plot(t,y2,'g',linewidth=1.0,label='Phase: %1.2f'%phase0)
-#pl.ylabel('Amplitud')
-#pl.xlabel('Tiempo')
-#pl.xlim(0,0.5)
-#pl.legend()
-#pl.grid()
-#
-#pl.subplot(3,3,6)
-#pl.plot(t,y1,'.',linewidth=1.0,label='Phase: %1.2f'%phase1)
-#pl.ylabel('Amplitud')
-#pl.xlabel('Tiempo')
-#pl.legend()
-#pl.grid()
-#
-#pl.subplot(3,3,(8,9))
-#pl.plot(t,y1,'m+-',linewidth=1.0,label='Phase: %1.2f'%phase1)
-#pl.ylabel('Amplitud')
-#pl.xlabel('Tiempo')
-#pl.legend()
-#pl.grid()
-#pl.title('Sin')
-#
-### Guardando figuras en archivos
-#pl.savefig('grafica.eps')
-#pl.savefig('grafica.pdf')
-#pl.savefig('grafica.png')
-#
-#pl.show()

@@ -40,46 +40,35 @@ col = int(input("Ingrese el número de columnas: "))
 
 ##################################################### INGRESO DE joinVec #################################################
 ##########################################################################################################################
-# Paso 1: Solicitar al usuario los elementos de la tupla anidada
-ingresoAgrupaciones = input("Ingrese los elementos de la tupla anidada separados por comas y los elementos internos separados por espacios: ")
-
-# Paso 2: Dividir los elementos ingresados por comas y almacenarlos en una lista
-listaAgrupaciones = ingresoAgrupaciones.split(",")
-
-# Paso 3: Crear una lista para almacenar las tuplas internas
-tuplaInternaAgrupaciones = []
-
-# Paso 4: Recorrer la lista de elementos y dividir cada elemento interno por espacios para crear las tuplas internas
-#         y convertir los elementos individuales en enteros
-for elementoLista in listaAgrupaciones:
-    valores = elementoLista.split()
-    if len(valores) > 1:
-        tuplaAux = tuple(int(aux) for aux in valores)
-        tuplaInternaAgrupaciones.append(tuplaAux)
-    else:
-        elementoInt = int(valores[0])
-        tuplaInternaAgrupaciones.append(elementoInt)
-
-# Paso 5: Convertir la lista de tuplas internas en una tupla anidada
-joinVec = tuple(tuplaInternaAgrupaciones)
-
-# Imprimir la tupla anidada resultante
-print("La tupla anidada ingresada es:", joinVec)
-print(len(joinVec))
-
-
-############################### VALIDACION DEL joinVec ###################################################33
-if( len(joinVec)>(row*col) ): #cantidad de elementos debe ser menor o igual al máximo (row*col)
-    ingreseOtraVez=1
+ingreseOtraVez = 1
+while( ingreseOtraVez == 1 ):
+    # Paso 1: Solicitar al usuario los elementos de la tupla anidada
+    ingresoAgrupaciones = input("\nIngrese las ubicaciones de los subplots separadas por comas, y las celdas unificadas separadas por espacios: ")
     
-else: #acceso a cada elemento de las agrupaciones. Se debe ver si son repetidos y si son horizontales
-    for aux in joinVec:
-        if( isinstance(aux, tuple) ):
-            if( len(aux) > 1 ):
-                for aux2 in aux:
-                    print(aux2)
+    # Paso 2: Dividir los elementos ingresados por comas y almacenarlos en una lista
+    listaAgrupaciones = ingresoAgrupaciones.split(",")
+    
+    # Paso 3: Crear una lista para almacenar las tuplas internas
+    tuplaInternaAgrupaciones = []
+    
+    # Paso 4: Recorrer la lista de elementos y dividir cada elemento interno por espacios para crear las tuplas internas
+    #         y convertir los elementos individuales en enteros
+    for elementoLista in listaAgrupaciones:
+        valores = elementoLista.split()
+        if len(valores) > 1:
+            tuplaAux = tuple(int(aux) for aux in valores)
+            tuplaInternaAgrupaciones.append(tuplaAux)
         else:
-            print(aux)
+            elementoInt = int(valores[0])
+            tuplaInternaAgrupaciones.append(elementoInt)
+    
+    # Paso 5: Convertir la lista de tuplas internas en una tupla anidada
+    joinVec = tuple(tuplaInternaAgrupaciones)
+    
+    # Imprimir la tupla anidada resultante
+    #print("La tupla anidada ingresada es:", joinVec)
+    #print(len(joinVec))
+    
     
 
 

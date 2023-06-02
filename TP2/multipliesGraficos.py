@@ -36,7 +36,7 @@ def figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylab
 
 
 row = int(input("Ingrese el número de filas: "))
-col = int(input("\nIngrese el número de columnas: "))
+col = int(input("Ingrese el número de columnas: "))
 
 ##################################################### INGRESO DE joinVec #################################################
 ##########################################################################################################################

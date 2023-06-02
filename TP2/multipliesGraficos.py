@@ -70,6 +70,83 @@ while( ingreseOtraVez == 1 ):
     #print(len(joinVec))
     
     
+    ############################### VALIDACION DEL joinVec ###################################################33
+    ingreseOtraVez=0
+    cumpleCond1=True
+    cumpleCond2=True
+    cumpleCond3=True
+
+    if( len(joinVec)>(row*col) ): #cantidad de elementos debe ser menor o igual al máximo (row*col)
+        print("\nLa cantidad de gráficos requeridos supera la capacidad máxima de subplots ({}).".format(row*col),end=" ")
+        ingreseOtraVez=1
+        cumpleCond1=False
+  
+    if( cumpleCond1==True ): # Controla que ningún número de ubicación supere al máximo posible.
+       
+        for aux in joinVec:
+            
+            if( isinstance(aux, tuple) ): # Si es tupla.
+                
+                if( len(aux) <= 2 ): # si la agrupación de un gráfico es de solo dos elementos
+                    
+                    for aux2 in aux:
+                        if( aux2 > (row*col) ):
+                            print("\nValor de ubicación de suplot supera el máximo: {}.".format(aux),end=" ")
+                            ingreseOtraVez=1
+                            cumpleCond2=False
+                            break
+
+                else:                # No permite que se ingresen agrupaciones de más de 2 elementos.
+                    print("\nLa agrupación se expresa solo con dos ubicaciones (max y min), no como: {}.".format(aux),end=" ")
+                    ingreseOtraVez=1
+                    cumpleCond2=False
+             
+            else:                         # Si es int. 
+                
+                if( aux > (row*col) ):
+                    print("\nValor de ubicación de suplot supera el máximo: {}.".format(aux),end=" ")
+                    ingreseOtraVez=1
+                    cumpleCond2=False
+                    break
+   
+    if( cumpleCond2==True ): # Controla que las ubicaciones no sean repetiadas.
+       
+        arrayAux = np.arange(1, row*col+1 , 1)
+        
+        for aux in joinVec:
+            
+            if( isinstance(aux, tuple) ): # Si es tupla.
+                
+                for aux2 in aux:
+                    contador=1
+                    for i in range(len(arrayAux)):
+                        if( aux2 == arrayAux[i] ):
+                            arrayAux[i]=0
+                            break # Sin este continua iterando y al final entra en la otra condición aunque se correcta la tupla
+                        elif( contador == len(arrayAux) ):
+                            print("\nUbicación repetida: {}.".format(aux),end=" ")
+                            ingreseOtraVez=1
+                            cumpleCond3=False
+                            break
+                        
+                        contador+=1
+             
+            else:                         # Si es int. 
+                contador=1
+                for i in range(len(arrayAux)):
+                    if( aux == arrayAux[i] ):
+                        arrayAux[i]=0
+                        break
+                    elif( contador == len(arrayAux) ):
+                        print("\nUbicación repetida: {}.".format(aux),end=" ")
+                        ingreseOtraVez=1
+                        cumpleCond3=False
+                        break
+                    
+                    contador+=1
+            
+        
+
 
 
 

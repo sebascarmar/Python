@@ -170,7 +170,9 @@ for i in range(len(x)): #Esto sería para 4 gráficos
     y.append(auxY)
 
 
-numplot=1
+##########################################################################################################################
+
+numplot = int(input("Ingrese el identificador numplot="))
 
 typeGraf=['s','p','p','s']
 

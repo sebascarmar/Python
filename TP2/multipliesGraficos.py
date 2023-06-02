@@ -34,19 +34,6 @@ def figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylab
 
 ###########################################################################################
 
-x = []
-for i in range(4): #Esto sería para 4 gráficos
-    x.append(np.arange(0.,2.,0.01))
-
-
-phase = 0.
-freq = 1.
-y=[]
-for i in range(len(x)): #Esto sería para 4 gráficos
-    auxY=np.sin(2.*np.pi*freq*x[0] + phase)
-    phase += np.pi/10.
-    freq += 1.
-    y.append(auxY)
 
 row = int(input("Ingrese el número de filas: "))
 col = int(input("\nIngrese el número de columnas: "))
@@ -102,6 +89,19 @@ else: #acceso a cada elemento de las agrupaciones. Se debe ver si son repetidos 
 
 ##########################################################################################################################
 
+x = []
+for i in range(len(joinVec)): #Esto sería para 4 gráficos
+    x.append(np.arange(0.,5.,0.01))
+
+
+phase = 0.
+freq = 1.
+y=[]
+for i in range(len(x)): #Esto sería para 4 gráficos
+    auxY=np.sin(2.*np.pi*freq*x[0] + phase)
+    phase += np.pi/10.
+    freq += 1.
+    y.append(auxY)
 
 
 numplot=1

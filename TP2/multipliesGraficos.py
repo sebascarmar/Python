@@ -202,10 +202,59 @@ def ingresoYValidacionTiposDeGraficos( lenJoinVec ):
 #typeGraf=['s','p','p','s']
 
 typeGraf = ingresoYValidacionTiposDeGraficos( len(joinVec) )
-##########################################################################################################################
 
-xlim = ((0.,1.), (0.,2.), (0.,2.), (0.,0.5))
-ylim = ((-2.,2.), (-2.,2.), (-2.,2.), (-2.,2.))
+##########################################################################################################################
+def ingresoDeLimitesDeEje( nombreEje ):
+    ingresoRangos = input("\nIngrese los extremos del eje {} separados por espacios. Separe con comas cada par: ".format(nombreEje))
+
+    listaDeRangos = ingresoRangos.split(",")
+
+    tuplaInternaRangos = []
+
+    for elementoLista in listaDeRangos:
+        valorFlotante = elementoLista.split()
+        tuplaAux = tuple(float(aux) for aux in valorFlotante)
+        tuplaInternaRangos.append( tuplaAux )
+
+    limitesEje = tuple( tuplaInternaRangos )
+
+    return limitesEje
+
+
+def validaRangosDeEje( limitesDeEje, lenJoinVec ):
+
+    if( len(limitesDeEje)==lenJoinVec ): # Verifica que el número de rangos ingresados se corresponda con el núm. de gráficos.
+
+        for rango in limitesDeEje:
+            if( len(rango)==2 ): # Verifcia que cada rango para verificar que tengo límite superior e inferior.
+                flagAux = False
+            else:                # Si no posee dos límites, no valida.
+                print("\nCada rango debe poseer 2 elementos (extremo inf y sup)",end="")
+                flagAux = True
+                break
+    else:                                # Si no coincide con el número de gráficos, no valida.
+        print("\nLa cantidad de rangos que debe ingresar es: {}".format(lenJoinVec),end="")
+        flagAux = True
+
+    return flagAux
+
+
+
+
+ingreseRangosXDeNuevo = True
+while( ingreseRangosXDeNuevo==True ):
+    xlim = ingresoDeLimitesDeEje("x")
+    ingreseRangosXDeNuevo = validaRangosDeEje(xlim, len(joinVec))
+
+ingreseRangosYDeNuevo = True
+while( ingreseRangosYDeNuevo==True ):
+    ylim = ingresoDeLimitesDeEje("y")
+    ingreseRangosYDeNuevo = validaRangosDeEje(ylim, len(joinVec))
+
+#xlim = ((0.,1.), (0.,2.), (0.,2.), (0.,0.5))
+#ylim = ((-2.,2.), (-2.,2.), (-2.,2.), (-2.,2.))
+
+##########################################################################################################################
 
 xlabel = "Tiempo"
 ylabel = "Amplitud"

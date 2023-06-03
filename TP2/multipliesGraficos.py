@@ -101,28 +101,24 @@ def graficar( ):
 
     
 def ingresoDelJoinVec( ):
-    # Paso 1: Solicitar al usuario los elementos de la tupla anidada
     ingresoAgrupaciones = input("\nIngrese las ubicaciones de los subplots separadas por comas, y las celdas unificadas separadas por espacios: ")
     
-    # Paso 2: Dividir los elementos ingresados por comas y almacenarlos en una lista
     listaAgrupaciones = ingresoAgrupaciones.split(",")
     
-    # Paso 3: Crear una lista para almacenar las tuplas internas
     tuplaInternaAgrupaciones = []
     
-    # Paso 4: Recorrer la lista de elementos y dividir cada elemento interno por espacios para crear las tuplas internas
-    #         y convertir los elementos individuales en enteros
-    for elementoLista in listaAgrupaciones:
+    for elementoLista in listaAgrupaciones: # Recorre lista elemento a elemento
         valores = elementoLista.split()
-        if len(valores) > 1:
+        if len(valores) > 1: # Si elelemento es una tupla de más de 1 elemento.
             tuplaAux = tuple(int(aux) for aux in valores)
             tuplaInternaAgrupaciones.append(tuplaAux)
-        else:
+        else:                # Si el elemento es un int.
             elementoInt = int(valores[0])
             tuplaInternaAgrupaciones.append(elementoInt)
     
-    # Paso 5: Convertir la lista de tuplas internas en una tupla anidada
+    # Convierte la lista de tuplas internas en una tupla anidada.
     joinVecAux = tuple(tuplaInternaAgrupaciones)
+
     return joinVecAux
 
 

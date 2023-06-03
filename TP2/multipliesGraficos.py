@@ -172,9 +172,37 @@ for i in range(len(x)): #Esto sería para 4 gráficos
 
 ##########################################################################################################################
 
-numplot = int(input("Ingrese el identificador numplot="))
+numplot = int(input("\nIngrese el identificador numplot="))
 
-typeGraf=['s','p','p','s']
+##########################################################################################################################
+
+def ingresoYValidacionTiposDeGraficos( lenJoinVec ):
+    
+    tiposDeGraficosCorrectos = False
+    while( tiposDeGraficosCorrectos==False ):
+     
+        ingresoTiposDeGraf = input("\nIngrese los tipos de graficos separado por comas (s:stem y p:plot): ")
+        typeGrafAux = ingresoTiposDeGraf.split(",")
+     
+        if( len(typeGrafAux)==lenJoinVec ): # Verifica que la cantidad de elem. ingresados se corresponda con la cant. de graf.
+            
+            for tipoIndividual in typeGrafAux:   # Recorre lo ingresado para detectar algún tipo de gráfico erróneo.
+                
+                if( tipoIndividual=='s' or tipoIndividual=='p' ):
+                    tiposDeGraficosCorrectos=True
+                else:
+                    print("\nTipo de gráfico no válido:",tipoIndividual,end="")
+                    tiposDeGraficosCorrectos=False
+                    break
+            
+        else:
+            print("\nDebe ingresar {} tipos de gráficos.".format(lenJoinVec),end=" ")
+
+    return typeGrafAux
+#typeGraf=['s','p','p','s']
+
+typeGraf = ingresoYValidacionTiposDeGraficos( len(joinVec) )
+##########################################################################################################################
 
 xlim = ((0.,1.), (0.,2.), (0.,2.), (0.,0.5))
 ylim = ((-2.,2.), (-2.,2.), (-2.,2.), (-2.,2.))

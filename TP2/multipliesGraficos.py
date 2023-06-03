@@ -134,7 +134,7 @@ def validaCantidadDeGraficasMenorACeldasTotales( joinVec, row, col, cumpleCond1A
     return cumpleCond1Aux
 
 
-def validaUbicacionNoSupereElMaximoPosible( joinVecm, row, col, cumpleCond2Aux ):
+def validaUbicacionNoSupereElMaximoPosible( joinVec, row, col, cumpleCond2Aux ):
     for aux in joinVec:
         
         if( isinstance(aux, tuple) ): # Si es tupla.

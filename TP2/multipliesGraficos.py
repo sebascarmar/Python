@@ -11,7 +11,7 @@ def figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylab
 
     pl.figure(figsize=[14,14])
     pl.figure(numplot)
-    for i in range(4):
+    for i in range(len(joinVec)):
         pl.subplot(row,col,joinVec[i])
         
         if( typeGraf[i]=='p' ):

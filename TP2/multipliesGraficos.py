@@ -1,11 +1,14 @@
-# Grafica en la misma pagina, sino abre una ventana con qt5
-#%matplotlib inline
-#%matplotlib qt5
-
+############################################################################################
+#                             IMPORTACION DE BIBLIOTECAS                                  ##
+############################################################################################
 
 import numpy as np
 import matplotlib.pyplot as pl
 
+
+############################################################################################
+#                          DEFINICIÓN DE FUNCIONES                                        ##
+############################################################################################
 
 def figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylabel, show=False):
 
@@ -214,11 +217,8 @@ def ingresoYValidacionTiposDeGraficos( lenJoinVec ):
             print("\nDebe ingresar {} tipos de gráficos.".format(lenJoinVec),end=" ")
 
     return typeGrafAux
-#typeGraf=['s','p','p','s']
 
-typeGraf = ingresoYValidacionTiposDeGraficos( len(joinVec) )
 
-##########################################################################################################################
 def ingresoDeLimitesDeEje( nombreEje ):
     ingresoRangos = input("\nIngrese los extremos del eje {} separados por espacios. Separe con comas cada par: ".format(nombreEje))
 
@@ -254,7 +254,67 @@ def validaRangosDeEje( limitesDeEje, lenJoinVec ):
     return flagAux
 
 
+############################################################################################
+#                                PROGRAMA PRINCIPAL                                       ##
+############################################################################################
 
+#********** Ingreso de la cantidad de filas y columndas de la Figura **********************#
+
+row = int(input("Ingrese el número de filas: "))
+col = int(input("Ingrese el número de columnas: "))
+
+
+#********************** Ingreso y validacion del joinVec **********************************#
+
+cumpleCond1=False
+cumpleCond2=False
+cumpleCond3=False
+while( cumpleCond1==False or cumpleCond2==False or cumpleCond3==False ):
+
+    joinVec = ingresoDelJoinVec(  )
+    
+    ingreseOtraVez=0
+    cumpleCond1=True
+    cumpleCond2=True
+    cumpleCond3=True
+
+    cumpleCond1 = validaCantidadDeGraficasMenorACeldasTotales( joinVec, row, col, cumpleCond1 )
+  
+    if( cumpleCond1==True ): # Controla que ningún número de ubicación supere al máximo posible.
+        cumpleCond2 = validaUbicacionNoSupereElMaximoPosible( joinVec, row, col, cumpleCond2 )
+   
+    if( cumpleCond1==True and cumpleCond2==True ): # Controla que las ubicaciones no sean repetiadas.
+        cumpleCond3 = validaUbicacionesNoRepetidas( joinVec, row, col, cumpleCond3 )
+
+
+#********************* Generación de los valores de x e y para graficar ********************#
+
+x = []
+for i in range(len(joinVec)): #Esto sería para 4 gráficos
+    x.append(np.arange(0.,5.,0.01))
+
+
+phase = 0.
+freq = 1.
+y=[]
+for i in range(len(x)): #Esto sería para 4 gráficos
+    auxY=np.sin(2.*np.pi*freq*x[0] + phase)
+    phase += np.pi/10.
+    freq += 1.
+    y.append(auxY)
+
+
+#********************* Ingreso del identificador de la figura ******************************#
+
+numplot = int(input("\nIngrese el identificador numplot="))
+
+
+#********************* Ingreso y validación de los tipos de gráficos ***********************#
+
+typeGraf = ingresoYValidacionTiposDeGraficos( len(joinVec) )
+
+
+#************** Ingreso y validación de los rangos de los ejes a mostrar *******************#
 
 ingreseRangosXDeNuevo = True
 while( ingreseRangosXDeNuevo==True ):
@@ -266,23 +326,21 @@ while( ingreseRangosYDeNuevo==True ):
     ylim = ingresoDeLimitesDeEje("y")
     ingreseRangosYDeNuevo = validaRangosDeEje(ylim, len(joinVec))
 
-#xlim = ((0.,1.), (0.,2.), (0.,2.), (0.,0.5))
-#ylim = ((-2.,2.), (-2.,2.), (-2.,2.), (-2.,2.))
 
-##########################################################################################################################
+#*********************** Ingreso de las etiquietas de los ejes *****************************#
 
-#xlabel = "Tiempo"
-#ylabel = "Amplitud"
 xlabel = input("\nIngrese la etiqueta del eje horizontal: ")
 ylabel = input("\nIngrese la etiqueta del eje vertical: ")
 
-##########################################################################################################################
+
+#********************* Ingreso de habilitación para ver el gráfico o no ********************#
 
 ingresoShowGraph = input("\nIngrese si desea mostrar la figura (Si o No): ")
 if( ingresoShowGraph.lower()=='si' ):
     show = True
 else:
     show = False
+
 
 ##########################################################################################################################
 

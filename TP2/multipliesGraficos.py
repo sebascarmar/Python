@@ -258,95 +258,68 @@ def validaRangosDeEje( limitesDeEje, lenJoinVec ):
     return flagAux
 
 
+def figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylabel, show=False):
+
+    pl.figure(figsize=[14,14])
+    pl.figure(numplot)
+    for i in range(len(joinVec)):
+        pl.subplot(row,col,joinVec[i])
+        
+        if( typeGraf[i]=='p' ):
+            pl.plot(x[i], y[i], linewidth=1.0,)
+        else:
+            pl.stem(x[i], y[i])
+        
+        pl.xlim(xlim[i])
+        pl.ylim(ylim[i])
+        
+        pl.grid()
+        
+        # Selecciona la ubicación del subplot para saber si corresponde poner xlabel o ylabel.
+        if( isinstance(joinVec[i],tuple) ):
+            auxTupla = joinVec[i]
+            celdaUbi = auxTupla[0]
+        else:
+            celdaUbi = joinVec[i]
+        
+        # Define si corresponde la ylabel para el subplot en particular.
+        mod = celdaUbi%col
+        if( mod==1 ):
+            pl.ylabel(ylabel)
+        
+        # Define si corresponde la xlabel para el subplot en particular.
+        filaInfMin = col*(row-1)+1
+        filaInfMax = row*col
+        if(  (celdaUbi>=filaInfMin) and (celdaUbi<=filaInfMax) ): 
+            pl.xlabel(xlabel)
+
+
+    if( show==True ):
+        pl.show()
+
+
+
 ############################################################################################
 #                                PROGRAMA PRINCIPAL                                       ##
 ############################################################################################
 
-#********** Ingreso de la cantidad de filas y columndas de la Figura **********************#
+parametrosParaGraficar = graficar( )
 
-row = int(input("Ingrese el número de filas: "))
-col = int(input("Ingrese el número de columnas: "))
-
-
-#********************** Ingreso y validacion del joinVec **********************************#
-
-cumpleCond1=False
-cumpleCond2=False
-cumpleCond3=False
-while( cumpleCond1==False or cumpleCond2==False or cumpleCond3==False ):
-
-    joinVec = ingresoDelJoinVec(  )
-    
-    ingreseOtraVez=0
-    cumpleCond1=True
-    cumpleCond2=True
-    cumpleCond3=True
-
-    cumpleCond1 = validaCantidadDeGraficasMenorACeldasTotales( joinVec, row, col, cumpleCond1 )
-  
-    if( cumpleCond1==True ): # Controla que ningún número de ubicación supere al máximo posible.
-        cumpleCond2 = validaUbicacionNoSupereElMaximoPosible( joinVec, row, col, cumpleCond2 )
-   
-    if( cumpleCond1==True and cumpleCond2==True ): # Controla que las ubicaciones no sean repetiadas.
-        cumpleCond3 = validaUbicacionesNoRepetidas( joinVec, row, col, cumpleCond3 )
+x       = parametrosParaGraficar[0]
+y       = parametrosParaGraficar[1]
+row     = parametrosParaGraficar[2]  
+col     = parametrosParaGraficar[3]
+joinVec = parametrosParaGraficar[4]
+numplot = parametrosParaGraficar[5]
+typeGraf= parametrosParaGraficar[6]
+xlim    = parametrosParaGraficar[7]
+ylim    = parametrosParaGraficar[8]
+xlabel  = parametrosParaGraficar[9]
+ylabel  = parametrosParaGraficar[10]
+show    = parametrosParaGraficar[11]
 
 
-#********************* Generación de los valores de x e y para graficar ********************#
-
-x = []
-for i in range(len(joinVec)): #Esto sería para 4 gráficos
-    x.append(np.arange(0.,5.,0.01))
-
-
-phase = 0.
-freq = 1.
-y=[]
-for i in range(len(x)): #Esto sería para 4 gráficos
-    auxY=np.sin(2.*np.pi*freq*x[0] + phase)
-    phase += np.pi/10.
-    freq += 1.
-    y.append(auxY)
-
-
-#********************* Ingreso del identificador de la figura ******************************#
-
-numplot = int(input("\nIngrese el identificador numplot="))
-
-
-#********************* Ingreso y validación de los tipos de gráficos ***********************#
-
-typeGraf = ingresoYValidacionTiposDeGraficos( len(joinVec) )
-
-
-#************** Ingreso y validación de los rangos de los ejes a mostrar *******************#
-
-ingreseRangosXDeNuevo = True
-while( ingreseRangosXDeNuevo==True ):
-    xlim = ingresoDeLimitesDeEje("x")
-    ingreseRangosXDeNuevo = validaRangosDeEje(xlim, len(joinVec))
-
-ingreseRangosYDeNuevo = True
-while( ingreseRangosYDeNuevo==True ):
-    ylim = ingresoDeLimitesDeEje("y")
-    ingreseRangosYDeNuevo = validaRangosDeEje(ylim, len(joinVec))
-
-
-#*********************** Ingreso de las etiquietas de los ejes *****************************#
-
-xlabel = input("\nIngrese la etiqueta del eje horizontal: ")
-ylabel = input("\nIngrese la etiqueta del eje vertical: ")
-
-
-#********************* Ingreso de habilitación para ver el gráfico o no ********************#
-
-ingresoShowGraph = input("\nIngrese si desea mostrar la figura (Si o No): ")
-if( ingresoShowGraph.lower()=='si' ):
-    show = True
-else:
-    show = False
-
-
-##########################################################################################################################
 
 figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylabel, show)
+
 

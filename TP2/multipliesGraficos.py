@@ -15,7 +15,7 @@ def graficar( ):
     #********** Ingreso de la cantidad de filas y columndas de la Figura **********************#
     
     row = int(input("Ingrese el número de filas: "))
-    col = int(input("Ingrese el número de columnas: "))
+    col = int(input("\nIngrese el número de columnas: "))
     
     
     #********************** Ingreso y validacion del joinVec **********************************#

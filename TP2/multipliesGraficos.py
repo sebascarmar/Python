@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as pl
 
 
-def figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylabel, show="False"):
+def figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylabel, show=False):
 
     pl.figure(figsize=[14,14])
     pl.figure(numplot)
@@ -28,7 +28,7 @@ def figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylab
         pl.grid()
 
 
-    if( show=="true" ):
+    if( show==True ):
         pl.show()
     
 
@@ -258,6 +258,13 @@ while( ingreseRangosYDeNuevo==True ):
 
 xlabel = "Tiempo"
 ylabel = "Amplitud"
+ingresoShowGraph = input("\nIngrese si desea mostrar la figura (Si o No): ")
+if( ingresoShowGraph.lower()=='si' ):
+    show = True
+else:
+    show = False
 
-figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylabel, "true")
+##########################################################################################################################
+
+figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylabel, show)
 

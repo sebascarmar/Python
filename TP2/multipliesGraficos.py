@@ -22,10 +22,25 @@ def figPlot(x, y, row, col, joinVec, numplot, typeGraf, xlim, ylim, xlabel, ylab
         pl.xlim(xlim[i])
         pl.ylim(ylim[i])
         
-        pl.ylabel(ylabel)
-        pl.xlabel(xlabel)
-        
         pl.grid()
+        
+        # Selecciona la ubicación del subplot para saber si corresponde poner xlabel o ylabel.
+        if( isinstance(joinVec[i],tuple) ):
+            auxTupla = joinVec[i]
+            celdaUbi = auxTupla[0]
+        else:
+            celdaUbi = joinVec[i]
+        
+        # Define si corresponde la ylabel para el subplot en particular.
+        mod = celdaUbi%col
+        if( mod==1 ):
+            pl.ylabel(ylabel)
+        
+        # Define si corresponde la xlabel para el subplot en particular.
+        filaInfMin = col*(row-1)+1
+        filaInfMax = row*col
+        if(  (celdaUbi>=filaInfMin) and (celdaUbi<=filaInfMax) ): 
+            pl.xlabel(xlabel)
 
 
     if( show==True ):
@@ -256,8 +271,13 @@ while( ingreseRangosYDeNuevo==True ):
 
 ##########################################################################################################################
 
-xlabel = "Tiempo"
-ylabel = "Amplitud"
+#xlabel = "Tiempo"
+#ylabel = "Amplitud"
+xlabel = input("\nIngrese la etiqueta del eje horizontal: ")
+ylabel = input("\nIngrese la etiqueta del eje vertical: ")
+
+##########################################################################################################################
+
 ingresoShowGraph = input("\nIngrese si desea mostrar la figura (Si o No): ")
 if( ingresoShowGraph.lower()=='si' ):
     show = True

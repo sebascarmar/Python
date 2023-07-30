@@ -25,16 +25,16 @@ def escribePuertoSerie():
     print('\t multiplot:   para ejecutar dicho script')
     print('\t exit:        para salir\n\t')
     data = input("\t > ")
-    ser.write(data.encode())
 
+    pSerie.write(data.encode()) # Función que envía por puerto serie byte a byte lo ingresado.
 
 #______________________________________________________________________________________________________________#
 
 def leePuertoSerie():
     aux = ''
-    while ser.inWaiting() > 0:
-        read_data = ser.read(1)
         aux += read_data.decode()
+    while pSerie.inWaiting() > 0: # Lee puerto serie hasta que no hallan más datos por leer. Lo anexa en 'aux'.
+        inByte = pSerie.read(1)
 
     return aux
 
@@ -43,20 +43,12 @@ def leePuertoSerie():
 ############################################## Programa Principal ##############################################
 #**************************************************************************************************************#
 
-ser = serial.serial_for_url('loop://', timeout=1)
 
-# ser = serial.Serial(
-#     port     = '/dev/ttyUSB1',      #Configurar con el puerto
-#     baudrate = 9600,
-#     parity   = serial.PARITY_NONE,
-#     stopbits = serial.STOPBITS_ONE,
-#     bytesize = serial.EIGHTBITS
-# )
+pSerie = serial.serial_for_url('loop://', timeout=1)
 
-ser.isOpen()
-ser.timeout=None
-ser.flushInput()
-ser.flushOutput()
+pSerie.timeout=None  # No espera tiempo alguno por datos.
+pSerie.flushInput()  # Limpia buffer de entrada.
+pSerie.flushOutput() # Limpia buffer de salida.
 
 
 while (1):
@@ -74,8 +66,8 @@ while (1):
         clear()
      
     elif(dataIn == 'exit'):
-        if ser.isOpen():
-            ser.close()
+        if pSerie.isOpen():
+            pSerie.close()
         break
      
     else:                         # Opción por defecto.

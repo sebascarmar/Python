@@ -56,17 +56,17 @@ while (1):
     escribePuertoSerie()
     clear()
     
-    dataIn = leePuertoSerie()
+    inData = leePuertoSerie()
     
-    if (dataIn == 'calculadora'):
+    if (inData == 'calculadora'): # Opción 1 del menú.
         calculadora.start()
         clear()
      
-    elif(dataIn == 'multiplot'):
+    elif(inData == 'multiplot'):  # Opción 2 del menú.
         multiplesGraficos.start()
         clear()
      
-    elif(dataIn == 'exit'):
+    elif(inData == 'exit'):       # Opción de salir del programa.
         if pSerie.isOpen():
             pSerie.close()
         break

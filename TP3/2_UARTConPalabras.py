@@ -10,12 +10,13 @@ from os import system, name
 ########################################### Definición de funciones ############################################
 #**************************************************************************************************************#
 
-def clear(): 
+def clear():  # Función que permite limpiar la pantalla.
     if name == 'nt': 
         x = system('cls') 
     else: 
         x = system('clear') 
 
+#______________________________________________________________________________________________________________#
 
 def escribePuertoSerie():
     print('Ingrese alguno de estos comandos para ser enviados por puerto serie:')
@@ -26,6 +27,8 @@ def escribePuertoSerie():
     ser.write(data.encode())
 
 
+#______________________________________________________________________________________________________________#
+
 def leePuertoSerie():
     aux = ''
     while ser.inWaiting() > 0:
@@ -33,6 +36,7 @@ def leePuertoSerie():
         aux += read_data.decode()
 
     return aux
+
 
 #**************************************************************************************************************#
 ############################################## Programa Principal ##############################################
@@ -73,5 +77,5 @@ while (1):
             ser.close()
         break
      
-    else:
+    else:                         # Opción por defecto.
         print('Dato no válido')

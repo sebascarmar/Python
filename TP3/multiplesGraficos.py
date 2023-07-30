@@ -12,6 +12,8 @@ import matplotlib.pyplot as pl
 ############################################################################################
 
 def graficar( ):
+    print("********************* MULTI-PLOT **********************")
+
     #********** Ingreso de la cantidad de filas y columndas de la Figura **********************#
     
     row = int(input("Ingrese el número de filas: "))

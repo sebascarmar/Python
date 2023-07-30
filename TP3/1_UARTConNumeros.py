@@ -32,9 +32,9 @@ def escribePuertoSerie():
 
 def leePuertoSerie():
     aux = ''
-    while ser.inWaiting() > 0:
-        read_data = ser.read(1)
-        aux += read_data.decode()
+    while pSerie.inWaiting() > 0: # Lee puerto serie hasta que no hallan más datos por leer. Lo anexa en 'aux'.
+        inByte = pSerie.read(1)
+        aux += inByte.decode()
 
     return aux
 
@@ -62,7 +62,7 @@ while (1):
     escribePuertoSerie()
     clear()
     
-    dataIn = leePuertoSerie()
+    inData = leePuertoSerie()
     
     if (inData == '1'):     # Opción 1 del menú.
         calculadora.start()

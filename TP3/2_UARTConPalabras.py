@@ -32,9 +32,9 @@ def escribePuertoSerie():
 
 def leePuertoSerie():
     aux = ''
-        aux += read_data.decode()
     while pSerie.inWaiting() > 0: # Lee puerto serie hasta que no hallan más datos por leer. Lo anexa en 'aux'.
         inByte = pSerie.read(1)
+        aux += inByte.decode()
 
     return aux
 

@@ -43,15 +43,9 @@ def leePuertoSerie():
 ############################################## Programa Principal ##############################################
 #**************************************************************************************************************#
 
-ser = serial.serial_for_url('loop://', timeout=1)
+clear()
 
-# ser = serial.Serial(
-#     port     = '/dev/ttyUSB1',      #Configurar con el puerto
-#     baudrate = 9600,
-#     parity   = serial.PARITY_NONE,
-#     stopbits = serial.STOPBITS_ONE,
-#     bytesize = serial.EIGHTBITS
-# )
+pSerie = serial.serial_for_url('loop://', timeout=1)
 
 pSerie.timeout=None  # No espera tiempo alguno por datos.
 pSerie.flushInput()  # Limpia buffer de entrada.

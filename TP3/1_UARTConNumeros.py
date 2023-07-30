@@ -19,12 +19,12 @@ def clear():  # Función que permite limpiar la pantalla.
 #______________________________________________________________________________________________________________#
 
 def escribePuertoSerie():
+    print('********************* ESCRITURA EN PUERTO SERIE *********************')
     print('Ingrese alguno de estos comandos para ser enviados por puerto serie:')
-    print('\t 1: para ejecutar la calculadora')
-    print('\t 2: para ejecutar el multi-plot')
+    print('\t 1:    para ejecutar la calculadora')
+    print('\t 2:    para ejecutar el multi-plot')
     print('\t exit: para salir\n\t')
     data = input("\t > ")
-    ser.write(data.encode())
 
     pSerie.write(data.encode()) # Función que envía por puerto serie byte a byte lo ingresado.
 

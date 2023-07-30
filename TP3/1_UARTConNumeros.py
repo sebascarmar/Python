@@ -10,12 +10,13 @@ from os import system, name
 ########################################### Definición de funciones ############################################
 #**************************************************************************************************************#
 
-def clear(): 
+def clear():  # Función que permite limpiar la pantalla.
     if name == 'nt': 
         x = system('cls') 
     else: 
         x = system('clear') 
 
+#______________________________________________________________________________________________________________#
 
 def escribePuertoSerie():
     print('Ingrese alguno de estos comandos para ser enviados por puerto serie:')
@@ -25,6 +26,9 @@ def escribePuertoSerie():
     data = input("\t > ")
     ser.write(data.encode())
 
+    pSerie.write(data.encode()) # Función que envía por puerto serie byte a byte lo ingresado.
+
+#______________________________________________________________________________________________________________#
 
 def leePuertoSerie():
     aux = ''
@@ -33,6 +37,7 @@ def leePuertoSerie():
         aux += read_data.decode()
 
     return aux
+
 
 #**************************************************************************************************************#
 ############################################## Programa Principal ##############################################
@@ -48,10 +53,9 @@ ser = serial.serial_for_url('loop://', timeout=1)
 #     bytesize = serial.EIGHTBITS
 # )
 
-ser.isOpen()
-ser.timeout=None
-ser.flushInput()
-ser.flushOutput()
+pSerie.timeout=None  # No espera tiempo alguno por datos.
+pSerie.flushInput()  # Limpia buffer de entrada.
+pSerie.flushOutput() # Limpia buffer de salida.
 
 
 while (1):
@@ -60,18 +64,18 @@ while (1):
     
     dataIn = leePuertoSerie()
     
-    if (dataIn == '1'):
+    if (inData == '1'):     # Opción 1 del menú.
         calculadora.start()
         clear()
      
-    elif(dataIn == '2'):
+    elif(inData == '2'):    # Opción 2 del menú.
         multiplesGraficos.start()
         clear()
      
-    elif(dataIn == 'exit'):
-        if ser.isOpen():
-            ser.close()
+    elif(inData == 'exit'): # Opción de salir del programa.
+        if pSerie.isOpen():
+            pSerie.close()
         break
      
-    else:
+    else:                   # Opción por defecto.
         print('Dato no válido')

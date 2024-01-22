@@ -13,15 +13,15 @@ from tool._fixedInt import *
 ##  ipython nbconvert --to latex --post PDF <Name.ipynb>
 
 ## Parametros generales
-T     = 1.0/21.0e9      # Periodo de baudio
+T     = 1.0/1.0e9       # Periodo de baudio
 Nsymb = 1000            # Numero de simbolos
-os    = 4               # Oversampling
+os    = 8               # Oversampling
 ## Parametros de la respuesta en frecuencia
 Nfreqs = 256            # Cantidad de frecuencias
 
 ## Parametros del filtro de caida cosenoidal
-beta   = [0.0,0.5,0.99] # Roll-Off
-Nbauds = 8              # Cantidad de baudios del filtro
+beta   = [0.0,0.5,1.0]  # Roll-Off
+Nbauds = 16             # Cantidad de baudios del filtro
 ## Parametros funcionales
 Ts = T/os               # Frecuencia de muestreo
 

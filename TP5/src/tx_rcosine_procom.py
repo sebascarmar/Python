@@ -306,15 +306,15 @@ plt.show()
 # In[13]:
 
 
-symb_out0I = np.convolve(rc0_0,zsymbI,'same'); symb_out0Q = np.convolve(rc0_0,zsymbQ,'same')
-symb_out1I = np.convolve(rc0_5,zsymbI,'same'); symb_out1Q = np.convolve(rc0_5,zsymbQ,'same')
-symb_out2I = np.convolve(rc1_0,zsymbI,'same'); symb_out2Q = np.convolve(rc1_0,zsymbQ,'same')
+symb_out_B00I = np.convolve(rc0_0,zsymbI,'same'); symb_out_B00Q = np.convolve(rc0_0,zsymbQ,'same')
+symb_out_B05I = np.convolve(rc0_5,zsymbI,'same'); symb_out_B05Q = np.convolve(rc0_5,zsymbQ,'same')
+symb_out_B10I = np.convolve(rc1_0,zsymbI,'same'); symb_out_B10Q = np.convolve(rc1_0,zsymbQ,'same')
 
 plt.figure(figsize=[10,6])
 plt.subplot(2,1,1)
-plt.plot(symb_out0I,'r-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta[0])
-plt.plot(symb_out1I,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta[1])
-plt.plot(symb_out2I,'k-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta[2])
+plt.plot(symb_out_B00I,'r-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta[0])
+plt.plot(symb_out_B05I,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta[1])
+plt.plot(symb_out_B10I,'k-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta[2])
 plt.xlim(1000,1250)
 plt.grid(True)
 plt.legend()
@@ -322,9 +322,9 @@ plt.xlabel('Muestras')
 plt.ylabel('Magnitud')
 
 plt.subplot(2,1,2)
-plt.plot(symb_out0Q,'r-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta[0])
-plt.plot(symb_out1Q,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta[1])
-plt.plot(symb_out2Q,'k-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta[2])
+plt.plot(symb_out_B00Q,'r-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta[0])
+plt.plot(symb_out_B05Q,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta[1])
+plt.plot(symb_out_B10Q,'k-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta[2])
 plt.xlim(1000,1250)
 plt.grid(True)
 plt.legend()
@@ -332,7 +332,7 @@ plt.xlabel('Muestras')
 plt.ylabel('Magnitud')
 
 #plt.figure(figsize=[10,6])
-#plt.plot(np.correlate(symbolsI,2*(symb_out0I[3:len(symb_out0I):int(os)]>0.0)-1,'same'))
+#plt.plot(np.correlate(symbolsI,2*(symb_out_B00I[3:len(symb_out_B00I):int(os)]>0.0)-1,'same'))
 
 plt.show()
 
@@ -363,14 +363,14 @@ def eyediagram(data, n, offset, period):
 # In[15]:
 
 
-eyediagram(symb_out0I[100:len(symb_out0I)-100],os,5,Nbauds)
-eyediagram(symb_out0Q[100:len(symb_out0Q)-100],os,5,Nbauds)
+eyediagram(symb_out_B00I[100:len(symb_out_B00I)-100],os,5,Nbauds)
+eyediagram(symb_out_B00Q[100:len(symb_out_B00Q)-100],os,5,Nbauds)
 
-eyediagram(symb_out1I[100:len(symb_out1I)-100],os,5,Nbauds)
-eyediagram(symb_out1Q[100:len(symb_out1Q)-100],os,5,Nbauds)
+eyediagram(symb_out_B05I[100:len(symb_out_B05I)-100],os,5,Nbauds)
+eyediagram(symb_out_B05Q[100:len(symb_out_B05Q)-100],os,5,Nbauds)
 
-eyediagram(symb_out2I[100:len(symb_out2I)-100],os,5,Nbauds)
-eyediagram(symb_out2Q[100:len(symb_out2Q)-100],os,5,Nbauds)
+eyediagram(symb_out_B10I[100:len(symb_out_B10I)-100],os,5,Nbauds)
+eyediagram(symb_out_B10Q[100:len(symb_out_B10Q)-100],os,5,Nbauds)
 
 plt.show()
 
@@ -388,8 +388,8 @@ plt.show()
 
 offset = 6
 plt.figure(figsize=[6,6])
-plt.plot(symb_out0I[100+offset:len(symb_out0I)-(100-offset):int(os)],
-         symb_out0Q[100+offset:len(symb_out0Q)-(100-offset):int(os)],
+plt.plot(symb_out_B00I[100+offset:len(symb_out_B00I)-(100-offset):int(os)],
+         symb_out_B00Q[100+offset:len(symb_out_B00Q)-(100-offset):int(os)],
              '.',linewidth=2.0)
 plt.xlim((-2, 2))
 plt.ylim((-2, 2))
@@ -398,8 +398,8 @@ plt.xlabel('Real')
 plt.ylabel('Imag')
 
 plt.figure(figsize=[6,6])
-plt.plot(symb_out1I[100+offset:len(symb_out1I)-(100-offset):int(os)],
-         symb_out1Q[100+offset:len(symb_out1Q)-(100-offset):int(os)],
+plt.plot(symb_out_B05I[100+offset:len(symb_out_B05I)-(100-offset):int(os)],
+         symb_out_B05Q[100+offset:len(symb_out_B05Q)-(100-offset):int(os)],
              '.',linewidth=2.0)
 plt.xlim((-2, 2))
 plt.ylim((-2, 2))
@@ -408,8 +408,8 @@ plt.xlabel('Real')
 plt.ylabel('Imag')
 
 plt.figure(figsize=[6,6])
-plt.plot(symb_out2I[100+offset:len(symb_out2I)-(100-offset):int(os)],
-         symb_out2Q[100+offset:len(symb_out2Q)-(100-offset):int(os)],
+plt.plot(symb_out_B10I[100+offset:len(symb_out_B10I)-(100-offset):int(os)],
+         symb_out_B10Q[100+offset:len(symb_out_B10Q)-(100-offset):int(os)],
              '.',linewidth=2.0)
 plt.xlim((-2, 2))
 plt.ylim((-2, 2))

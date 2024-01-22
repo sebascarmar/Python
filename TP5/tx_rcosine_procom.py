@@ -49,40 +49,45 @@ def rcosine(beta, Tbaud, oversampling, Nbauds, Norm):
         return (t_vect,y_vect)
 
 
+###########################################################################################
+#                                 Respuesta temporal                                      #
+###########################################################################################
+
 # In[3]:
 
+### Calculo de tres pulsos con diferente roll-off
+(t,aux_rc0_0) = rcosine(beta[0], T,os,Nbauds,Norm=False)
+(t,aux_rc0_5) = rcosine(beta[1], T,os,Nbauds,Norm=False)
+(t,aux_rc1_0) = rcosine(beta[2], T,os,Nbauds,Norm=False)
 
-### Calculo de tres pusos con diferente roll-off
-(t,rc0) = rcosine(beta[0], T,os,Nbauds,Norm=False)
-(t,rc1) = rcosine(beta[1], T,os,Nbauds,Norm=False)
-(t,rc2) = rcosine(beta[2], T,os,Nbauds,Norm=False)
+(rc0_0, rc0_5, rc1_0) = floatToFixedPoint(aux_rc0_0, aux_rc0_5, aux_rc1_0)
 
-print (np.sum(rc0**2),np.sum(rc1**2),np.sum(rc2**2))
+#print (np.sum(rc0_0**2),np.sum(rc0_5**2),np.sum(rc1_0**2))
 
 ### Generacion de las graficas
 plt.figure(figsize=[14,7])
-plt.plot(t,rc0,'ro-',linewidth=2.0,label=r'$\beta=0.0$')
-plt.plot(t,rc1,'gs-',linewidth=2.0,label=r'$\beta=0.5$')
-plt.plot(t,rc2,'k^-',linewidth=2.0,label=r'$\beta=1.0$')
+plt.plot(t,rc0_0,'ro-',linewidth=2.0,label=r'$\beta=0.0$')
+plt.plot(t,rc0_5,'gs-',linewidth=2.0,label=r'$\beta=0.5$')
+plt.plot(t,rc1_0,'k^-',linewidth=2.0,label=r'$\beta=1.0$')
 plt.legend()
 plt.grid(True)
-#plt.xlim(0,len(rc0)-1)
+#plt.xlim(0,len(rc0_0)-1)
 plt.xlabel('Muestras')
 plt.ylabel('Magnitud')
 
 symb00    = np.zeros(int(os)*3+1);symb00[os:len(symb00)-1:int(os)] = 1.0
-rc0Symb00 = np.convolve(rc0,symb00);
-rc1Symb00 = np.convolve(rc1,symb00);
-rc2Symb00 = np.convolve(rc2,symb00);
+rc0_0Symb00 = np.convolve(rc0_0,symb00);
+rc0_5Symb00 = np.convolve(rc0_5,symb00);
+rc1_0Symb00 = np.convolve(rc1_0,symb00);
 
 offsetPot = os*((Nbauds//2)-1) + int(os/2)*(Nbauds%2) + 0.5*(os%2 and Nbauds%2)
 
 plt.figure(figsize=[14,7])
 plt.subplot(3,1,1)
-plt.plot(np.arange(0,len(rc0)),rc0,'r.-',linewidth=2.0,label=r'$\beta=0.0$')
-plt.plot(np.arange(os,len(rc0)+os),rc0,'k.-',linewidth=2.0,label=r'$\beta=0.0$')
+plt.plot(np.arange(0,len(rc0_0)),rc0_0,'r.-',linewidth=2.0,label=r'$\beta=0.0$')
+plt.plot(np.arange(os,len(rc0_0)+os),rc0_0,'k.-',linewidth=2.0,label=r'$\beta=0.0$')
 plt.stem(np.arange(offsetPot,len(symb00)+offsetPot),symb00,label='Bits',use_line_collection=True)
-plt.plot(rc0Symb00[os::],'--',linewidth=3.0,label='Convolution')
+plt.plot(rc0_0Symb00[os::],'--',linewidth=3.0,label='Convolution')
 plt.legend()
 plt.grid(True)
 #plt.xlim(0,35)
@@ -93,10 +98,10 @@ plt.title('Rcosine - OS: %d'%int(os))
 
 #plt.figure()
 plt.subplot(3,1,2)
-plt.plot(np.arange(0,len(rc1)),rc1,'r.-',linewidth=2.0,label=r'$\beta=0.5$')
-plt.plot(np.arange(os,len(rc1)+os),rc1,'k.-',linewidth=2.0,label=r'$\beta=0.5$')
+plt.plot(np.arange(0,len(rc0_5)),rc0_5,'r.-',linewidth=2.0,label=r'$\beta=0.5$')
+plt.plot(np.arange(os,len(rc0_5)+os),rc0_5,'k.-',linewidth=2.0,label=r'$\beta=0.5$')
 plt.stem(np.arange(offsetPot,len(symb00)+offsetPot),symb00,label='Bits',use_line_collection=True)
-plt.plot(rc1Symb00[os::],'--',linewidth=3.0,label='Convolution')
+plt.plot(rc0_5Symb00[os::],'--',linewidth=3.0,label='Convolution')
 plt.legend()
 plt.grid(True)
 #plt.xlim(0,35)
@@ -107,10 +112,10 @@ plt.ylabel('Magnitud')
 
 #plt.figure()
 plt.subplot(3,1,3)
-plt.plot(np.arange(0,len(rc2)),rc2,'r.-',linewidth=2.0,label=r'$\beta=1.0$')
-plt.plot(np.arange(os,len(rc2)+os),rc2,'k.-',linewidth=2.0,label=r'$\beta=1.0$')
+plt.plot(np.arange(0,len(rc1_0)),rc1_0,'r.-',linewidth=2.0,label=r'$\beta=1.0$')
+plt.plot(np.arange(os,len(rc1_0)+os),rc1_0,'k.-',linewidth=2.0,label=r'$\beta=1.0$')
 plt.stem(np.arange(offsetPot,len(symb00)+offsetPot),symb00,label='Bits',use_line_collection=True)
-plt.plot(rc2Symb00[os::],'--',linewidth=3.0,label='Convolution')
+plt.plot(rc1_0Symb00[os::],'--',linewidth=3.0,label='Convolution')
 plt.legend()
 plt.grid(True)
 #plt.xlim(0,35)
@@ -121,6 +126,10 @@ plt.ylabel('Magnitud')
 
 plt.show()
 
+
+###########################################################################################
+#                             Respuesta en frecuencia                                     #
+###########################################################################################
 
 # In[4]:
 
@@ -162,9 +171,9 @@ def resp_freq(filt, Ts, Nfreqs):
 
 
 ### Calculo respuesta en frec para los tres pulsos
-[H0,A0,F0] = resp_freq(rc0, Ts, Nfreqs)
-[H1,A1,F1] = resp_freq(rc1, Ts, Nfreqs)
-[H2,A2,F2] = resp_freq(rc2, Ts, Nfreqs)
+[H0,A0,F0] = resp_freq(rc0_0, Ts, Nfreqs)
+[H1,A1,F1] = resp_freq(rc0_5, Ts, Nfreqs)
+[H2,A2,F2] = resp_freq(rc1_0, Ts, Nfreqs)
 
 ### Generacion de los graficos
 plt.figure(figsize=[14,6])
@@ -177,11 +186,15 @@ plt.axvline(x=(1./T)/2.,color='b',linewidth=2.0)
 plt.axhline(y=20*np.log10(0.5),color='b',linewidth=2.0)
 plt.legend(loc=3)
 plt.grid(True)
-plt.xlim(F2[1],F2[len(F2)-1]*10)
+plt.xlim(F2[1],F2[len(F2)-1])
 plt.xlabel('Frequencia [Hz]')
 plt.ylabel('Magnitud [dB]')
 plt.show()
 
+
+###########################################################################################
+#                         Convolución del filtro con símbolos                             #
+###########################################################################################
 
 # In[6]:
 
@@ -189,20 +202,20 @@ plt.show()
 symbolsI = 2*(np.random.uniform(-1,1,Nsymb)>0.0)-1;
 symbolsQ = 2*(np.random.uniform(-1,1,Nsymb)>0.0)-1;
 
-label = 'Simbolos: %d' % Nsymb
-plt.figure(figsize=[14,6])
-plt.subplot(1,2,1)
-plt.hist(symbolsI,label=label)
-plt.legend()
-plt.xlabel('Simbolos')
-plt.ylabel('Repeticiones')
-plt.subplot(1,2,2)
-plt.hist(symbolsQ,label=label)
-plt.legend()
-plt.xlabel('Simbolos')
-plt.ylabel('Repeticiones')
-
-plt.show()
+#label = 'Simbolos: %d' % Nsymb
+#plt.figure(figsize=[14,6])
+#plt.subplot(1,2,1)
+#plt.hist(symbolsI,label=label)
+#plt.legend()
+#plt.xlabel('Simbolos')
+#plt.ylabel('Repeticiones')
+#plt.subplot(1,2,2)
+#plt.hist(symbolsQ,label=label)
+#plt.legend()
+#plt.xlabel('Simbolos')
+#plt.ylabel('Repeticiones')
+#
+#plt.show()
 
 
 # In[7]:
@@ -228,15 +241,15 @@ plt.show()
 
 
 # # Calculo de tres pusos con diferente roll-off
-# (t,rc01) = rcosine(0.1, T,os,Nbauds,Norm=True)
-# (t,rc05) = rcosine(0.5, T,os,Nbauds,Norm=True)
+# (t,rc0_01) = rcosine(0.1, T,os,Nbauds,Norm=True)
+# (t,rc0_05) = rcosine(0.5, T,os,Nbauds,Norm=True)
 # # Generacion de las graficas
 # plt.figure()
-# plt.plot(rc01,'o-r',linewidth=2.0,label=r'$\beta=0.1$')
-# plt.plot(rc05,'s-g',linewidth=2.0,label=r'$\beta=0.5$')
+# plt.plot(rc0_01,'o-r',linewidth=2.0,label=r'$\beta=0.1$')
+# plt.plot(rc0_05,'s-g',linewidth=2.0,label=r'$\beta=0.5$')
 # plt.legend()
 # plt.grid(True)
-# plt.xlim(0,len(rc01)-1)
+# plt.xlim(0,len(rc0_01)-1)
 # plt.xlabel('Muestras')
 # plt.ylabel('Magnitud')
 # #plt.show()
@@ -245,9 +258,9 @@ plt.show()
 # In[13]:
 
 
-symb_out0I = np.convolve(rc0,zsymbI,'same'); symb_out0Q = np.convolve(rc0,zsymbQ,'same')
-symb_out1I = np.convolve(rc1,zsymbI,'same'); symb_out1Q = np.convolve(rc1,zsymbQ,'same')
-symb_out2I = np.convolve(rc2,zsymbI,'same'); symb_out2Q = np.convolve(rc2,zsymbQ,'same')
+symb_out0I = np.convolve(rc0_0,zsymbI,'same'); symb_out0Q = np.convolve(rc0_0,zsymbQ,'same')
+symb_out1I = np.convolve(rc0_5,zsymbI,'same'); symb_out1Q = np.convolve(rc0_5,zsymbQ,'same')
+symb_out2I = np.convolve(rc1_0,zsymbI,'same'); symb_out2Q = np.convolve(rc1_0,zsymbQ,'same')
 
 plt.figure(figsize=[10,6])
 plt.subplot(2,1,1)
@@ -275,6 +288,10 @@ plt.ylabel('Magnitud')
 
 plt.show()
 
+
+###########################################################################################
+#                                   Diagrama de ojo                                       #
+###########################################################################################
 
 # In[14]:
 
@@ -314,10 +331,14 @@ plt.show()
 #plt.close()
 
 
+###########################################################################################
+#                                    Constelaciones                                       #
+###########################################################################################
+
 # In[16]:
 
 
-offset = 2
+offset = 6
 plt.figure(figsize=[6,6])
 plt.plot(symb_out0I[100+offset:len(symb_out0I)-(100-offset):int(os)],
          symb_out0Q[100+offset:len(symb_out0Q)-(100-offset):int(os)],

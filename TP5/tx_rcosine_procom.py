@@ -338,6 +338,7 @@ plt.show()
 # In[16]:
 
 
+#offset = 2 # Para Full Resolution
 offset = 6
 plt.figure(figsize=[6,6])
 plt.plot(symb_out0I[100+offset:len(symb_out0I)-(100-offset):int(os)],

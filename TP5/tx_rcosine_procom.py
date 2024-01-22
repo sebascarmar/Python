@@ -106,7 +106,9 @@ def floatToFixedPoint(rc0_0, rc0_5, rc1_0, fixedOption):
 (t,aux_rc0_5) = rcosine(beta[1], T,os,Nbauds,Norm=False)
 (t,aux_rc1_0) = rcosine(beta[2], T,os,Nbauds,Norm=False)
 
-(rc0_0, rc0_5, rc1_0) = floatToFixedPoint(aux_rc0_0, aux_rc0_5, aux_rc1_0)
+# Se cuantiza con opciones del 1 al 6 como 4to argumento del método. Si se requiere Full Res, 
+#se puede poner cualquier entero fuera del rango mencionado.
+(rc0_0, rc0_5, rc1_0) = floatToFixedPoint(aux_rc0_0, aux_rc0_5, aux_rc1_0, 1)
 
 #print (np.sum(rc0_0**2),np.sum(rc0_5**2),np.sum(rc1_0**2))
 

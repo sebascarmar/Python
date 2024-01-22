@@ -50,37 +50,46 @@ def rcosine(beta, Tbaud, oversampling, Nbauds, Norm):
 
 
 def floatToFixedPoint(rc0_0, rc0_5, rc1_0, fixedOption):
+    # Listas vacías.
     fixed0 = []
     fixed1 = []    
     fixed2 = []
-
+    
+    # Se crean los ndarrays de numpy de punto fijo. Cada elemento es de la clase DeFixedInt.
     if( fixedOption == 1 ):   # S(8,7) con truncado y saturación
         aux0 = arrayFixedInt(8, 7, rc0_0, signedMode='S', roundMode='trunc', saturateMode='saturate')
         aux1 = arrayFixedInt(8, 7, rc0_5, signedMode='S', roundMode='trunc', saturateMode='saturate')
         aux2 = arrayFixedInt(8, 7, rc1_0, signedMode='S', roundMode='trunc', saturateMode='saturate')
+        print("Punto Fijo S(8,7) truncado\n.")
     elif( fixedOption == 2 ): # S(8,7) con redondeo y saturación
         aux0 = arrayFixedInt(8, 7, rc0_0, signedMode='S', roundMode='round', saturateMode='saturate')
         aux1 = arrayFixedInt(8, 7, rc0_5, signedMode='S', roundMode='round', saturateMode='saturate')
         aux2 = arrayFixedInt(8, 7, rc1_0, signedMode='S', roundMode='round', saturateMode='saturate')
+        print("Punto Fijo S(8,7) redondeo\n.")
     elif( fixedOption == 3 ): # S(3,2) con truncado y saturación
         aux0 = arrayFixedInt(3, 2, rc0_0, signedMode='S', roundMode='trunc', saturateMode='saturate')
         aux1 = arrayFixedInt(3, 2, rc0_5, signedMode='S', roundMode='trunc', saturateMode='saturate')
         aux2 = arrayFixedInt(3, 2, rc1_0, signedMode='S', roundMode='trunc', saturateMode='saturate')
+        print("Punto Fijo S(3,2) con truncado\n.")
     elif( fixedOption == 4 ): # S(3,2) con redondeo y saturación
         aux0 = arrayFixedInt(3, 2, rc0_0, signedMode='S', roundMode='round', saturateMode='saturate')
         aux1 = arrayFixedInt(3, 2, rc0_5, signedMode='S', roundMode='round', saturateMode='saturate')
         aux2 = arrayFixedInt(3, 2, rc1_0, signedMode='S', roundMode='round', saturateMode='saturate')
+        print("Punto Fijo S(3,2) con redondeo\n.")
     elif( fixedOption == 5 ): # S(6,4) con truncado y saturación
         aux0 = arrayFixedInt(6, 4, rc0_0, signedMode='S', roundMode='trunc', saturateMode='saturate')
         aux1 = arrayFixedInt(6, 4, rc0_5, signedMode='S', roundMode='trunc', saturateMode='saturate')
         aux2 = arrayFixedInt(6, 4, rc1_0, signedMode='S', roundMode='trunc', saturateMode='saturate')
+        print("Punto Fijo S(6,4) con truncado\n.")
     elif( fixedOption == 6 ): # S(6,4) con redondeo y saturación
         aux0 = arrayFixedInt(6, 4, rc0_0, signedMode='S', roundMode='round', saturateMode='saturate')
         aux1 = arrayFixedInt(6, 4, rc0_5, signedMode='S', roundMode='round', saturateMode='saturate')
         aux2 = arrayFixedInt(6, 4, rc1_0, signedMode='S', roundMode='round', saturateMode='saturate')
+        print("Punto Fijo S(6,4) con redondeo\n.")
     else:
         return (rc0_0, rc0_5, rc1_0)
 
+    # Las listas vacías se llenan con los elementos fixeados. Estos objetos pasan como clases float64.
     for i in range(len(rc0_0)):
             fixed0.append(aux0[i].fValue)
     for i in range(len(rc0_0)):
@@ -88,6 +97,7 @@ def floatToFixedPoint(rc0_0, rc0_5, rc1_0, fixedOption):
     for i in range(len(rc0_0)):
         fixed2.append(aux2[i].fValue)
 
+    # Las listas son convertidas a ndarray de numpy, que ya posee objetos de tipo float64.
     rc0_0_fixed = np.array(fixed0)
     rc0_5_fixed = np.array(fixed1)
     rc1_0_fixed = np.array(fixed2)   

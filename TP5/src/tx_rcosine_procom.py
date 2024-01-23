@@ -398,6 +398,7 @@ plt.show()
 
 # In[16]:
 
+# Los arrays se recorren de a hasta b en pasos de a c (array[a:b:c])
 
 offset = 6
 plt.figure(figsize=[6,6])

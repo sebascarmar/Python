@@ -259,7 +259,7 @@ plt.show()
 
 # In[6]:
 
-
+# PRBS
 symbolsI = 2*(np.random.uniform(-1,1,Nsymb)>0.0)-1;
 symbolsQ = 2*(np.random.uniform(-1,1,Nsymb)>0.0)-1;
 
@@ -281,7 +281,7 @@ symbolsQ = 2*(np.random.uniform(-1,1,Nsymb)>0.0)-1;
 
 # In[7]:
 
-
+# Up-sampling before convolution
 zsymbI = np.zeros(os*Nsymb); zsymbI[1:len(zsymbI):int(os)]=symbolsI
 zsymbQ = np.zeros(os*Nsymb); zsymbQ[1:len(zsymbQ):int(os)]=symbolsQ
 
@@ -318,7 +318,7 @@ plt.show()
 
 # In[13]:
 
-
+# Convolution between coefs. and symbols
 symb_out_B00I = np.convolve(rc0_0,zsymbI,'same'); symb_out_B00Q = np.convolve(rc0_0,zsymbQ,'same')
 symb_out_B05I = np.convolve(rc0_5,zsymbI,'same'); symb_out_B05Q = np.convolve(rc0_5,zsymbQ,'same')
 symb_out_B10I = np.convolve(rc1_0,zsymbI,'same'); symb_out_B10Q = np.convolve(rc1_0,zsymbQ,'same')

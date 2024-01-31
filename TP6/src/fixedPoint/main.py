@@ -14,7 +14,7 @@ os    = 4             # Over-salmpling
 Nfreqs = 256          # Cantidad de frecuencias
 
 beta   = 0.5          # Roll-Off
-Nbauds = 8            # Cantidad de baudios del filtro
+Nbauds = 6            # Cantidad de baudios del filtro
 
 Ts = T/os             # Frecuencia de muestreo
 

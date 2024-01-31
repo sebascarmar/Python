@@ -80,18 +80,15 @@ symI_fix_float64 = fn.arrayFix_to_arrayFloat(symI_fix)
 symQ_fix_float64 = fn.arrayFix_to_arrayFloat(symQ_fix)
 
 
-############################### Up-Sampling ##############################
-zsymbI = np.zeros(os*Nsymb); zsymbI[1:len(zsymbI):int(os)]=symbolsI
-zsymbQ = np.zeros(os*Nsymb); zsymbQ[1:len(zsymbQ):int(os)]=symbolsQ
+#################### Gráfica de bits símbolos generados ##################
 
-# Gráfica de bits transmitidos
 plt.figure(figsize=[10,6])
 plt.subplot(2,1,1)
-plt.plot(zsymbI,'o')
+plt.plot(symI_fix_float64,'o')
 plt.xlim(0,20)
 plt.grid(True)
 plt.subplot(2,1,2)
-plt.plot(zsymbQ,'o')
+plt.plot(symQ_fix_float64,'o')
 plt.xlim(0,20)
 plt.grid(True)
 plt.xlim(0,20)

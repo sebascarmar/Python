@@ -21,11 +21,18 @@ Ts = T/os             # Frecuencia de muestreo
 
 ########################## Obtención del filtro ##########################
 (t,rc) = fn.rcosine(beta, T,os,Nbauds,Norm=False)
+
+rc_fixed  = arrayFixedInt(8, 7, rc, signedMode='S', roundMode='trunc', saturateMode='saturate')
+
+rc_fixed_float64 = []
+for i in range(Nbauds*os):
+    rc_fixed_float64.append(rc_fixed[i].fValue)
+
 print(rc)
 
 # Gráfica de la respuesta al impulso.
 plt.figure(figsize=[14,7])
-plt.plot(t,rc,'ro-',linewidth=2.0,label=r'$\beta=0.5$')
+plt.plot(t,rc_fixed_float64,'ro-',linewidth=2.0,label=r'$\beta=0.5$')
 plt.legend()
 plt.grid(True)
 plt.xlabel('Muestras')
@@ -35,7 +42,7 @@ plt.show()
 
 
 ################### Respuesta en frecuencia del filtro ###################
-[Mag,Fas,Fq] = fn.resp_freq(rc, Ts, Nfreqs) #[magnitud, fase, freq]
+[Mag,Fas,Fq] = fn.resp_freq(rc_fixed_float64, Ts, Nfreqs) #[magnitud, fase, freq]
 
 ### Gráfica de Bode
 plt.figure(figsize=[14,6])

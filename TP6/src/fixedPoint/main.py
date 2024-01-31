@@ -62,17 +62,23 @@ plt.show()
 
 
 ################################## PRBS ##################################
-symbolsI = 2*(np.random.uniform(-1,1,Nsymb)>0.0)-1;
-symbolsQ = 2*(np.random.uniform(-1,1,Nsymb)>0.0)-1;
-
 prbs9I = prbs9(0x1AA)
 prbs9Q = prbs9(0x1FE)
 
-symI = np.zeros(Nsymb)
-symQ = np.zeros(Nsymb)
+symI = []
+symQ = []
 for i in range(Nsymb):
-    symI[i] = 1 if(prbs9I.get_new_symbol()) else -1
-    symQ[i] = 1 if(prbs9Q.get_new_symbol()) else -1
+    symI.append(1 if(prbs9I.get_new_symbol()) else -1)
+    symQ.append(1 if(prbs9Q.get_new_symbol()) else -1)
+
+# Cuantiza los símbolos generados
+symI_fix = arrayFixedInt(8, 7, symI, signedMode='S', roundMode='trunc', saturateMode='saturate')
+symQ_fix = arrayFixedInt(8, 7, symQ, signedMode='S', roundMode='trunc', saturateMode='saturate')
+
+# Los valores cuantizados los convierte a float64 para gráficas
+symI_fix_float64 = fn.arrayFix_to_arrayFloat(symI_fix)
+symQ_fix_float64 = fn.arrayFix_to_arrayFloat(symQ_fix)
+
 
 ############################### Up-Sampling ##############################
 zsymbI = np.zeros(os*Nsymb); zsymbI[1:len(zsymbI):int(os)]=symbolsI

@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tool._fixedInt import *
 import funciones as fn
+from prbs9 import prbs9
 
 
 
@@ -56,7 +57,14 @@ plt.show()
 symbolsI = 2*(np.random.uniform(-1,1,Nsymb)>0.0)-1;
 symbolsQ = 2*(np.random.uniform(-1,1,Nsymb)>0.0)-1;
 
+prbs9I = prbs9(0x1AA)
+prbs9Q = prbs9(0x1FE)
 
+symI = np.zeros(Nsymb)
+symQ = np.zeros(Nsymb)
+for i in range(Nsymb):
+    symI[i] = 1 if(prbs9I.get_new_symbol()) else -1
+    symQ[i] = 1 if(prbs9Q.get_new_symbol()) else -1
 
 ############################### Up-Sampling ##############################
 zsymbI = np.zeros(os*Nsymb); zsymbI[1:len(zsymbI):int(os)]=symbolsI

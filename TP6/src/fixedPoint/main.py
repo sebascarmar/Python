@@ -103,6 +103,8 @@ plt.xlim(0,20)
 ################ Convolución de los símbolos con el filtro ###############
 filter_reg_I = np.zeros(5+1)
 filter_reg_Q = np.zeros(5+1)
+nb_sym = 0
+
 coef_ph0 = np.zeros(6)
 coef_ph1 = np.zeros(6)
 coef_ph2 = np.zeros(6)

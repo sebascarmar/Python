@@ -103,6 +103,16 @@ plt.xlim(0,20)
 ################ Convolución de los símbolos con el filtro ###############
 symb_outI = np.convolve(rc,zsymbI,'same')
 symb_outQ = np.convolve(rc,zsymbQ,'same')
+coef_ph0 = np.zeros(6)
+coef_ph1 = np.zeros(6)
+coef_ph2 = np.zeros(6)
+coef_ph3 = np.zeros(6)
+for i in range(0,Nbauds*os,4):
+    coef_ph0[int(i/4)] = rc_fix[i].fValue
+    coef_ph1[int(i/4)] = rc_fix[i+1].fValue
+    coef_ph2[int(i/4)] = rc_fix[i+2].fValue
+    coef_ph3[int(i/4)] = rc_fix[i+3].fValue
+    #print(i, int(i/4), rc_fix[i].fValue)
 print(coef_ph0)
 print(coef_ph1)
 print(coef_ph2)

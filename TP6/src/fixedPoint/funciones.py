@@ -78,7 +78,7 @@ def eyediagram(data, n, offset, period):
 
 
 
-def arrayFix_to_arrayFloat(vect):
+def arrFixToFloat(vect):
     aux = []
     for i in range(len(vect)):
         aux.append(vect[i].fValue)

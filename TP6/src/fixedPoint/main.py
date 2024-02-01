@@ -27,17 +27,15 @@ NRegFilter = 5
 (t,rc) = fn.rcosine(beta, T,os,Nbauds,Norm=False)
 
 # Cuantiza los coeficientes del filtro
-rc_fix          = arrayFixedInt(NBTot, NBFrac, rc, signedMode='S', roundMode='trunc', saturateMode='saturate')
+rc     = arrayFixedInt(NBTot, NBFrac, rc, signedMode='S', roundMode='trunc', saturateMode='saturate')
 
-# Los valores cuantizados los convierte a float64 para gráficas
-rc_fix_float64  = fn.arrayFix_to_arrayFloat(rc_fix)
 
 #print(rc)
-#print(rc_fix_float64)
+#print(rc_float64)
 
 # Gráfica de la respuesta al impulso.
 plt.figure(figsize=[14,7])
-plt.plot(t,rc_fix_float64,'ro-',linewidth=2.0,label=r'$\beta=0.5$')
+plt.plot(t,fn.arrFixToFloat(rc),'ro-',linewidth=2.0,label=r'$\beta=0.5$')
 plt.legend()
 plt.grid(True)
 plt.xlabel('Muestras')
@@ -47,7 +45,7 @@ plt.ylabel('Magnitud')
 
 
 ################### Respuesta en frecuencia del filtro ###################
-[Mag,Fas,Fq] = fn.resp_freq(rc_fix_float64, Ts, Nfreqs) #[magnitud, fase, freq]
+[Mag,Fas,Fq] = fn.resp_freq(fn.arrFixToFloat(rc), Ts, Nfreqs) #[magnitud, fase, freq]
 
 ### Gráfica de Bode
 plt.figure(figsize=[14,6])
@@ -80,10 +78,6 @@ for i in range(Nsymb):
 symI_fix = arrayFixedInt(NBTot, NBFrac, symI, signedMode='S', roundMode='trunc', saturateMode='saturate')
 symQ_fix = arrayFixedInt(NBTot, NBFrac, symQ, signedMode='S', roundMode='trunc', saturateMode='saturate')
 
-# Los valores cuantizados los convierte a float64 para gráficas
-symI_fix_float64 = fn.arrayFix_to_arrayFloat(symI_fix)
-symQ_fix_float64 = fn.arrayFix_to_arrayFloat(symQ_fix)
-
 #print(symI)
 #print(symI_fix)
 #print(symI_fix_float64)
@@ -92,11 +86,11 @@ symQ_fix_float64 = fn.arrayFix_to_arrayFloat(symQ_fix)
 
 plt.figure(figsize=[10,6])
 plt.subplot(2,1,1)
-plt.plot(symI_fix_float64,'o')
+plt.plot(fn.arrFixToFloat(symI_fix),'o')
 plt.xlim(0,20)
 plt.grid(True)
 plt.subplot(2,1,2)
-plt.plot(symQ_fix_float64,'o')
+plt.plot(fn.arrFixToFloat(symQ_fix),'o')
 plt.xlim(0,20)
 plt.grid(True)
 plt.xlim(0,20)
@@ -105,11 +99,9 @@ plt.xlim(0,20)
 
 
 ################ Convolución de los símbolos con el filtro ###############
-symI_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc_fix, symI_fix)
-symI_out_float64  = fn.arrayFix_to_arrayFloat(symI_out)
+symI_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc, symI_fix)
 
-symQ_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc_fix, symQ_fix)
-symQ_out_float64  = fn.arrayFix_to_arrayFloat(symQ_out)
+symQ_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc, symQ_fix)
 
 
 
@@ -120,7 +112,7 @@ symQ_out_float64  = fn.arrayFix_to_arrayFloat(symQ_out)
 plt.figure(figsize=[10,6])
 
 plt.subplot(2,1,1)
-plt.plot(symI_out_float64,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
+plt.plot(fn.arrFixToFloat(symI_out),'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
 plt.xlim(1000,1250)
 plt.grid(True)
 plt.legend()
@@ -128,7 +120,7 @@ plt.xlabel('Muestras')
 plt.ylabel('Magnitud')
 
 plt.subplot(2,1,2)
-plt.plot(symQ_out_float64,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
+plt.plot(fn.arrFixToFloat(symQ_out),'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
 plt.xlim(1000,1250)
 plt.grid(True)
 plt.legend()
@@ -140,16 +132,16 @@ plt.show()
 
 
 ############################# Diagrama de Ojo ############################
-fn.eyediagram(symI_out_float64[100:len(symI_out_float64)-100],os,5,Nbauds)
-fn.eyediagram(symQ_out_float64[100:len(symQ_out_float64)-100],os,5,Nbauds)
+fn.eyediagram(fn.arrFixToFloat(symI_out)[100:len(symI_out)-100],os,5,Nbauds)
+fn.eyediagram(fn.arrFixToFloat(symQ_out)[100:len(symQ_out)-100],os,5,Nbauds)
 
 
 
 ############################## Constelación ##############################
 offset = 0
 plt.figure(figsize=[6,6])
-plt.plot(symI_out_float64[100+offset:len(symI_out_float64)-(100-offset):int(os)],
-         symQ_out_float64[100+offset:len(symQ_out_float64)-(100-offset):int(os)],
+plt.plot(fn.arrFixToFloat(symI_out)[100+offset:len(symI_out)-(100-offset):int(os)],
+         fn.arrFixToFloat(symQ_out)[100+offset:len(symQ_out)-(100-offset):int(os)],
          '.',linewidth=2.0)
 plt.xlim((-2, 2))
 plt.ylim((-2, 2))

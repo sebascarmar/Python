@@ -105,49 +105,13 @@ plt.xlim(0,20)
 
 
 ################ Convolución de los símbolos con el filtro ###############
-filter_reg_I = np.zeros(5+1)
-filter_reg_Q = np.zeros(5+1)
-nb_sym = 0
+symI_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc_fix, symI_fix)
+symI_out_float64  = fn.arrayFix_to_arrayFloat(symI_out)
 
-coef_ph0 = np.zeros(6)
-coef_ph1 = np.zeros(6)
-coef_ph2 = np.zeros(6)
-coef_ph3 = np.zeros(6)
-for i in range(0,Nbauds*os,4):
-    coef_ph0[int(i/4)] = rc_fix[i].fValue
-    coef_ph1[int(i/4)] = rc_fix[i+1].fValue
-    coef_ph2[int(i/4)] = rc_fix[i+2].fValue
-    coef_ph3[int(i/4)] = rc_fix[i+3].fValue
-    #print(i, int(i/4), rc_fix[i].fValue)
-phase_counter = 0
-prod_parcial  = np.zeros(6)
-print(coef_ph0)
-print(coef_ph1)
-print(coef_ph2)
-print(coef_ph3)
+symQ_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc_fix, symQ_fix)
+symQ_out_float64  = fn.arrayFix_to_arrayFloat(symQ_out)
 
-for i in range(os*Nsymb):
-    # Ingresa símbolo
-    if(i%4 == 0):
-        filter_reg_I = np.roll(filter_reg_I,1)
-        
-        filter_reg_I[0] = symI_fix[nb_sym].fValue
-        
-        nb_sym +=1
-        phase_counter = 0
 
-    if(phase_counter == 0):
-        prod_parcial[i] = filter_reg_I[i] * coef_ph0[i] # resulta S(16,14)
-    if(phase_counter == 1):
-        prod_parcial[i] = filter_reg_I[i] * coef_ph1[i] # resulta S(16,14)
-    if(phase_counter == 2):
-        prod_parcial[i] = filter_reg_I[i] * coef_ph2[i] # resulta S(16,14)
-    if(phase_counter == 3):
-        prod_parcial[i] = filter_reg_I[i] * coef_ph3[i] # resulta S(16,14)
-    
-    
-
-    #print(filter_reg_I)
 
 #symb_outI = symb_outI/np.std(symb_outI)
 #symb_outQ = symb_outQ/np.std(symb_outQ)

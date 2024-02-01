@@ -28,8 +28,8 @@ rc_fix          = arrayFixedInt(8, 7, rc, signedMode='S', roundMode='trunc', sat
 # Los valores cuantizados los convierte a float64 para gráficas
 rc_fix_float64  = fn.arrayFix_to_arrayFloat(rc_fix)
 
-print(rc)
-print(rc_fix_float64)
+#print(rc)
+#print(rc_fix_float64)
 
 # Gráfica de la respuesta al impulso.
 plt.figure(figsize=[14,7])
@@ -39,7 +39,7 @@ plt.grid(True)
 plt.xlabel('Muestras')
 plt.ylabel('Magnitud')
 
-plt.show()
+#plt.show()
 
 
 ################### Respuesta en frecuencia del filtro ###################
@@ -54,10 +54,11 @@ plt.axhline(y=20*np.log10(0.5),color='k',linewidth=2.0)
 plt.legend(loc=3)
 plt.grid(True)
 plt.xlim(Fq[1],Fq[len(Fq)-1])
+plt.ylim(-90,15)
 plt.xlabel('Frequencia [Hz]')
 plt.ylabel('Magnitud [dB]')
 
-plt.show()
+#plt.show()
 
 
 
@@ -79,6 +80,9 @@ symQ_fix = arrayFixedInt(8, 7, symQ, signedMode='S', roundMode='trunc', saturate
 symI_fix_float64 = fn.arrayFix_to_arrayFloat(symI_fix)
 symQ_fix_float64 = fn.arrayFix_to_arrayFloat(symQ_fix)
 
+#print(symI)
+#print(symI_fix)
+#print(symI_fix_float64)
 
 #################### Gráfica de bits símbolos generados ##################
 
@@ -92,13 +96,18 @@ plt.plot(symQ_fix_float64,'o')
 plt.xlim(0,20)
 plt.grid(True)
 plt.xlim(0,20)
-plt.show()
+#plt.show()
 
 
 
 ################ Convolución de los símbolos con el filtro ###############
 symb_outI = np.convolve(rc,zsymbI,'same')
 symb_outQ = np.convolve(rc,zsymbQ,'same')
+print(coef_ph0)
+print(coef_ph1)
+print(coef_ph2)
+print(coef_ph3)
+    #print(filter_reg_I)
 
 #symb_outI = symb_outI/np.std(symb_outI)
 #symb_outQ = symb_outQ/np.std(symb_outQ)

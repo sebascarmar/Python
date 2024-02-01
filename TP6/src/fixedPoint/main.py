@@ -66,11 +66,11 @@ plt.ylabel('Magnitud [dB]')
 prbs9I = prbs9(0x1AA)
 prbs9Q = prbs9(0x1FE)
 
-symI = []
-symQ = []
+symI = np.zeros(Nsymb)
+symQ = np.zeros(Nsymb)
 for i in range(Nsymb):
-    symI.append(1 if(prbs9I.get_new_symbol()) else -1)
-    symQ.append(1 if(prbs9Q.get_new_symbol()) else -1)
+    symI[i] = (1 if(prbs9I.get_new_symbol()) else -1)
+    symQ[i] = (1 if(prbs9Q.get_new_symbol()) else -1)
 
 # Cuantiza los símbolos generados
 symI_fix = arrayFixedInt(8, 7, symI, signedMode='S', roundMode='trunc', saturateMode='saturate')

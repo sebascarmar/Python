@@ -18,12 +18,16 @@ Nbauds = 6            # Cantidad de baudios del filtro
 
 Ts = T/os             # Frecuencia de muestreo
 
+NBTot  = 8
+NBFrac = 6
+NRegFilter = 5
+
 
 ########################## Obtención del filtro ##########################
 (t,rc) = fn.rcosine(beta, T,os,Nbauds,Norm=False)
 
 # Cuantiza los coeficientes del filtro
-rc_fix          = arrayFixedInt(8, 7, rc, signedMode='S', roundMode='trunc', saturateMode='saturate')
+rc_fix          = arrayFixedInt(NBTot, NBFrac, rc, signedMode='S', roundMode='trunc', saturateMode='saturate')
 
 # Los valores cuantizados los convierte a float64 para gráficas
 rc_fix_float64  = fn.arrayFix_to_arrayFloat(rc_fix)
@@ -73,8 +77,8 @@ for i in range(Nsymb):
     symQ[i] = (1 if(prbs9Q.get_new_symbol()) else -1)
 
 # Cuantiza los símbolos generados
-symI_fix = arrayFixedInt(8, 7, symI, signedMode='S', roundMode='trunc', saturateMode='saturate')
-symQ_fix = arrayFixedInt(8, 7, symQ, signedMode='S', roundMode='trunc', saturateMode='saturate')
+symI_fix = arrayFixedInt(NBTot, NBFrac, symI, signedMode='S', roundMode='trunc', saturateMode='saturate')
+symQ_fix = arrayFixedInt(NBTot, NBFrac, symQ, signedMode='S', roundMode='trunc', saturateMode='saturate')
 
 # Los valores cuantizados los convierte a float64 para gráficas
 symI_fix_float64 = fn.arrayFix_to_arrayFloat(symI_fix)

@@ -113,6 +113,8 @@ for i in range(0,Nbauds*os,4):
     coef_ph2[int(i/4)] = rc_fix[i+2].fValue
     coef_ph3[int(i/4)] = rc_fix[i+3].fValue
     #print(i, int(i/4), rc_fix[i].fValue)
+phase_counter = 0
+prod_parcial  = np.zeros(6)
 print(coef_ph0)
 print(coef_ph1)
 print(coef_ph2)

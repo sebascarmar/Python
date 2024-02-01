@@ -121,6 +121,16 @@ print(coef_ph0)
 print(coef_ph1)
 print(coef_ph2)
 print(coef_ph3)
+
+for i in range(os*Nsymb):
+    # Ingresa símbolo
+    if(i%4 == 0):
+        filter_reg_I = np.roll(filter_reg_I,1)
+        
+        filter_reg_I[0] = symI_fix[nb_sym].fValue
+        
+        nb_sym +=1
+        phase_counter = 0
     #print(filter_reg_I)
 
 #symb_outI = symb_outI/np.std(symb_outI)

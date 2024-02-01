@@ -131,6 +131,18 @@ for i in range(os*Nsymb):
         
         nb_sym +=1
         phase_counter = 0
+
+    if(phase_counter == 0):
+        prod_parcial[i] = filter_reg_I[i] * coef_ph0[i] # resulta S(16,14)
+    if(phase_counter == 1):
+        prod_parcial[i] = filter_reg_I[i] * coef_ph1[i] # resulta S(16,14)
+    if(phase_counter == 2):
+        prod_parcial[i] = filter_reg_I[i] * coef_ph2[i] # resulta S(16,14)
+    if(phase_counter == 3):
+        prod_parcial[i] = filter_reg_I[i] * coef_ph3[i] # resulta S(16,14)
+    
+    
+
     #print(filter_reg_I)
 
 #symb_outI = symb_outI/np.std(symb_outI)

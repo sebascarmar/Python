@@ -4,8 +4,12 @@ import matplotlib.pyplot as plt
 
 def rcosine(beta, Tbaud, oversampling, Nbauds, Norm):
     """ Respuesta al impulso del pulso de caida cosenoidal """
-    t_vect = np.arange(-0.5*Nbauds*Tbaud, 0.5*Nbauds*Tbaud, 
+    t_aux = np.arange(-0.5*Nbauds*Tbaud, 0.5*Nbauds*Tbaud, 
                        float(Tbaud)/oversampling)
+    t_vect = []
+    for i in range(oversampling*Nbauds): # Asegura la cant. de coef.
+        t_vect.append(t_aux[i])
+
 
     y_vect = []
     for t in t_vect:

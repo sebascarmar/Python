@@ -120,7 +120,7 @@ symQ_out_float64  = fn.arrayFix_to_arrayFloat(symQ_out)
 plt.figure(figsize=[10,6])
 
 plt.subplot(2,1,1)
-plt.plot(symb_outI,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
+plt.plot(symI_out_float64,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
 plt.xlim(1000,1250)
 plt.grid(True)
 plt.legend()
@@ -128,7 +128,7 @@ plt.xlabel('Muestras')
 plt.ylabel('Magnitud')
 
 plt.subplot(2,1,2)
-plt.plot(symb_outQ,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
+plt.plot(symQ_out_float64,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
 plt.xlim(1000,1250)
 plt.grid(True)
 plt.legend()
@@ -140,16 +140,16 @@ plt.show()
 
 
 ############################# Diagrama de Ojo ############################
-fn.eyediagram(symb_outI[100:len(symb_outI)-100],os,5,Nbauds)
-fn.eyediagram(symb_outQ[100:len(symb_outQ)-100],os,5,Nbauds)
+fn.eyediagram(symI_out_float64[100:len(symI_out_float64)-100],os,5,Nbauds)
+fn.eyediagram(symQ_out_float64[100:len(symQ_out_float64)-100],os,5,Nbauds)
 
 
 
 ############################## Constelación ##############################
-offset = 2
+offset = 0
 plt.figure(figsize=[6,6])
-plt.plot(symb_outI[100+offset:len(symb_outI)-(100-offset):int(os)],
-         symb_outQ[100+offset:len(symb_outQ)-(100-offset):int(os)],
+plt.plot(symI_out_float64[100+offset:len(symI_out_float64)-(100-offset):int(os)],
+         symQ_out_float64[100+offset:len(symQ_out_float64)-(100-offset):int(os)],
          '.',linewidth=2.0)
 plt.xlim((-2, 2))
 plt.ylim((-2, 2))

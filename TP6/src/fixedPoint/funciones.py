@@ -66,7 +66,7 @@ def eyediagram(data, n, offset, period):
     segments = int(len(data)/span)
     xmax     = (n-1)*period
     xmin     = -(n-1)*period
-    x        = list(np.arange(-n,n,)*period)
+    x        = list(np.arange(-n,n,1)*period)
     xoff     = offset
 
     plt.figure()

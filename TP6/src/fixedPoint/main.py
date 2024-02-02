@@ -133,11 +133,20 @@ fn.eyediagram(fn.arrFixToFloat(symQ_out)[100:len(symQ_out)-100],os,5,Nbauds)
 
 
 
+############################# Down-sampling ##############################
+offs = 12
+symI_rx_downsam = symI_out[offs:len(symI):int(os)]
+symQ_rx_downsam = symQ_out[offs:len(symQ):int(os)]
+#for i in range(len(symI_rx_downsam)):
+#    print(symI_rx_downsam[i].fValue, "\t\t",symI[i].fValue)
+
+
+
 ############################## Constelación ##############################
 offset = 0
 plt.figure(figsize=[6,6])
-plt.plot(fn.arrFixToFloat(symI_out)[100+offset:len(symI_out)-(100-offset):int(os)],
-         fn.arrFixToFloat(symQ_out)[100+offset:len(symQ_out)-(100-offset):int(os)],
+plt.plot(fn.arrFixToFloat(symI_rx_downsam), # No afecta que no desprecie los 100 primeros y los 100 ultimos?
+         fn.arrFixToFloat(symQ_rx_downsam),
          '.',linewidth=2.0)
 plt.xlim((-2, 2))
 plt.ylim((-2, 2))

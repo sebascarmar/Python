@@ -18,9 +18,10 @@ Nbauds = 6            # Cantidad de baudios del filtro
 
 Ts = T/os             # Frecuencia de muestreo
 
-NBTot  = 8
-NBFrac = 6
-NRegFilter = 5
+NBTot  = 8            # Cuantización: bits totales
+NBFrac = 6            # Cuantización: bits fraccionales
+
+NRegFilter = 5        # Cantidad de registros del shifter del filtro
 
 
 ########################## Obtención del filtro ##########################

@@ -75,22 +75,22 @@ for i in range(Nsymb):
     symQ[i] = (1 if(prbs9Q.get_new_symbol()) else -1)
 
 # Cuantiza los símbolos generados
-symI_fix = arrayFixedInt(NBTot, NBFrac, symI, signedMode='S', roundMode='trunc', saturateMode='saturate')
-symQ_fix = arrayFixedInt(NBTot, NBFrac, symQ, signedMode='S', roundMode='trunc', saturateMode='saturate')
+symI = arrayFixedInt(NBTot, NBFrac, symI, signedMode='S', roundMode='trunc', saturateMode='saturate')
+symQ = arrayFixedInt(NBTot, NBFrac, symQ, signedMode='S', roundMode='trunc', saturateMode='saturate')
 
 #print(symI)
-#print(symI_fix)
+#print(symI)
 #print(symI_fix_float64)
 
 #################### Gráfica de bits símbolos generados ##################
 
 plt.figure(figsize=[10,6])
 plt.subplot(2,1,1)
-plt.plot(fn.arrFixToFloat(symI_fix),'o')
+plt.plot(fn.arrFixToFloat(symI),'o')
 plt.xlim(0,20)
 plt.grid(True)
 plt.subplot(2,1,2)
-plt.plot(fn.arrFixToFloat(symQ_fix),'o')
+plt.plot(fn.arrFixToFloat(symQ),'o')
 plt.xlim(0,20)
 plt.grid(True)
 plt.xlim(0,20)
@@ -98,15 +98,10 @@ plt.xlim(0,20)
 
 
 
-################ Convolución de los símbolos con el filtro ###############
-symI_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc, symI_fix)
+######################### Up-sampling y filtrado #########################
+symI_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc, symI)
 
-symQ_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc, symQ_fix)
-
-
-
-#symb_outI = symb_outI/np.std(symb_outI)
-#symb_outQ = symb_outQ/np.std(symb_outQ)
+symQ_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc, symQ)
 
 # Gráfica de la salida del filtro
 plt.figure(figsize=[10,6])
@@ -127,7 +122,7 @@ plt.legend()
 plt.xlabel('Muestras')
 plt.ylabel('Magnitud')
 
-plt.show()
+#plt.show()
 
 
 

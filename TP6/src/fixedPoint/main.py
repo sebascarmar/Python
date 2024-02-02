@@ -142,6 +142,17 @@ symQ_rx_downsam = symQ_out[offs:len(symQ):int(os)]
 
 
 
+####################### Escritura de datos para VM #######################
+with open('VM_I.txt', 'w') as archivo:
+    for i in range(len(symI_rx_downsam)):
+        archivo.write(str(int(symI_rx_downsam[i].fValue*(2**NBFrac))) + '\n')
+
+with open('VM_Q.txt', 'w') as archivo:
+    for i in range(len(symQ_rx_downsam)):
+        archivo.write(str(int(symQ_rx_downsam[i].fValue*(2**NBFrac))) + '\n')
+
+
+
 ############################## Constelación ##############################
 offset = 0
 plt.figure(figsize=[6,6])

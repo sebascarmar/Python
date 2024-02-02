@@ -72,8 +72,8 @@ prbs9Q = prbs9(0x1FE)
 symI = np.zeros(Nsymb)
 symQ = np.zeros(Nsymb)
 for i in range(Nsymb):
-    symI[i] = (1 if(prbs9I.get_new_symbol()) else -1)
-    symQ[i] = (1 if(prbs9Q.get_new_symbol()) else -1)
+    symI[i] = (-1 if(prbs9I.get_new_symbol()) else 1)
+    symQ[i] = (-1 if(prbs9Q.get_new_symbol()) else 1)
 
 # Cuantiza los símbolos generados
 symI = arrayFixedInt(NBTot, NBFrac, symI, signedMode='S', roundMode='trunc', saturateMode='saturate')

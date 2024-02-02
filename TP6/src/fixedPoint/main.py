@@ -166,3 +166,26 @@ plt.xlabel('Real')
 plt.ylabel('Imag')
 
 plt.show()
+
+
+################################### BER ##################################
+prbs9I_rx = prbs9(0x1AA)
+acumPRBSI = 0
+for i in range(15):
+    sign_symI_rx_downsam = (int((symI_rx_downsam[i].fValue)*2**NBFrac) >> (NBTot-1)) & 0b1
+    aux = sign_symI_rx_downsam ^ prbs9I.get_new_symbol()
+    acumPRBSI = acumPRBSI+1 if(aux) else acumPRBSI
+
+BER_I = (acumPRBSI / Nsymb) * 100
+
+prbs9Q_rx = prbs9(0x1FE)
+acumPRBSQ = 0
+for i in range(15):
+    sign_symI_rx_downsam = (int((symQ_rx_downsam[i].fValue)*2**NBFrac) >> (NBTot-1)) & 0b1
+    aux = sign_symI_rx_downsam ^ prbs9Q.get_new_symbol()
+    acumPRBSQ = acumPRBSQ+1 if(aux) else acumPRBSQ
+
+BER_Q = (acumPRBSQ / Nsymb) * 100
+
+print("BER_I =", BER_I, "%")
+print("BER_Q =", BER_Q, "%")

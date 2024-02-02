@@ -134,9 +134,9 @@ fn.eyediagram(fn.arrFixToFloat(symQ_out)[100:len(symQ_out)-100],os,5,Nbauds)
 
 
 ############################# Down-sampling ##############################
-offs = 12
-symI_rx_downsam = symI_out[offs:len(symI):int(os)]
-symQ_rx_downsam = symQ_out[offs:len(symQ):int(os)]
+phase = 0
+symI_rx_downsam = symI_out[phase:len(symI_out):int(os)]
+symQ_rx_downsam = symQ_out[phase:len(symQ_out):int(os)]
 #for i in range(len(symI_rx_downsam)):
 #    print(symI_rx_downsam[i].fValue, "\t\t",symI[i].fValue)
 

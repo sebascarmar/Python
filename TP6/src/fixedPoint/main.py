@@ -8,7 +8,7 @@ from prbs9 import prbs9
 
 ############################### Parámetros ###############################
 T     = 1.0/25.0e6    # Periodo de baudio
-Nsymb = 1000          # Numero de simbolos
+Nsymb = 6000          # Numero de simbolos
 os    = 4             # Over-salmpling
 
 Nfreqs = 256          # Cantidad de frecuencias

@@ -28,13 +28,75 @@ NRegFilter = 5        # Cantidad de registros del shifter del filtro
 (t,rc) = fn.rcosine(beta, T,os,Nbauds,Norm=False)
 
 # Cuantiza los coeficientes del filtro
-rc     = arrayFixedInt(NBTot, NBFrac, rc, signedMode='S', roundMode='trunc', saturateMode='saturate')
-
-
+rc = arrayFixedInt(NBTot, NBFrac, rc, signedMode='S', roundMode='trunc', saturateMode='saturate')
 #print(rc)
-#print(rc_float64)
 
-# Gráfica de la respuesta al impulso.
+
+################### Respuesta en frecuencia del filtro ###################
+[Mag,Fas,Fq] = fn.resp_freq(fn.arrFixToFloat(rc), Ts, Nfreqs) #[magnitud, fase, freq]
+
+
+################################## PRBS ##################################
+prbs9I = prbs9(0x1AA)
+prbs9Q = prbs9(0x1FE)
+
+symI = np.zeros(Nsymb)
+symQ = np.zeros(Nsymb)
+for i in range(Nsymb):
+    symI[i] = (-1 if(prbs9I.get_new_symbol()) else 1)
+    symQ[i] = (-1 if(prbs9Q.get_new_symbol()) else 1)
+
+# Cuantiza los símbolos generados
+symI = arrayFixedInt(NBTot, NBFrac, symI, signedMode='S', roundMode='trunc', saturateMode='saturate')
+symQ = arrayFixedInt(NBTot, NBFrac, symQ, signedMode='S', roundMode='trunc', saturateMode='saturate')
+
+
+######################### Up-sampling y filtrado #########################
+symI_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc, symI)
+
+symQ_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc, symQ)
+
+
+############################# Down-sampling ##############################
+phase = 0
+symI_rx_downsam = symI_out[phase:len(symI_out):int(os)]
+symQ_rx_downsam = symQ_out[phase:len(symQ_out):int(os)]
+
+
+################################### BER ##################################
+prbs9I_rx    = prbs9(0x1AA)
+(BER_I, latencia_I) = fn.ber(prbs9I_rx, symI_rx_downsam, Nsymb, NBTot, NBFrac)
+
+prbs9Q_rx    = prbs9(0x1FE)
+(BER_Q, latencia_Q) = fn.ber(prbs9Q_rx, symQ_rx_downsam, Nsymb, NBTot, NBFrac)
+
+print("BER_I =", BER_I, "%\t", "Latencia =", latencia_I)
+print("BER_Q =", BER_Q, "%\t", "Latencia =", latencia_Q)
+
+
+####################### Escritura de datos para VM #######################
+with open('VM_I_rx.txt', 'w') as archivo:
+    for i in range(len(symI_rx_downsam)):
+        archivo.write(str(int(symI_out[i].fValue*(2**NBFrac))) + '\n')
+
+with open('VM_Q_rx.txt', 'w') as archivo:
+    for i in range(len(symQ_rx_downsam)):
+        archivo.write(str(int(symQ_out[i].fValue*(2**NBFrac))) + '\n')
+
+with open('VM_I_rx_dwsam.txt', 'w') as archivo:
+    for i in range(len(symI_rx_downsam)):
+        archivo.write(str(int(symI_rx_downsam[i].fValue*(2**NBFrac))) + '\n')
+
+with open('VM_Q_rx_dwsam.txt', 'w') as archivo:
+    for i in range(len(symQ_rx_downsam)):
+        archivo.write(str(int(symQ_rx_downsam[i].fValue*(2**NBFrac))) + '\n')
+
+
+
+
+################################ Gráficas ################################
+
+### Gráfica de la respuesta al impulso.
 plt.figure(figsize=[14,7])
 plt.plot(t,fn.arrFixToFloat(rc),'ro-',linewidth=2.0,label=r'$\beta=0.5$')
 plt.legend()
@@ -44,9 +106,6 @@ plt.ylabel('Magnitud')
 
 #plt.show()
 
-
-################### Respuesta en frecuencia del filtro ###################
-[Mag,Fas,Fq] = fn.resp_freq(fn.arrFixToFloat(rc), Ts, Nfreqs) #[magnitud, fase, freq]
 
 ### Gráfica de Bode
 plt.figure(figsize=[14,6])
@@ -64,27 +123,7 @@ plt.ylabel('Magnitud [dB]')
 #plt.show()
 
 
-
-################################## PRBS ##################################
-prbs9I = prbs9(0x1AA)
-prbs9Q = prbs9(0x1FE)
-
-symI = np.zeros(Nsymb)
-symQ = np.zeros(Nsymb)
-for i in range(Nsymb):
-    symI[i] = (-1 if(prbs9I.get_new_symbol()) else 1)
-    symQ[i] = (-1 if(prbs9Q.get_new_symbol()) else 1)
-
-# Cuantiza los símbolos generados
-symI = arrayFixedInt(NBTot, NBFrac, symI, signedMode='S', roundMode='trunc', saturateMode='saturate')
-symQ = arrayFixedInt(NBTot, NBFrac, symQ, signedMode='S', roundMode='trunc', saturateMode='saturate')
-
-#print(symI)
-#print(symI)
-#print(symI_fix_float64)
-
-#################### Gráfica de bits símbolos generados ##################
-
+### Gráfica de bits símbolos generados 
 plt.figure(figsize=[10,6])
 plt.subplot(2,1,1)
 plt.plot(fn.arrFixToFloat(symI),'o')
@@ -95,16 +134,11 @@ plt.plot(fn.arrFixToFloat(symQ),'o')
 plt.xlim(0,20)
 plt.grid(True)
 plt.xlim(0,20)
+
 #plt.show()
 
 
-
-######################### Up-sampling y filtrado #########################
-symI_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc, symI)
-
-symQ_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc, symQ)
-
-# Gráfica de la salida del filtro
+### Gráfica de la salida del filtro
 plt.figure(figsize=[10,6])
 
 plt.subplot(2,1,1)
@@ -126,38 +160,15 @@ plt.ylabel('Magnitud')
 #plt.show()
 
 
-
-############################# Diagrama de Ojo ############################
+### Diagrama de Ojo 
 fn.eyediagram(fn.arrFixToFloat(symI_out)[100:len(symI_out)-100],os,5,Nbauds)
 fn.eyediagram(fn.arrFixToFloat(symQ_out)[100:len(symQ_out)-100],os,5,Nbauds)
 
 
-
-############################# Down-sampling ##############################
-phase = 0
-symI_rx_downsam = symI_out[phase:len(symI_out):int(os)]
-symQ_rx_downsam = symQ_out[phase:len(symQ_out):int(os)]
-#for i in range(len(symI_rx_downsam)):
-#    print(symI_rx_downsam[i].fValue, "\t\t",symI[i].fValue)
-
-
-
-####################### Escritura de datos para VM #######################
-with open('VM_I.txt', 'w') as archivo:
-    for i in range(len(symI_rx_downsam)):
-        archivo.write(str(int(symI_rx_downsam[i].fValue*(2**NBFrac))) + '\n')
-
-with open('VM_Q.txt', 'w') as archivo:
-    for i in range(len(symQ_rx_downsam)):
-        archivo.write(str(int(symQ_rx_downsam[i].fValue*(2**NBFrac))) + '\n')
-
-
-
-############################## Constelación ##############################
-offset = 0
+### Constelación 
 plt.figure(figsize=[6,6])
-plt.plot(fn.arrFixToFloat(symI_rx_downsam), # No afecta que no desprecie los 100 primeros y los 100 ultimos?
-         fn.arrFixToFloat(symQ_rx_downsam),
+plt.plot(fn.arrFixToFloat(symI_rx_downsam[latencia_I:len(symI_rx_downsam)]), 
+         fn.arrFixToFloat(symQ_rx_downsam[latencia_I:len(symQ_rx_downsam)]),
          '.',linewidth=2.0)
 plt.xlim((-2, 2))
 plt.ylim((-2, 2))
@@ -165,17 +176,4 @@ plt.grid(True)
 plt.xlabel('Real')
 plt.ylabel('Imag')
 
-#plt.show()
-
-
-################################### BER ##################################
-prbs9I_rx    = prbs9(0x1AA)
-(BER_I, latencia_I) = fn.ber(prbs9I_rx, symI_rx_downsam, Nsymb, NBTot, NBFrac)
-
-prbs9Q_rx    = prbs9(0x1FE)
-(BER_Q, latencia_Q) = fn.ber(prbs9Q_rx, symQ_rx_downsam, Nsymb, NBTot, NBFrac)
-
-print("BER_I =", BER_I, "%\t", "Latencia =", latencia_I)
-print("BER_Q =", BER_Q, "%\t", "Latencia =", latencia_Q)
-
-
+plt.show()

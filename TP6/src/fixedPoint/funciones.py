@@ -179,3 +179,57 @@ def upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc, sym):
         #print(filter_reg_I)
 
     return sym_out
+
+
+def ber(prbs9_rx, sym_rx, Nsymb, NBTot, NBFrac):
+    # Buffer de 511 bits inicializado en 0
+    buffer_prbs  = np.full(511,0b0)
+    # Contadores
+    error_min    = 511
+    cuenta_bits_tot_err = 0
+    cuenta_bits_tot  = 0
+    # Almacena el index con menor latencia
+    latencia     = 0
+    
+    for i in range(511):
+        # 1er ciclo de la PRBS
+        if(i<510):
+            cuenta_bits_tot_err = 0
+            for j in range(511):
+                # Ingresa un nuevo símbolo al buffer de la PRBS
+                buffer_prbs = np.roll(buffer_prbs, 1)
+                buffer_prbs[0] = prbs9_rx.get_new_symbol()
+                #print(buffer_prbs)
+                # Obtiene el signo del símbolo recibido 
+                sign_symI = (int((sym_rx[j].fValue)*2**NBFrac) >> (NBTot-1)) & 0b1
+                # Compara si son iguales signo y bit de la prbs
+                #print(sign_symI, buffer_prbs[i])
+                aux = sign_symI ^ buffer_prbs[i]
+                # Si son diferentes auemnta la cuenta de error
+                cuenta_bits_tot_err = cuenta_bits_tot_err+1 if(aux) else cuenta_bits_tot_err
+            
+            if(cuenta_bits_tot_err <= error_min):
+                latencia = i
+                error_min = cuenta_bits_tot_err
+             
+        # 2do ciclo en adelante de la PRBS
+        else:
+            cuenta_bits_tot_err = 0
+            for k in range(Nsymb-511):
+                # Ingresa un nuevo símbolo al buffer de la PRBS
+                buffer_prbs = np.roll(buffer_prbs, 1)
+                buffer_prbs[0] = prbs9_rx.get_new_symbol()
+                #print(buffer_prbs)
+                # Obtiene el signo del símbolo recibido 
+                sign_symI = (int((sym_rx[k].fValue)*2**NBFrac) >> (NBTot-1)) & 0b1
+                # Compara si son iguales signo y bit de la prbs
+                #print(sign_symI, buffer_prbs[i])
+                aux = sign_symI ^ buffer_prbs[latencia]
+                # Si son diferentes auemnta la cuenta de error y además aumenta la cuetna de bits
+                cuenta_bits_tot_err = cuenta_bits_tot_err+1 if(aux) else cuenta_bits_tot_err
+                cuenta_bits_tot += 1
+    
+#    print(error_min, "\t\t", latencia)
+#    print(cuenta_bits_tot_err, "\t\t", cuenta_bits_tot)
+
+    return (cuenta_bits_tot_err/cuenta_bits_tot, latencia)

@@ -3,12 +3,16 @@ import matplotlib.pyplot as plt
 from tool._fixedInt import *
 import funciones as fn
 from prbs9 import prbs9
+from upsamp_y_filtro import filtro
+from ber import ber
 
 
 
 ############################### Parámetros ###############################
 T     = 1.0/25.0e6    # Periodo de baudio
-Nsymb = 6000          # Numero de simbolos
+#Nsymb = 262144        # Para la sim. completa, descomentar línea 11 y en cambiar 4 por 511 en lin.131
+                      #511 comp. p/cada 511 simb. (sincronizar) y 1022 simb. p/contar ber.
+Nsymb = 7155          # 4 comp. p/cada 511 simb. (sincro.) y 5110 p/contar ber.
 os    = 4             # Over-salmpling
 
 Nfreqs = 256          # Cantidad de frecuencias
@@ -21,76 +25,156 @@ Ts = T/os             # Frecuencia de muestreo
 NBTot  = 8            # Cuantización: bits totales
 NBFrac = 6            # Cuantización: bits fraccionales
 
-NRegFilter = 5        # Cantidad de registros del shifter del filtro
+CombPRBS = (2**9)-1
 
 
-########################## Obtención del filtro ##########################
+LOG_COEF_FILTRO         = []
+LOG_PRBS_I_TX           = []
+LOG_PRBS_Q_TX           = []
+LOG_FILTER_OUT_I        = []
+LOG_FILTER_OUT_Q        = []
+LOG_RX_I_DW_SAM         = []
+LOG_RX_Q_DW_SAM         = []
+LOG_SYM_RX_I_POST_SINCR = []
+LOG_SYM_RX_Q_POST_SINCR = []
+
+
+################################ BER en Tx ###############################
+### Instancia objeto para generación de símbolos para cada lane
+prbs9I = prbs9([1, 0, 1, 0, 1, 0, 1, 0, 1]) # Seed: 0x1AA
+prbs9Q = prbs9([0, 1, 1, 1, 1, 1, 1, 1, 1]) # Seed: 0x1FE
+
+################################# Filtro #################################
+### Coeficientes del filtro
 (t,rc) = fn.rcosine(beta, T,os,Nbauds,Norm=False)
+### Cuantiza los coeficientes
+rc   = arrayFixedInt(NBTot, NBFrac, rc, 'S', 'trunc', 'saturate')
+### Loguea los coeficientes
+for i in range(len(rc)):
+    LOG_COEF_FILTRO.append(rc[i].fValue)
 
-# Cuantiza los coeficientes del filtro
-rc = arrayFixedInt(NBTot, NBFrac, rc, signedMode='S', roundMode='trunc', saturateMode='saturate')
-#print(rc)
+### Instancia objeto de filtro para cada lane
+filtradoI = filtro(rc, Nbauds, os, Nsymb, NBTot, NBFrac)
+filtradoQ = filtro(rc, Nbauds, os, Nsymb, NBTot, NBFrac)
+
+### Buffer temporal para almacenar el resultado de cada convoloución
+sym_I_out_filter = 0.0
+sym_Q_out_filter = 0.0
+
+############################## Down-sampler ##############################
+### Registro de 4 fases para cada lane
+shifDwSam_I = np.full(os,0)
+shifDwSam_Q = np.full(os,0)
+
+################################# PRBS Rx ################################
+### Instancia prbs para el Rx con las mismas semillas que el Tx
+prbs9I_rx = prbs9([1, 0, 1, 0, 1, 0, 1, 0, 1]) # Seed: 0x1AA
+prbs9Q_rx = prbs9([0, 1, 1, 1, 1, 1, 1, 1, 1]) # Seed: 0x1FE
+
+################################## BER Rx ################################
+### Instanica los contadores de BER para cada lane. Cada buffer es de 511
+ber_I = ber(CombPRBS)
+ber_Q = ber(CombPRBS)
+
+########################## Contadores y selectores #######################
+sel_phase_4_dwsam = 0 # 0, 1, 2 o 3
+
+latencia_I = 0  ;  bit_err_I = 0  ;  bit_tot_I = 0
+latencia_Q = 0  ;  bit_err_Q = 0  ;  bit_tot_Q = 0
 
 
-################### Respuesta en frecuencia del filtro ###################
-[Mag,Fas,Fq] = fn.resp_freq(fn.arrFixToFloat(rc), Ts, Nfreqs) #[magnitud, fase, freq]
+
+################################## Bucle #################################
+for i in range(Nsymb*os):
+    
+    ################ PRBS Tx
+    if(i%os == 0):
+        ### Lane I
+        new_bit_I_tx = prbs9I.get_new_symbol()
+        ### Lane Q
+        new_bit_Q_tx = prbs9Q.get_new_symbol()
+        ### Logueo de bits generados
+        LOG_PRBS_I_TX.append(-1 if(new_bit_I_tx) else 1)
+        LOG_PRBS_Q_TX.append(-1 if(new_bit_Q_tx) else 1)
+
+    ################ Upsampling y filtrado
+    #### Lane I
+    sym_I_out_filter = filtradoI.convol(i, new_bit_I_tx)
+    #### Lane Q
+    sym_Q_out_filter = filtradoQ.convol(i, new_bit_Q_tx)
+    ### Logue los bits transmitidos
+    LOG_FILTER_OUT_I.append(sym_I_out_filter)
+    LOG_FILTER_OUT_Q.append(sym_Q_out_filter)
+
+    ################ Down-sampling y Slicer
+    ### Lane I: actualiza registro de down-sampling
+    shifDwSam_I = np.roll(shifDwSam_I,1)
+    shifDwSam_I[0] = 0 if(sym_I_out_filter>0.0) else 1
+    ### Lane Q: actualiza registro de down-sampling
+    shifDwSam_Q = np.roll(shifDwSam_Q,1)
+    shifDwSam_Q[0] = 0 if(sym_Q_out_filter>0.0) else 1
+    ### Loguea los bits luego del slicer
+    if(i%(sel_phase_4_dwsam+4) == 0):
+        LOG_RX_I_DW_SAM.append(sym_I_out_filter)
+        LOG_RX_Q_DW_SAM.append(sym_Q_out_filter)
+
+    ################ BER Rx
+    if(i%os == 0):
+        ### Lane I: PRBS Rx genera un nuevo símbolo
+        new_bit_I_rx = prbs9I_rx.get_new_symbol()
+        ### Lane Q: PRBS Rx genera un nuevo símbolo
+        new_bit_Q_rx = prbs9Q_rx.get_new_symbol()
+
+        ### Sincroniza con los 1eros 4*511 símbolos downsampleados
+        if(i<=CombPRBS*4*os ):
+            ### Lane I: sincroniza
+            latencia_I = ber_I.sincroniza( i, new_bit_I_rx, shifDwSam_I[sel_phase_4_dwsam] )
+            ### Lane Q: sincroniza
+            latencia_Q = ber_Q.sincroniza( i, new_bit_Q_rx, shifDwSam_Q[sel_phase_4_dwsam] )
+        ### Conteo de errores y de bits totales
+        else:
+            ### Lane I: cuenta
+            (bit_err_I, bit_tot_I)=ber_I.cuenta( i, new_bit_I_rx, shifDwSam_I[sel_phase_4_dwsam] )
+            ### Lane Q: cuenta
+            (bit_err_Q, bit_tot_Q)=ber_Q.cuenta( i, new_bit_Q_rx, shifDwSam_Q[sel_phase_4_dwsam] )
+            ### Logueo de símbolos downsampleados luego de sincronizar
+            LOG_SYM_RX_I_POST_SINCR.append(-1 if(shifDwSam_I[sel_phase_4_dwsam]) else 1)
+            LOG_SYM_RX_Q_POST_SINCR.append(-1 if(shifDwSam_Q[sel_phase_4_dwsam]) else 1)
 
 
-################################## PRBS ##################################
-prbs9I = prbs9(0x1AA)
-prbs9Q = prbs9(0x1FE)
 
-symI = np.zeros(Nsymb)
-symQ = np.zeros(Nsymb)
-for i in range(Nsymb):
-    symI[i] = (-1 if(prbs9I.get_new_symbol()) else 1)
-    symQ[i] = (-1 if(prbs9Q.get_new_symbol()) else 1)
-
-# Cuantiza los símbolos generados
-symI = arrayFixedInt(NBTot, NBFrac, symI, signedMode='S', roundMode='trunc', saturateMode='saturate')
-symQ = arrayFixedInt(NBTot, NBFrac, symQ, signedMode='S', roundMode='trunc', saturateMode='saturate')
-
-
-######################### Up-sampling y filtrado #########################
-symI_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc, symI)
-
-symQ_out = fn.upsamp_and_filter(NRegFilter, NBTot, NBFrac, Nbauds, os, Nsymb, rc, symQ)
-
-
-############################# Down-sampling ##############################
-phase = 0
-symI_rx_downsam = symI_out[phase:len(symI_out):int(os)]
-symQ_rx_downsam = symQ_out[phase:len(symQ_out):int(os)]
-
-
-################################### BER ##################################
-prbs9I_rx    = prbs9(0x1AA)
-(BER_I, latencia_I) = fn.ber(prbs9I_rx, symI_rx_downsam, Nsymb, NBTot, NBFrac)
-
-prbs9Q_rx    = prbs9(0x1FE)
-(BER_Q, latencia_Q) = fn.ber(prbs9Q_rx, symQ_rx_downsam, Nsymb, NBTot, NBFrac)
-
-print("BER_I =", BER_I, "%\t", "Latencia =", latencia_I)
-print("BER_Q =", BER_Q, "%\t", "Latencia =", latencia_Q)
-
+print("BER_I =",bit_err_I/bit_tot_I, " - Latencia_I =", latencia_I)
+print("BER_Q =",bit_err_Q/bit_tot_Q, " - Latencia_Q =", latencia_Q)
 
 ####################### Escritura de datos para VM #######################
-with open('VM_I_rx.txt', 'w') as archivo:
-    for i in range(len(symI_rx_downsam)):
-        archivo.write(str(int(symI_out[i].fValue*(2**NBFrac))) + '\n')
+with open('VM_CoefFilter.txt', 'w') as archivo:
+    for i in range(len(rc)):
+        archivo.write(str(int(rc[i].fValue*(2**NBFrac))) + '\n')
 
-with open('VM_Q_rx.txt', 'w') as archivo:
-    for i in range(len(symQ_rx_downsam)):
-        archivo.write(str(int(symQ_out[i].fValue*(2**NBFrac))) + '\n')
+with open('VM_I_SymTx.txt', 'w') as archivo:
+    for i in range(len(LOG_PRBS_I_TX)):
+        archivo.write(str(LOG_PRBS_I_TX[i]) + '\n')
 
-with open('VM_I_rx_dwsam.txt', 'w') as archivo:
-    for i in range(len(symI_rx_downsam)):
-        archivo.write(str(int(symI_rx_downsam[i].fValue*(2**NBFrac))) + '\n')
+with open('VM_Q_SymTx.txt', 'w') as archivo:
+    for i in range(len(LOG_PRBS_Q_TX)):
+        archivo.write(str(LOG_PRBS_Q_TX[i]) + '\n')
 
-with open('VM_Q_rx_dwsam.txt', 'w') as archivo:
-    for i in range(len(symQ_rx_downsam)):
-        archivo.write(str(int(symQ_rx_downsam[i].fValue*(2**NBFrac))) + '\n')
+with open('VM_I_FilterOut.txt', 'w') as archivo:
+    for i in range(len(LOG_FILTER_OUT_I)):
+        archivo.write(str(int(LOG_FILTER_OUT_I[i]*(2**NBFrac))) + '\n')
 
+with open('VM_Q_FilterOut.txt', 'w') as archivo:
+    for i in range(len(LOG_FILTER_OUT_Q)):
+        archivo.write(str(int(LOG_FILTER_OUT_Q[i]*(2**NBFrac))) + '\n')
+
+
+with open('VM_SymI_POST_SINCR.txt', 'w') as archivo:
+    for i in range(len(LOG_SYM_RX_I_POST_SINCR)):
+        archivo.write(str(LOG_SYM_RX_I_POST_SINCR[i]) + '\n')
+
+with open('VM_SymQ_POST_SINCR.txt', 'w') as archivo:
+    for i in range(len(LOG_SYM_RX_Q_POST_SINCR)):
+        archivo.write(str(LOG_SYM_RX_Q_POST_SINCR[i]) + '\n')
 
 
 
@@ -98,7 +182,7 @@ with open('VM_Q_rx_dwsam.txt', 'w') as archivo:
 
 ### Gráfica de la respuesta al impulso.
 plt.figure(figsize=[14,7])
-plt.plot(t,fn.arrFixToFloat(rc),'ro-',linewidth=2.0,label=r'$\beta=0.5$')
+plt.plot(t,LOG_COEF_FILTRO,'ro-',linewidth=2.0,label=r'$\beta=0.5$')
 plt.legend()
 plt.grid(True)
 plt.xlabel('Muestras')
@@ -108,6 +192,8 @@ plt.ylabel('Magnitud')
 
 
 ### Gráfica de Bode
+[Mag,Fas,Fq] = fn.resp_freq(LOG_COEF_FILTRO, Ts, Nfreqs) #[magnitud, fase, freq]
+
 plt.figure(figsize=[14,6])
 plt.semilogx(Fq, 20*np.log10(Mag),'r', linewidth=2.0, label=r'$\beta=0.0$')
 plt.axvline(x=(1./Ts)/2.,color='k',linewidth=2.0)
@@ -126,11 +212,11 @@ plt.ylabel('Magnitud [dB]')
 ### Gráfica de bits símbolos generados 
 plt.figure(figsize=[10,6])
 plt.subplot(2,1,1)
-plt.plot(fn.arrFixToFloat(symI),'o')
+plt.plot(LOG_PRBS_I_TX,'o')
 plt.xlim(0,20)
 plt.grid(True)
 plt.subplot(2,1,2)
-plt.plot(fn.arrFixToFloat(symQ),'o')
+plt.plot(LOG_PRBS_Q_TX,'o')
 plt.xlim(0,20)
 plt.grid(True)
 plt.xlim(0,20)
@@ -142,7 +228,7 @@ plt.xlim(0,20)
 plt.figure(figsize=[10,6])
 
 plt.subplot(2,1,1)
-plt.plot(fn.arrFixToFloat(symI_out),'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
+plt.plot(LOG_FILTER_OUT_I,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
 plt.xlim(1000,1250)
 plt.grid(True)
 plt.legend()
@@ -150,7 +236,7 @@ plt.xlabel('Muestras')
 plt.ylabel('Magnitud')
 
 plt.subplot(2,1,2)
-plt.plot(fn.arrFixToFloat(symQ_out),'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
+plt.plot(LOG_FILTER_OUT_Q,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
 plt.xlim(1000,1250)
 plt.grid(True)
 plt.legend()
@@ -161,15 +247,18 @@ plt.ylabel('Magnitud')
 
 
 ### Diagrama de Ojo 
-fn.eyediagram(fn.arrFixToFloat(symI_out)[100:len(symI_out)-100],os,5,Nbauds)
-fn.eyediagram(fn.arrFixToFloat(symQ_out)[100:len(symQ_out)-100],os,5,Nbauds)
+fn.eyediagram(LOG_FILTER_OUT_I[100:len(LOG_FILTER_OUT_Q)-100],os,5,Nbauds)
+fn.eyediagram(LOG_FILTER_OUT_Q[100:len(LOG_FILTER_OUT_Q)-100],os,5,Nbauds)
 
 
 ### Constelación 
 plt.figure(figsize=[6,6])
-plt.plot(fn.arrFixToFloat(symI_rx_downsam[latencia_I:len(symI_rx_downsam)]), 
-         fn.arrFixToFloat(symQ_rx_downsam[latencia_I:len(symQ_rx_downsam)]),
+plt.plot(LOG_FILTER_OUT_I[100+sel_phase_4_dwsam:len(LOG_FILTER_OUT_I)-100:int(os)], 
+         LOG_FILTER_OUT_Q[100+sel_phase_4_dwsam:len(LOG_FILTER_OUT_Q)-100:int(os)],
          '.',linewidth=2.0)
+#plt.plot(LOG_RX_I_DW_SAM[100:len(LOG_SYM_RX_I_POST_SINCR)-100], 
+#         LOG_RX_Q_DW_SAM[100:len(LOG_SYM_RX_Q_POST_SINCR)-100],
+#         '.',linewidth=2.0)
 plt.xlim((-2, 2))
 plt.ylim((-2, 2))
 plt.grid(True)

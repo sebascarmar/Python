@@ -1,16 +1,15 @@
-
+import numpy as np
 
 class prbs9:
 
     def __init__(self, seed):
-        self.reg = seed
+        self.reg = np.array(seed)
 
     def get_new_symbol(self):
         # Calcula el nuevo bit de entrada al registro
-        next_in  = ((self.reg>>4)^(self.reg>>8)) & 0b000000001
+        new_in = self.reg[4]^self.reg[8]
         # Desplaza el registro e ingresa el nuevo bit con LSB
-        self.reg = ((self.reg<<1)|next_in) & 0b111111111
-        # Obtiene el bit más significativo, que es la salida
-        next_out = (self.reg>>8) & 0b000000001
+        self.reg = np.roll(self.reg,1)
+        self.reg[0] = new_in
 
-        return next_out
+        return self.reg[8]

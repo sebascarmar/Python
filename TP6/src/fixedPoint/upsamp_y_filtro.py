@@ -26,8 +26,7 @@ class filtro:
         self.sum_lvl2   = DeFixedInt(NBTot+2, NBFrac, 'S', 'trunc', 'saturate')
         self.sum_lvl3   = DeFixedInt(NBTot+3, NBFrac, 'S', 'trunc', 'saturate')
         ### Saturación y truncado
-        sym_out   = np.zeros(Nsymb*os)
-        self.sym_out   = arrayFixedInt(NBTot, NBFrac, sym_out, 'S', 'trunc', 'saturate')
+        self.sym_out   = DeFixedInt(NBTot, NBFrac, 'S', 'trunc', 'saturate')
         ### Contadores
         self.phase_counter = 0
 
@@ -68,6 +67,6 @@ class filtro:
         self.sum_lvl3  .assign( self.sum_lvl2 + self.sum_lvl1_c   )# resulta S(11,6)
          
         ### Saturación y truncado para obtener la salida final
-        self.sym_out[i].assign( self.sum_lvl3 )# resulta S(8,6)
+        self.sym_out.assign( self.sum_lvl3 )# resulta S(8,6)
         
-        return self.sym_out[i].fValue
+        return self.sym_out.fValue

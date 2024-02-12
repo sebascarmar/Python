@@ -212,11 +212,13 @@ plt.ylabel('Magnitud [dB]')
 ### Gráfica de bits símbolos generados 
 plt.figure(figsize=[10,6])
 plt.subplot(2,1,1)
-plt.plot(LOG_PRBS_I_TX,'o')
-plt.xlim(0,20)
+#plt.plot(LOG_PRBS_I_TX,'o')
+plt.plot(LOG_PRBS_I_TX[127000:len(LOG_PRBS_I_TX)-127000],'o') #Para sim. completa
+plt.xlim(0,20) 
 plt.grid(True)
 plt.subplot(2,1,2)
-plt.plot(LOG_PRBS_Q_TX,'o')
+#plt.plot(LOG_PRBS_Q_TX,'o')
+plt.plot(LOG_PRBS_Q_TX[127000:len(LOG_PRBS_Q_TX)-127000],'o') #Para sim. completa
 plt.xlim(0,20)
 plt.grid(True)
 plt.xlim(0,20)
@@ -228,7 +230,8 @@ plt.xlim(0,20)
 plt.figure(figsize=[10,6])
 
 plt.subplot(2,1,1)
-plt.plot(LOG_FILTER_OUT_I,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
+#plt.plot(LOG_FILTER_OUT_I,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
+plt.plot(LOG_FILTER_OUT_I[510000:len(LOG_FILTER_OUT_Q)-510000],'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta) #Para sim. comp.
 plt.xlim(1000,1250)
 plt.grid(True)
 plt.legend()
@@ -236,7 +239,8 @@ plt.xlabel('Muestras')
 plt.ylabel('Magnitud')
 
 plt.subplot(2,1,2)
-plt.plot(LOG_FILTER_OUT_Q,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
+#plt.plot(LOG_FILTER_OUT_Q,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
+plt.plot(LOG_FILTER_OUT_Q[510000:len(LOG_FILTER_OUT_Q)-510000],'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta) #Para sim. comp.
 plt.xlim(1000,1250)
 plt.grid(True)
 plt.legend()
@@ -247,18 +251,22 @@ plt.ylabel('Magnitud')
 
 
 ### Diagrama de Ojo 
-fn.eyediagram(LOG_FILTER_OUT_I[100:len(LOG_FILTER_OUT_Q)-100],os,5,Nbauds)
-fn.eyediagram(LOG_FILTER_OUT_Q[100:len(LOG_FILTER_OUT_Q)-100],os,5,Nbauds)
+#fn.eyediagram(LOG_FILTER_OUT_I[100:len(LOG_FILTER_OUT_Q)-100],os,5,Nbauds)
+#fn.eyediagram(LOG_FILTER_OUT_Q[100:len(LOG_FILTER_OUT_Q)-100],os,5,Nbauds)
+fn.eyediagram(LOG_FILTER_OUT_I[510000:len(LOG_FILTER_OUT_Q)-510000],os,5,Nbauds) # Para sim. completa
+fn.eyediagram(LOG_FILTER_OUT_Q[510000:len(LOG_FILTER_OUT_Q)-510000],os,5,Nbauds) # Para sim. completa
+
 
 
 ### Constelación 
 plt.figure(figsize=[6,6])
-plt.plot(LOG_FILTER_OUT_I[100+sel_phase_4_dwsam:len(LOG_FILTER_OUT_I)-100:int(os)], 
-         LOG_FILTER_OUT_Q[100+sel_phase_4_dwsam:len(LOG_FILTER_OUT_Q)-100:int(os)],
-         '.',linewidth=2.0)
-#plt.plot(LOG_RX_I_DW_SAM[100:len(LOG_SYM_RX_I_POST_SINCR)-100], 
-#         LOG_RX_Q_DW_SAM[100:len(LOG_SYM_RX_Q_POST_SINCR)-100],
+#plt.plot(LOG_FILTER_OUT_I[100+sel_phase_4_dwsam:len(LOG_FILTER_OUT_I)-100:int(os)], 
+#         LOG_FILTER_OUT_Q[100+sel_phase_4_dwsam:len(LOG_FILTER_OUT_Q)-100:int(os)],
 #         '.',linewidth=2.0)
+#plt.plot(LOG_RX_I_DW_SAM, LOG_RX_Q_DW_SAM, '.') # Da formas no reconocibles en el diagrama de ojo
+plt.plot(LOG_FILTER_OUT_I[510000+sel_phase_4_dwsam:len(LOG_FILTER_OUT_I)-510000:int(os)],  # Para sim. completa
+         LOG_FILTER_OUT_Q[510000+sel_phase_4_dwsam:len(LOG_FILTER_OUT_Q)-510000:int(os)],
+         '.',linewidth=2.0)
 plt.xlim((-2, 2))
 plt.ylim((-2, 2))
 plt.grid(True)

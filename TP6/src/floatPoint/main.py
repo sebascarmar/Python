@@ -20,7 +20,7 @@ Ts = T/os             # Frecuencia de muestreo
 
 ########################## Obtención del filtro ##########################
 (t,rc) = fn.rcosine(beta, T,os,Nbauds,Norm=False)
-print(rc)
+#print(rc)
 
 # Gráfica de la respuesta al impulso.
 plt.figure(figsize=[14,7])
@@ -125,4 +125,11 @@ plt.grid(True)
 plt.xlabel('Real')
 plt.ylabel('Imag')
 
+plt.show()
+
+
+
+######################### Estimación de BER ##############################
+plt.figure(figsize=[10,6])
+plt.plot(np.correlate(symbolsI,2*(symb_outI[3:len(symb_outI):int(os)]>0.0)-1,'same'))
 plt.show()

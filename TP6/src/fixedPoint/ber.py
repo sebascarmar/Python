@@ -2,8 +2,8 @@ import numpy as np
 
 class ber:
     def __init__(self, CombPRBS):
-        self.shifterBER = np.full(1022,0)
-        self.index_BER = -1
+        self.shifterBER = np.full(511,0)
+        self.index_BER = 0
         self.cuenta_bit_err=CombPRBS
         self.error_min = CombPRBS
         self.combinacionesPRBS = CombPRBS
@@ -18,7 +18,7 @@ class ber:
 
         self.cuenta_bit_err += self.shifterBER[self.index_BER] ^ sym_downsamp
         
-        if(i%self.combinacionesPRBS == 0):
+        if(i%self.combinacionesPRBS == 0 and i>0):
             if(self.cuenta_bit_err < self.error_min):
                 self.error_min = self.cuenta_bit_err
                 self.latencia = self.index_BER

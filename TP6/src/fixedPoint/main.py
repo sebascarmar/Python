@@ -41,7 +41,7 @@ LOG_SYM_RX_Q_POST_SINCR = []
 
 ################################ BER en Tx ###############################
 ### Instancia objeto para generación de símbolos para cada lane
-prbs9I = prbs9([1, 0, 1, 0, 1, 0, 1, 0, 1]) # Seed: 0x1AA
+prbs9I = prbs9([0, 1, 0, 1, 0, 1, 0, 1, 1]) # Seed: 0x1AA
 prbs9Q = prbs9([0, 1, 1, 1, 1, 1, 1, 1, 1]) # Seed: 0x1FE
 
 ################################# Filtro #################################
@@ -68,7 +68,7 @@ shifDwSam_Q = np.full(os,0)
 
 ################################# PRBS Rx ################################
 ### Instancia prbs para el Rx con las mismas semillas que el Tx
-prbs9I_rx = prbs9([1, 0, 1, 0, 1, 0, 1, 0, 1]) # Seed: 0x1AA
+prbs9I_rx = prbs9([0, 1, 0, 1, 0, 1, 0, 1, 1]) # Seed: 0x1AA
 prbs9Q_rx = prbs9([0, 1, 1, 1, 1, 1, 1, 1, 1]) # Seed: 0x1FE
 
 ################################## BER Rx ################################

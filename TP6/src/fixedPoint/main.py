@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from tool._fixedInt import *
 import funciones as fn
 from prbs9 import prbs9
-from upsamp_y_filtro import filtro
+from poly_filter import filtro
 from ber import ber
 
 

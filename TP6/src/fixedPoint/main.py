@@ -66,6 +66,11 @@ sym_Q_out_filter = 0.0
 shifDwSam_I = np.full(os,0)
 shifDwSam_Q = np.full(os,0)
 
+############################### Slicer ###################################
+### Regi. del slicer (el lugar extra sirve para simular la carga del dato)
+buff_slicer_I = np.full(2,0)
+buff_slicer_Q = np.full(2,0)
+
 ################################# PRBS Rx ################################
 ### Instancia prbs para el Rx con las mismas semillas que el Tx
 prbs9I_rx = prbs9([0, 1, 0, 1, 0, 1, 0, 1, 1]) # Seed: 0x1AA
@@ -125,21 +130,29 @@ for i in range(Nsymb*os):
         ### Lane Q: PRBS Rx genera un nuevo símbolo
         new_bit_Q_rx = prbs9Q_rx.get_new_symbol()
 
+        ### Buffer de slicer con simulación de un clock de demora en cargar el dato
+        ###en ambos lanes.
+        buff_slicer_I[0] = shifDwSam_I[sel_phase_4_dwsam]
+        buff_slicer_Q[0] = shifDwSam_Q[sel_phase_4_dwsam]
+        
         ### Sincroniza con los 1eros 4*511 símbolos downsampleados
-        if(i<=CombPRBS*511*os ):
+        if(i<=CombPRBS*4*os ):
             ### Lane I: sincroniza
-            latencia_I = ber_I.sincroniza( i, new_bit_I_rx, shifDwSam_I[sel_phase_4_dwsam] )
+            latencia_I = ber_I.sincroniza( i, new_bit_I_rx, buff_slicer_I[1] )
             ### Lane Q: sincroniza
-            latencia_Q = ber_Q.sincroniza( i, new_bit_Q_rx, shifDwSam_Q[sel_phase_4_dwsam] )
+            latencia_Q = ber_Q.sincroniza( i, new_bit_Q_rx, buff_slicer_Q[1] )
         ### Conteo de errores y de bits totales
         else:
             ### Lane I: cuenta
-            (bit_err_I, bit_tot_I)=ber_I.cuenta( i, new_bit_I_rx, shifDwSam_I[sel_phase_4_dwsam] )
+            (bit_err_I, bit_tot_I)=ber_I.cuenta( i, new_bit_I_rx, buff_slicer_I[1] )
             ### Lane Q: cuenta
-            (bit_err_Q, bit_tot_Q)=ber_Q.cuenta( i, new_bit_Q_rx, shifDwSam_Q[sel_phase_4_dwsam] )
+            (bit_err_Q, bit_tot_Q)=ber_Q.cuenta( i, new_bit_Q_rx, buff_slicer_Q[1] )
             ### Logueo de símbolos downsampleados luego de sincronizar
-            LOG_SYM_RX_I_POST_SINCR.append(shifDwSam_I[sel_phase_4_dwsam])
-            LOG_SYM_RX_Q_POST_SINCR.append(shifDwSam_Q[sel_phase_4_dwsam])
+            LOG_SYM_RX_I_POST_SINCR.append(buff_slicer_I[1])
+            LOG_SYM_RX_Q_POST_SINCR.append(buff_slicer_Q[1])
+
+        buff_slicer_I = np.roll(buff_slicer_I, 1)
+        buff_slicer_Q = np.roll(buff_slicer_Q, 1)
 
 
 

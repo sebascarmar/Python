@@ -147,7 +147,15 @@ print("BER_I =",bit_err_I/bit_tot_I, " - Latencia_I =", latencia_I)
 print("BER_Q =",bit_err_Q/bit_tot_Q, " - Latencia_Q =", latencia_Q)
 
 ####################### Escritura de datos para VM #######################
-with open('VM_CoefFilter.txt', 'w') as archivo:
+## Escribe los coeficientes como una cadena en su represetnación binaria (para Verilog)
+#with open('CoefFilter.dat', 'w') as binString:
+#    for i in range(len(rc)):
+#        binString.write((format(int(rc[i].fValue*(2**NBFrac)), '08b')[-8:] 
+#                         if(rc[i].fValue>0.0) else 
+#                         format((1 << 8) + int(rc[i].fValue*(2**NBFrac)), '08b')[-8:])
+#                         + '\n')
+
+with open('CoefFilter.txt', 'w') as archivo:
     for i in range(len(rc)):
         archivo.write(str(int(rc[i].fValue*(2**NBFrac))) + '\n')
 

@@ -4,8 +4,8 @@ from tool._fixedInt import *
 class filtro:
 
     def __init__(self, rc, Nbauds, os, Nsymb, NBTot, NBFrac):
-        ### Shifreg del filtro
-        self.shifterFIR = np.full(Nbauds,0)
+        ### Shifreg del filtro con simulación de 1 clock de demora en cargar el dato
+        self.shifterFIR = np.full(Nbauds+1,0) 
         ### Conjunto de coeficientes correspondientes a cada fase del filtro 
         self.coef_ph0 = []
         self.coef_ph1 = []
@@ -27,8 +27,9 @@ class filtro:
         self.sum_lvl3   = DeFixedInt(NBTot+3, NBFrac, 'S', 'trunc', 'saturate')
         ### Saturación y truncado
         self.sym_out   = DeFixedInt(NBTot, NBFrac, 'S', 'trunc', 'saturate')
-        ### Contadores
-        self.phase_counter = 0
+        ### Contador. Permite que coincida la fase0 del filtro (coeficientes) con el primer
+        ###símbolo ingresado al filtro (bucle i=1, o segundo clock)
+        self.phase_counter = 3
 
 
 
@@ -36,25 +37,27 @@ class filtro:
         menos = DeFixedInt(2, 1, 'S', 'trunc', 'saturate')
         menos.value = -1.0
         
+        ### Ingresa un nuevo símbolo
         if(i%4 == 0):
-            # Ingresa el nuevo símbolo al shifter del Filtro
-            self.shifterFIR    = np.roll(self.shifterFIR,1)
             self.shifterFIR[0] = new_symb
+        ### Carga el registro en el siguiente clock
+        if(i%4 == 1):
+            self.shifterFIR    = np.roll(self.shifterFIR,1)
         
-        
-        for j in range(6):
+        ### shifterFIR posee un lugar más de memoria para simular hardware
+        for j in range(1, 7):
             if(self.phase_counter == 0):
                 #prod_parcial[j].value =  -1*coef_ph0[j].fValue if(shifterFIR[j]==1) else coef_ph0[j].fValue
-                self.prod_parcial[j].assign( menos*self.coef_ph0[j] if(self.shifterFIR[j]) else self.coef_ph0[j] )# S(8,6)
+                self.prod_parcial[j-1].assign( menos*self.coef_ph0[j-1] if(self.shifterFIR[j]) else self.coef_ph0[j-1] )# S(8,6)
             elif(self.phase_counter == 1):                                                               
                 #prod_parcial[j].value =  -1*coef_ph1[j].fValue if(shifterFIR[j]==1) else coef_ph1[j].fValue
-                self.prod_parcial[j].assign( menos*self.coef_ph1[j] if(self.shifterFIR[j]) else self.coef_ph1[j] )# S(8,6)
+                self.prod_parcial[j-1].assign( menos*self.coef_ph1[j-1] if(self.shifterFIR[j]) else self.coef_ph1[j-1] )# S(8,6)
             elif(self.phase_counter == 2):                                                              
                 #prod_parcial[j].value =  -1*coef_ph2[j].fValue if(shifterFIR[j]==1) else coef_ph2[j].fValue
-                self.prod_parcial[j].assign( menos*self.coef_ph2[j] if(self.shifterFIR[j]) else self.coef_ph2[j] )# S(8,6)
+                self.prod_parcial[j-1].assign( menos*self.coef_ph2[j-1] if(self.shifterFIR[j]) else self.coef_ph2[j-1] )# S(8,6)
             elif(self.phase_counter == 3):                                                             
                 #prod_parcial[j].value =  -1*coef_ph3[j].fValue if(shifterFIR[j]==1) else coef_ph3[j].fValue
-                self.prod_parcial[j].assign( menos*self.coef_ph3[j] if(self.shifterFIR[j]) else self.coef_ph3[j] )# S(8.6)
+                self.prod_parcial[j-1].assign( menos*self.coef_ph3[j-1] if(self.shifterFIR[j]) else self.coef_ph3[j-1] )# S(8.6)
         
         ### Actualiza contador (elección) de las fases
         self.phase_counter = self.phase_counter+1 if(self.phase_counter<3) else 0

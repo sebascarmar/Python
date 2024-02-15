@@ -49,3 +49,7 @@ class ber:
         self.cuenta_bit_tot += 1
         
         return (self.cuenta_bit_err, self.cuenta_bit_tot)
+
+    def imprime(self, i):
+        print("i:",i,self.shifterBER[1],self.shifterBER[0:20],self.cuenta_bit_err)
+        input()

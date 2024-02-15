@@ -160,6 +160,7 @@ for i in range(Nsymb*os):
             LOG_SYM_RX_I_POST_SINCR.append(buff_slicer_I[1])
             LOG_SYM_RX_Q_POST_SINCR.append(buff_slicer_Q[1])
 
+    #ber_I.imprime(i)
 
 
 

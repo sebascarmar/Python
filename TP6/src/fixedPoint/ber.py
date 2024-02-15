@@ -18,19 +18,21 @@ class ber:
         self.combinacionesPRBS = CombPRBS
 
 
-    def sincroniza(self, i, new_bit_rx, sym_downsamp):
-        # Ingresa el nuevo símbolo al buffer de la BER Rx
+    def sincroniza(self, i, new_bit_prbs_rx, sym_downsamp):
+        ### Ingresa el nuevo bit generado por la prbs al buffer de la BER Rx
         self.shifterBER    = np.roll(self.shifterBER,1)
-        self.shifterBER[0] = new_bit_rx
-
-        self.cuenta_bit_err += self.shifterBER[self.index_BER] ^ sym_downsamp
+        self.shifterBER[0] = new_bit_prbs_rx
         
+        ### Aumenta la cuenta si son distintos
+        self.cuenta_bit_err += self.shifterBER[self.index_BER+1] ^ sym_downsamp
+        
+        ### Si ya hizo las 511 comparaciones con la misma index_BER, entra
         if(i%self.combinacionesPRBS == 0 and i>0):
             if(self.cuenta_bit_err < self.error_min):
                 self.error_min = self.cuenta_bit_err
-                self.latencia = self.index_BER
+                self.latencia  = self.index_BER
             
-            self.index_BER += 1
+            self.index_BER     += 1
             self.cuenta_bit_err = 0
 
         return self.latencia

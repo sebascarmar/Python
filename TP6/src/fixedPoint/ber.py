@@ -43,7 +43,7 @@ class ber:
         self.shifterBER    = np.roll(self.shifterBER,1)
         self.shifterBER[0] = new_bit_prbs_rx
 
-        self.cuenta_bit_err += self.shifterBER[self.latencia] ^ sym_downsamp
+        self.cuenta_bit_err += self.shifterBER[self.latencia+1] ^ sym_downsamp
         #print(self.cuenta_bit_err, self.shifterBER[self.latencia] , sym_downsamp)
         #input()
         self.cuenta_bit_tot += 1

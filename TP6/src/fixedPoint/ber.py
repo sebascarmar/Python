@@ -38,10 +38,10 @@ class ber:
         return self.latencia
 
 
-    def cuenta(self, i, new_bit_rx, sym_downsamp):
+    def cuenta(self, i, new_bit_prbs_rx, sym_downsamp):
         # Ingresa el nuevo símbolo al buffer de la BER Rx
         self.shifterBER    = np.roll(self.shifterBER,1)
-        self.shifterBER[0] = new_bit_rx
+        self.shifterBER[0] = new_bit_prbs_rx
 
         self.cuenta_bit_err += self.shifterBER[self.latencia] ^ sym_downsamp
         #print(self.cuenta_bit_err, self.shifterBER[self.latencia] , sym_downsamp)

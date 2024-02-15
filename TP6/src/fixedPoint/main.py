@@ -10,7 +10,7 @@ from ber import ber
 
 ############################### Parámetros ###############################
 T     = 1.0/25.0e6    # Periodo de baudio
-Nsymb = 262144        # Para la sim. completa, descom. lín.13 y cambiar el 4 por 511 en lin.131
+Nsymb = 262144        # Para la sim. completa, descom. lín.13 y cambiar el 4 por 511 en lin.148
                       #511 comp. p/cada 511 simb. (sincronizar) y 1022 simb. p/contar ber.
 #Nsymb = 7155          # 4 comp. p/cada 511 simb. (sincro.) y 5110 p/contar ber.
 os    = 4             # Over-salmpling
@@ -83,7 +83,7 @@ ber_I = ber(CombPRBS)
 ber_Q = ber(CombPRBS)
 
 ########################## Contadores y selectores #######################
-sel_phase_4_dwsam = 0 # 0, 1, 2 o 3
+sel_phase_4_dwsam = 2 # 0, 1, 2 o 3
 index_dw_samp     = sel_phase_4_dwsam + 1 # Debido a que el reg. es más grande
 
 latencia_I = 0  ;  bit_err_I = 0  ;  bit_tot_I = 0
@@ -145,7 +145,7 @@ for i in range(Nsymb*os):
         new_bit_Q_rx = prbs9Q_rx.get_new_symbol()
         
         ### Sincroniza con los 1eros 4*511 símbolos downsampleados
-        if(i<=CombPRBS*4*os ):
+        if(i<=CombPRBS*511*os ):
             ### Lane I: sincroniza
             latencia_I = ber_I.sincroniza( i, new_bit_I_rx, buff_slicer_I[1] )
             ### Lane Q: sincroniza
@@ -288,12 +288,9 @@ fn.eyediagram(LOG_FILTER_OUT_Q[510000:len(LOG_FILTER_OUT_Q)-510000],os,5,Nbauds)
 
 ### Constelación 
 plt.figure(figsize=[6,6])
-#plt.plot(LOG_FILTER_OUT_I[100+sel_phase_4_dwsam:len(LOG_FILTER_OUT_I)-100:int(os)], 
-#         LOG_FILTER_OUT_Q[100+sel_phase_4_dwsam:len(LOG_FILTER_OUT_Q)-100:int(os)],
-#         '.',linewidth=2.0)
-#plt.plot(LOG_RX_I_DW_SAM, LOG_RX_Q_DW_SAM, '.') # Da formas no reconocibles en el diagrama de ojo
-plt.plot(LOG_FILTER_OUT_I[510000+sel_phase_4_dwsam:len(LOG_FILTER_OUT_I)-510000:int(os)],  # Para sim. completa
-         LOG_FILTER_OUT_Q[510000+sel_phase_4_dwsam:len(LOG_FILTER_OUT_Q)-510000:int(os)],
+#plt.plot(LOG_RX_I_DW_SAM, LOG_RX_Q_DW_SAM,'.',linewidth=2.0)
+plt.plot(LOG_RX_I_DW_SAM[510000:len(LOG_RX_I_DW_SAM)-510000], # Para sim. completa
+         LOG_RX_Q_DW_SAM[510000:len(LOG_RX_Q_DW_SAM)-510000],
          '.',linewidth=2.0)
 plt.xlim((-2, 2))
 plt.ylim((-2, 2))

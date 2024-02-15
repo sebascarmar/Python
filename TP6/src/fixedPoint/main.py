@@ -119,11 +119,23 @@ for i in range(Nsymb*os):
     shifDwSam_I[0] = sym_I_out_filter
     ### Lane Q: actualiza registro de down-sampling
     shifDwSam_Q = np.roll(shifDwSam_Q,1)
-    ### Loguea los bits luego del slicer
-    if(i%(sel_phase_4_dwsam+4) == 0):
-        LOG_RX_I_DW_SAM.append(sym_I_out_filter)
-        LOG_RX_Q_DW_SAM.append(sym_Q_out_filter)
     shifDwSam_Q[0] = sym_Q_out_filter
+    
+    ################ Slicer
+    ### Buffer de slicer con simulación de un clock de demora en cargar el dato
+    ###en ambos lanes.
+    if(i%os == 0):
+        ### Lane I: desplaza (carga el signo para la siguiente comparación)
+        ###         detecta el signo de la comp. siguiente de la siguiente
+        buff_slicer_I    = np.roll(buff_slicer_I, 1)
+        buff_slicer_I[0] = 0 if(shifDwSam_I[index_dw_samp]>=0.0) else 1
+        ### Lane Q: desplaza (carga el signo para la siguiente comparación)
+        ###         detecta el signo de la comp. siguiente de la siguiente
+        buff_slicer_Q    = np.roll(buff_slicer_Q, 1)
+        buff_slicer_Q[0] = 0 if(shifDwSam_Q[index_dw_samp]>=0.0) else 1
+        ### Loguea los símbolos down-sampleandos
+        LOG_RX_I_DW_SAM.append(shifDwSam_I[index_dw_samp])
+        LOG_RX_Q_DW_SAM.append(shifDwSam_Q[index_dw_samp])
 
     ################ BER Rx
     if(i%os == 0):
@@ -131,11 +143,6 @@ for i in range(Nsymb*os):
         new_bit_I_rx = prbs9I_rx.get_new_symbol()
         ### Lane Q: PRBS Rx genera un nuevo símbolo
         new_bit_Q_rx = prbs9Q_rx.get_new_symbol()
-
-        ### Buffer de slicer con simulación de un clock de demora en cargar el dato
-        ###en ambos lanes.
-        buff_slicer_I[0] = shifDwSam_I[sel_phase_4_dwsam]
-        buff_slicer_Q[0] = shifDwSam_Q[sel_phase_4_dwsam]
         
         ### Sincroniza con los 1eros 4*511 símbolos downsampleados
         if(i<=CombPRBS*4*os ):
@@ -153,8 +160,6 @@ for i in range(Nsymb*os):
             LOG_SYM_RX_I_POST_SINCR.append(buff_slicer_I[1])
             LOG_SYM_RX_Q_POST_SINCR.append(buff_slicer_Q[1])
 
-        buff_slicer_I = np.roll(buff_slicer_I, 1)
-        buff_slicer_Q = np.roll(buff_slicer_Q, 1)
 
 
 

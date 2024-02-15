@@ -62,9 +62,10 @@ sym_I_out_filter = 0.0
 sym_Q_out_filter = 0.0
 
 ############################## Down-sampler ##############################
-### Registro de 4 fases para cada lane
-shifDwSam_I = np.full(os,0)
-shifDwSam_Q = np.full(os,0)
+### Registro de 4 fases para cada lane. Usa un lugar más para poder
+###representar hardware (carga el dato 1 clock después)
+shifDwSam_I = np.zeros(os+1)
+shifDwSam_Q = np.zeros(os+1)
 
 ############################### Slicer ###################################
 ### Regi. del slicer (el lugar extra sirve para simular la carga del dato)
@@ -83,6 +84,7 @@ ber_Q = ber(CombPRBS)
 
 ########################## Contadores y selectores #######################
 sel_phase_4_dwsam = 0 # 0, 1, 2 o 3
+index_dw_samp     = sel_phase_4_dwsam + 1 # Debido a que el reg. es más grande
 
 latencia_I = 0  ;  bit_err_I = 0  ;  bit_tot_I = 0
 latencia_Q = 0  ;  bit_err_Q = 0  ;  bit_tot_Q = 0
@@ -111,17 +113,17 @@ for i in range(Nsymb*os):
     LOG_FILTER_OUT_I.append(sym_I_out_filter)
     LOG_FILTER_OUT_Q.append(sym_Q_out_filter)
 
-    ################ Down-sampling y Slicer
+    ################ Down-sampling 
     ### Lane I: actualiza registro de down-sampling
     shifDwSam_I = np.roll(shifDwSam_I,1)
-    shifDwSam_I[0] = 0 if(sym_I_out_filter>0.0) else 1
+    shifDwSam_I[0] = sym_I_out_filter
     ### Lane Q: actualiza registro de down-sampling
     shifDwSam_Q = np.roll(shifDwSam_Q,1)
-    shifDwSam_Q[0] = 0 if(sym_Q_out_filter>0.0) else 1
     ### Loguea los bits luego del slicer
     if(i%(sel_phase_4_dwsam+4) == 0):
         LOG_RX_I_DW_SAM.append(sym_I_out_filter)
         LOG_RX_Q_DW_SAM.append(sym_Q_out_filter)
+    shifDwSam_Q[0] = sym_Q_out_filter
 
     ################ BER Rx
     if(i%os == 0):

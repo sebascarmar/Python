@@ -290,8 +290,8 @@ fn.eyediagram(LOG_FILTER_OUT_Q[510000:len(LOG_FILTER_OUT_Q)-510000],os,5,Nbauds)
 ### Constelación 
 plt.figure(figsize=[6,6])
 #plt.plot(LOG_RX_I_DW_SAM, LOG_RX_Q_DW_SAM,'.',linewidth=2.0)
-plt.plot(LOG_RX_I_DW_SAM[510000:len(LOG_RX_I_DW_SAM)-510000], # Para sim. completa
-         LOG_RX_Q_DW_SAM[510000:len(LOG_RX_Q_DW_SAM)-510000],
+plt.plot(LOG_RX_I_DW_SAM[118000:len(LOG_RX_I_DW_SAM)-118000], # Para sim. completa
+         LOG_RX_Q_DW_SAM[118000:len(LOG_RX_Q_DW_SAM)-118000],
          '.',linewidth=2.0)
 plt.xlim((-2, 2))
 plt.ylim((-2, 2))

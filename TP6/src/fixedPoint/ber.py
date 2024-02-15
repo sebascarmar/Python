@@ -2,13 +2,20 @@ import numpy as np
 
 class ber:
     def __init__(self, CombPRBS):
-        self.shifterBER = np.full(511,0)
-        self.index_BER = 0
-        self.cuenta_bit_err=CombPRBS
-        self.error_min = CombPRBS
-        self.combinacionesPRBS = CombPRBS
-        self.latencia=0
+        ### 511+1 para simular la carga del dato en el siguiente clock
+        self.shifterBER     = np.full(511+1,0) 
+        ### Puntero al shifter (p/sincronización)
+        self.index_BER      = 0                
+        ### Puntero al shifter, en la que se tiene el menor error (p/conteo ber)
+        self.latencia       = 0                
+        ### Contador de errores (p/sincronización y p/conteo ber)
+        self.cuenta_bit_err = 0
+        ### Conteador de bits totales (p/conteo de ber, post sincronización)
         self.cuenta_bit_tot = 0
+        ### Permite almacenar el menor error para detectar la latencia
+        self.error_min      = CombPRBS
+        ### Cantindad de combinaciones de la prbs9
+        self.combinacionesPRBS = CombPRBS
 
 
     def sincroniza(self, i, new_bit_rx, sym_downsamp):

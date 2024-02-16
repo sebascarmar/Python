@@ -35,8 +35,6 @@ LOG_FILTER_OUT_I        = []
 LOG_FILTER_OUT_Q        = []
 LOG_RX_I_DW_SAM         = []
 LOG_RX_Q_DW_SAM         = []
-LOG_SYM_RX_I_POST_SINCR = []
-LOG_SYM_RX_Q_POST_SINCR = []
 
 
 ################################ BER en Tx ###############################
@@ -156,9 +154,6 @@ for i in range(Nsymb*os):
             (bit_err_I, bit_tot_I)=ber_I.cuenta( i, new_bit_I_rx, buff_slicer_I[1] )
             ### Lane Q: cuenta
             (bit_err_Q, bit_tot_Q)=ber_Q.cuenta( i, new_bit_Q_rx, buff_slicer_Q[1] )
-            ### Logueo de símbolos downsampleados luego de sincronizar
-            LOG_SYM_RX_I_POST_SINCR.append(buff_slicer_I[1])
-            LOG_SYM_RX_Q_POST_SINCR.append(buff_slicer_Q[1])
 
 
 
@@ -179,14 +174,16 @@ with open('CoefFilter.txt', 'w') as archivo:
     for i in range(len(rc)):
         archivo.write(str(int(rc[i].fValue*(2**NBFrac))) + '\n')
 
-with open('VM_I_SymTx.txt', 'w') as archivo:
+### Bits generados por las PRBS
+with open('VM_I_PRBS_Tx.txt', 'w') as archivo:
     for i in range(len(LOG_PRBS_I_TX)):
         archivo.write(str(0 if(LOG_PRBS_I_TX[i]>0) else 1) + '\n')
 
-with open('VM_Q_SymTx.txt', 'w') as archivo:
+with open('VM_Q_PRBS_Tx.txt', 'w') as archivo:
     for i in range(len(LOG_PRBS_Q_TX)):
         archivo.write(str(0 if(LOG_PRBS_Q_TX[i]>0) else 1) + '\n')
 
+### Salida de los filtros - convolución
 with open('VM_I_FilterOut.txt', 'w') as archivo:
     for i in range(len(LOG_FILTER_OUT_I)):
         archivo.write(str(int(LOG_FILTER_OUT_I[i]*(2**NBFrac))) + '\n')
@@ -195,14 +192,15 @@ with open('VM_Q_FilterOut.txt', 'w') as archivo:
     for i in range(len(LOG_FILTER_OUT_Q)):
         archivo.write(str(int(LOG_FILTER_OUT_Q[i]*(2**NBFrac))) + '\n')
 
+### Símbolos down-sampleados
+with open('VM_I_DownSamp.txt', 'w') as archivo:
+    for i in range(len(LOG_RX_I_DW_SAM)):
+        archivo.write(str(int(LOG_RX_I_DW_SAM[i]*(2**NBFrac))) + '\n')
 
-with open('VM_SymI_POST_SINCR.txt', 'w') as archivo:
-    for i in range(len(LOG_SYM_RX_I_POST_SINCR)):
-        archivo.write(str(LOG_SYM_RX_I_POST_SINCR[i]) + '\n')
+with open('VM_Q_DownSamp.txt', 'w') as archivo:
+    for i in range(len(LOG_RX_Q_DW_SAM)):
+        archivo.write(str(int(LOG_RX_Q_DW_SAM[i]*(2**NBFrac))) + '\n')
 
-with open('VM_SymQ_POST_SINCR.txt', 'w') as archivo:
-    for i in range(len(LOG_SYM_RX_Q_POST_SINCR)):
-        archivo.write(str(LOG_SYM_RX_Q_POST_SINCR[i]) + '\n')
 
 
 

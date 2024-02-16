@@ -20,6 +20,18 @@ sym_down_samp_Q_ph2 = "Salida_down_samp_Q_ph2.txt"
 sym_down_samp_I_ph3 = "Salida_down_samp_I_ph3.txt"
 sym_down_samp_Q_ph3 = "Salida_down_samp_Q_ph3.txt"
 
+# filter_out_I        = "C:\\Users\\andre\\OneDrive\\Documentos\\GitHub\\Python\\TP6\\src\\graficaArchivosVerilog\\Salida_filtro_I.txt"
+# filter_out_Q        = "C:\\Users\\andre\\OneDrive\\Documentos\\GitHub\\Python\\TP6\\src\\graficaArchivosVerilog\\Salida_filtro_Q.txt"
+# sym_down_samp_I_ph0 = "C:\\Users\\andre\\OneDrive\\Documentos\\GitHub\\Python\\TP6\\src\\graficaArchivosVerilog\\Salida_down_samp_I_ph0.txt"
+# sym_down_samp_Q_ph0 = "C:\\Users\\andre\\OneDrive\\Documentos\\GitHub\\Python\\TP6\\src\\graficaArchivosVerilog\\Salida_down_samp_Q_ph0.txt"
+# sym_down_samp_I_ph1 = "C:\\Users\\andre\\OneDrive\\Documentos\\GitHub\\Python\\TP6\\src\\graficaArchivosVerilog\\Salida_down_samp_I_ph1.txt"
+# sym_down_samp_Q_ph1 = "C:\\Users\\andre\\OneDrive\\Documentos\\GitHub\\Python\\TP6\\src\\graficaArchivosVerilog\\Salida_down_samp_Q_ph1.txt"
+# sym_down_samp_I_ph2 = "C:\\Users\\andre\\OneDrive\\Documentos\\GitHub\\Python\\TP6\\src\\graficaArchivosVerilog\\Salida_down_samp_I_ph2.txt"
+# sym_down_samp_Q_ph2 = "C:\\Users\\andre\\OneDrive\\Documentos\\GitHub\\Python\\TP6\\src\\graficaArchivosVerilog\\Salida_down_samp_Q_ph2.txt"
+# sym_down_samp_I_ph3 = "C:\\Users\\andre\\OneDrive\\Documentos\\GitHub\\Python\\TP6\\src\\graficaArchivosVerilog\\Salida_down_samp_I_ph3.txt"
+# sym_down_samp_Q_ph3 = "C:\\Users\\andre\\OneDrive\\Documentos\\GitHub\\Python\\TP6\\src\\graficaArchivosVerilog\\Salida_down_samp_Q_ph3.txt"
+
+
 # Lista para almacenar los números enteros firmados
 LOG_FILTER_OUT_I = []
 LOG_FILTER_OUT_Q = []

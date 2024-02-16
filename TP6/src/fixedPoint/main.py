@@ -257,7 +257,7 @@ plt.figure(figsize=[10,6])
 
 plt.subplot(2,1,1)
 #plt.plot(LOG_FILTER_OUT_I,'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta)
-plt.plot(LOG_FILTER_OUT_I[510000:len(LOG_FILTER_OUT_Q)-510000],'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta) #Para sim. comp.
+plt.plot(LOG_FILTER_OUT_I[510000:len(LOG_FILTER_OUT_I)-510000],'g-',linewidth=2.0,label=r'$\beta=%2.2f$'%beta) #Para sim. comp.
 plt.xlim(1000,1250)
 plt.grid(True)
 plt.legend()
@@ -279,7 +279,7 @@ plt.ylabel('Magnitud')
 ### Diagrama de Ojo 
 #fn.eyediagram(LOG_FILTER_OUT_I[100:len(LOG_FILTER_OUT_Q)-100],os,5,Nbauds)
 #fn.eyediagram(LOG_FILTER_OUT_Q[100:len(LOG_FILTER_OUT_Q)-100],os,5,Nbauds)
-fn.eyediagram(LOG_FILTER_OUT_I[510000:len(LOG_FILTER_OUT_Q)-510000],os,5,Nbauds) # Para sim. completa
+fn.eyediagram(LOG_FILTER_OUT_I[510000:len(LOG_FILTER_OUT_I)-510000],os,5,Nbauds) # Para sim. completa
 fn.eyediagram(LOG_FILTER_OUT_Q[510000:len(LOG_FILTER_OUT_Q)-510000],os,5,Nbauds) # Para sim. completa
 
 

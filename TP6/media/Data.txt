@@ -1,0 +1,20 @@
+############# Fase 0 #############
+BER_I = 0.25048923679060664  - Latencia_I = 3
+BER_Q = 0.25048923679060664  - Latencia_Q = 3
+
+
+############# Fase 1 #############
+BER_I = 0.0  - Latencia_I = 4
+BER_Q = 0.0  - Latencia_Q = 4
+
+
+
+############# Fase 2 #############
+BER_I = 0.0  - Latencia_I = 4
+BER_Q = 0.0  - Latencia_Q = 4
+
+
+
+############# Fase 3 #############
+BER_I = 0.0  - Latencia_I = 4
+BER_Q = 0.0  - Latencia_Q = 4

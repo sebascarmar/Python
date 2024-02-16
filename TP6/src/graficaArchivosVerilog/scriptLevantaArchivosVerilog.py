@@ -166,13 +166,11 @@ with open(sym_down_samp_Q_ph3, "r") as archivo:
 
 
 ### Gráfica de la salida del filtro
-maxim1 = 6000 if(len(LOG_FILTER_OUT_I)>6000) else len(LOG_FILTER_OUT_I)
-maxim2 = 6000 if(len(LOG_FILTER_OUT_Q)>6000) else len(LOG_FILTER_OUT_Q)
 
 plt.figure(figsize=[10,6])
 
 plt.subplot(2,1,1)
-plt.plot(LOG_FILTER_OUT_I[510:maxim1],'g-',linewidth=2.0,label=r"Filtro I") #Para sim. comp.
+plt.plot(LOG_FILTER_OUT_I[510000:510000+6000],'g-',linewidth=2.0,label=r"Filtro I") #Para sim. comp.
 plt.xlim(1000,1250)
 plt.grid(True)
 plt.legend()
@@ -180,7 +178,7 @@ plt.xlabel('Muestras')
 plt.ylabel('Magnitud')
 
 plt.subplot(2,1,2)
-plt.plot(LOG_FILTER_OUT_Q[510:maxim2],'g-',linewidth=2.0,label=r"Filtro Q") #Para sim. comp.
+plt.plot(LOG_FILTER_OUT_Q[510000:510000+6000],'g-',linewidth=2.0,label=r"Filtro Q") #Para sim. comp.
 plt.xlim(1000,1250)
 plt.grid(True)
 plt.legend()
@@ -190,6 +188,9 @@ plt.ylabel('Magnitud')
 
 
 ### Diagrama de Ojo 
+maxim1 = 6000 if(len(LOG_FILTER_OUT_I)>6000) else len(LOG_FILTER_OUT_I)
+maxim2 = 6000 if(len(LOG_FILTER_OUT_Q)>6000) else len(LOG_FILTER_OUT_Q)
+
 fn.eyediagram(LOG_FILTER_OUT_I[0:maxim1],os,5,Nbauds) 
 fn.eyediagram(LOG_FILTER_OUT_Q[0:maxim2],os,5,Nbauds)
 

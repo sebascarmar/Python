@@ -47,39 +47,42 @@ int main()
     XGpio_SetDataDirection(&GpioOutput, 1, 0x00000000);
     XGpio_SetDataDirection(&GpioInput, 1, 0xFFFFFFFF);
     
-    unsigned char cabecera[1];
-    u32           value;
-    unsigned char datos;
+    // Variables para lectura de GPIO 
+    u32           value     = 0;
+    unsigned char datEnviar = '\0';
+    // Variables para escritura en GPIO
+    unsigned char cabecera[1] = {'\0'};
+    unsigned char funcion[1]  = {'a'};
+    unsigned char data[2]     = {'\0'};
+    u32           conver      = 0;
+    
     while(1)
     {
-        read(stdin,cabecera,1);
-        
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// ACA es donde se escribe toda la funcionalidad
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-        switch(cabecera[0])
+        if(cabecera[0]!=0x03) // Detecta byte de start
         {
-            case '0':
-                XGpio_DiscreteWrite(&GpioOutput,1, (u32) 0x00000249);
-                break;
-            case '1':
-                XGpio_DiscreteWrite(&GpioOutput,1, (u32) 0x00000492);
-                break;
-            case '2':
-                XGpio_DiscreteWrite(&GpioOutput,1, (u32) 0x00000924);
-                break;
-            case '3':
-                XGpio_DiscreteWrite(&GpioOutput,1, (u32) 0x00000000);
-                value = XGpio_DiscreteRead(&GpioInput, 1);
-                datos=(char)(value&(0x0000000F));
-                while(XUartLite_IsSending(&uart_module)){}
-                XUartLite_Send(&uart_module, &(datos),1);
-                break;
+            read(stdin,cabecera,1);
         }
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// FIN de toda la funcionalidad
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        else if(funcion[0]!=0x00 || funcion[0]!=0xFF) // Lee byte de función
+        {
+            read(stdin,funcion,1);
+        }
+        else if(funcion[0]==0x00) // Si es función de lectura, lee los switches
+        {
+            XGpio_DiscreteWrite(&GpioOutput, 1, (u32) 0x00000000);
+            value     = XGpio_DiscreteRead(&GpioInput, 1);
+            datEnviar = (char) (value&(0x0000000F));
+            while(XUartLite_IsSending(&uart_module)){}
+            XUartLite_Send(&uart_module, &(datEnviar),1);
+        }
+        else                      // Si es función de escritura, escribe los leds
+        {
+            for(unsigned char i=0; i<=1; i++)
+                read(stdin,data[i],1);
+            
+            conver = (u32) ((data[1]<<8) | (data[0]));
+            XGpio_DiscreteWrite(&GpioOutput, 1, conver);
+        }
+        
     }
     
     cleanup_platform();

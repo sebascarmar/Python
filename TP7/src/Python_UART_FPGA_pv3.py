@@ -240,12 +240,6 @@ def accion_leds(color, num_led, leds, accion):
 
 # Función que arma la trama a enviar
 def armar_trama(opcion, leds):
-    print("Estado actual de los LEDs:")
-    print('          B  G  R')
-    for i, estado in enumerate(leds, start = 1):
-        print('LED ', i, ':', estado)
-
-    trama = ''
     start = 0b00000101
 
     if opcion == 'leds':

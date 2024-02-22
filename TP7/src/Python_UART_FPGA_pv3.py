@@ -145,19 +145,71 @@ def modificar_led(leds):
         accion = input('<<')
         accion = accion.lower()
     
-    print('¿Qué color desea' , accion, '? Rojo, Verde o Azul? ')
-    color = input('<<')
-    color = color.lower()
 
-    while (color.lower() not in {'rojo', 'verde', 'azul'}):
-        print ('\033[91mColor incorrecto. Por favor, ingrese un color válido\033[0m')
-        color = input('<<')
-        color = color.lower()
 
+    print('¿Qué color desea' , accion, '? ¿Rojo, Verde o Azul?       ')
+    print('Separe por "," si desea', accion,'encender más de un color')
+    color = input('<<').lower()
+    
+
+
+    # Si se ingresa más de un color
+    if "," in color:
+        color_mul = []
+        
+        # Dividir la entrada por comas y eliminar los espacios en blanco
+        color_mul = [c.strip() for c in color.split(",")]
+
+        # Verificar cada color ingresado
+        for c in color_mul:
+            if c not in {'rojo', 'verde', 'azul'}:
+                color_incorrecto = True
+                break
+            else:
+                color_incorrecto = False
+
+        while (len(color.split(",")) > 3) or color_incorrecto == True:
+            if(len(color.split(",")) > 3):
+                print ('\033[91mERROR: ingresó más de tres colores. Por favor, ingrese una cantidad válida\033[0m')
+            else:
+                print ('\033[91mERROR: ingresó un color incorrecto. Por favor, ingrese un color válico\033[0m')
+
+            print('¿Qué color desea' , accion, '? ¿Rojo, Verde o Azul?       ')
+            print('Separe por "," si desea', accion,'encender más de un color')
+            color = input('<<').lower()
+            
+
+            # Dividir la entrada por comas y eliminar los espacios en blanco
+            color_mul = [c.strip() for c in color.split(",")]
+
+            # Verificar cada color ingresado
+            for c in color_mul:
+                if c not in {'rojo', 'verde', 'azul'}:
+                    color_incorrecto = True
+                    break
+                else:
+                    color_incorrecto = False
+
+            
+        for i in range(len(color_mul)):
+            accion_leds(color_mul[i], num_led, leds, accion)
+
+    # Si solo se ingresa un color
+    else:
+        while (color not in {'rojo', 'verde', 'azul'}):
+            print ('\033[91mColor incorrecto. Por favor, ingrese un color válido (solo uno)\033[0m')
+            color = input('<<')
+            color = color.lower()
+
+        accion_leds(color, num_led, leds, accion)
+        
+
+    return
+
+def accion_leds(color, num_led, leds, accion):
     colores = {"azul": 0, "verde": 1, "rojo": 2}          # [AZUL VERDE ROJO]
     col_led = colores[color]
-
-    
+        
     # Verificar si se puede realizar la acción
     # Si se seleccionó encender
     if (accion == "encender"):
@@ -176,7 +228,7 @@ def modificar_led(leds):
 
         else:
             print('\033[93mAdvertencia: el led', num_led + 1, 'ya está apagado en color', color, '\033[0m')
-
+    
     return
 
 
@@ -194,14 +246,9 @@ def armar_trama(opcion, leds):
         
         # Convierte cada fila de LEDs en un número binario
         led_1 = (int(leds[0][2]) and 0b1) << 2 | (int(leds[0][1]) and 0b1) << 1 | (int(leds[0][0]) and 0b1) 
-        print (led_1)
         led_2 = (int(leds[1][2]) and 0b1) << 2 | (int(leds[1][1]) and 0b1) << 1 | (int(leds[1][0]) and 0b1)
-        print (led_2)
         led_3 = (int(leds[2][2]) and 0b1) << 2 | (int(leds[2][1]) and 0b1) << 1 | (int(leds[2][0]) and 0b1)
-        print (led_3)
         led_4 = (int(leds[3][2]) and 0b1) << 2 | (int(leds[3][1]) and 0b1) << 1 | (int(leds[3][0]) and 0b1)
-        print (led_4)
-
 
 
         # Concatena los valores en una variable de 32 bits

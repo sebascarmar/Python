@@ -23,7 +23,7 @@ def main():
    
     # Configuración del puerto para la simulación
     # ser = serial.serial_for_url('loop://', timeout=1)
-    # ser.flushInput()
+    # ser.flushInput ()
     # ser.flushOutput()
 
     leds  = [[0, 0, 0],                                 # Estado inicial de los LEDs
@@ -65,7 +65,7 @@ def main():
             estado = str(int.from_bytes(readData,byteorder='big'))
             print(ser.inWaiting())
             if estado != '':
-                print (">>" + estado)
+                print (">> Estado: " + estado)
 
 
         elif opcion == 'exit':
@@ -77,7 +77,6 @@ def main():
        
 
 ################### MENÚ DE LEDS ###################
-
 def gestionar_leds(leds, ser):
     opcion_led = ''
     while True:
@@ -207,6 +206,7 @@ def modificar_led(leds):
 
     return
 
+# Función que enciende o apaga los LEDs
 def accion_leds(color, num_led, leds, accion):
     colores = {"azul": 0, "verde": 1, "rojo": 2}          # [AZUL VERDE ROJO]
     col_led = colores[color]
@@ -259,15 +259,16 @@ def armar_trama(opcion, leds):
         func = 0b00000000
         trama = (start << 8) | func 
 
-    print(trama)
     return trama    
 
+# Funcion que imrpime el estado de los LEDs
 def imprimir_estado_leds(leds):
-    # Imprimir estado actual de los LEDs
     print("Estado actual de los LEDs:")
     print('          B  G  R')
     for i, estado in enumerate(leds, start = 1):
         print('LED ', i, ':', estado)
+
+
 
 
 main()

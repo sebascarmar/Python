@@ -58,7 +58,7 @@ int main()
     
     while(1)
     {
-        if(cabecera[0]!=0x03) // Detecta byte de start
+        if(cabecera[0]!=0x05) // Detecta byte de start
         {
             read(stdin,cabecera,1);
         }

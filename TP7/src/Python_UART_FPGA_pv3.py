@@ -8,22 +8,22 @@ def main():
     print('')
     
     # Configuración del puerto real
-    # portUSB = sys.argv[1]
-    # ser = serial.Serial(
-    #    port     = '/dev/ttyUSB{}'.format(int(portUSB)),      #Cambiar el nombre del puerto por el correcto
-    #    baudrate = 115200,
-    #    parity   = serial.PARITY_NONE,
-    #    stopbits = serial.STOPBITS_ONE,
-    #    bytesize = serial.EIGHTBITS
-    #    ser.isOpen()
-    #    ser.timeout = None
-    #    print(ser.timeout)
-    #)
+    portUSB = sys.argv[1]
+    ser = serial.Serial(
+       port     = '/dev/ttyUSB{}'.format(int(portUSB)),      #Cambiar el nombre del puerto por el correcto
+       baudrate = 115200,
+       parity   = serial.PARITY_NONE,
+       stopbits = serial.STOPBITS_ONE,
+       bytesize = serial.EIGHTBITS
+       ser.isOpen()
+       ser.timeout = None
+       print(ser.timeout)
+    )
    
     # Configuración del puerto para la simulación
-    ser = serial.serial_for_url('loop://', timeout=1)
-    ser.flushInput()
-    ser.flushOutput()
+    # ser = serial.serial_for_url('loop://', timeout=1)
+    # ser.flushInput()
+    # ser.flushOutput()
 
     leds  = [[0, 0, 0],                                 # Estado inicial de los LEDs
              [0, 0, 0],

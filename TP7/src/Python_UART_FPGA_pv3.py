@@ -83,7 +83,7 @@ def gestionar_leds(leds, ser):
         print('')
         print('\033[1;4mMenú Leds\033[0m')
         print("1. Modificar leds")
-        print("2. Aplicar cambios")
+        print("2. Enviar datos")
         print("3. Imprimir el estado de los leds")
         print("4. Regresar al menú principal")
 

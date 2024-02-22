@@ -261,8 +261,6 @@ def armar_trama(opcion, leds):
                 data_1,
                 data_2]
         
-        print(trama)
-        input()
 
     else:        
         func  = 0b00000000

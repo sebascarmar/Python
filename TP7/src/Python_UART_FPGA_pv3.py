@@ -99,6 +99,76 @@ def main():
         
         else:
             print ('\033[91mOpción incorrecta. Por favor, ingrese una opción válida\033[0m')
+
+
+
+def gestionar_leds(leds):
+    print('¿Qué led desea modificar? 1,2,3,4')
+    num_led = input('<<')
+
+    while (num_led not in {'1', '2', '3', '4'}):
+        print ('\033[91mERROR: número de led inválido\033[0m')
+        print('¿Qué led desea modificar? 1,2,3,4')
+        num_led = input('<<')
+
+    num_led = int(num_led) - 1                                          # Convertir a índice
+
+    print('¿Desea encender o apagar el led?')
+    accion = input('<<')
+
+    while (accion.lower() not in {'encender', 'apagar'}):
+        print ('\033[91mAcción incorrecta. Por favor, ingrese una opción válida\033[0m')
+        accion = input('<<')
+    
+    print('¿Qué color desea' , accion, '? Rojo, Verde o Azul?')
+    color = input('<<')
+
+    while (color.lower() not in {'rojo', 'verde', 'azul'}):
+        print ('\033[91mColor incorrecto. Por favor, ingrese un color válido\033[0m')
+        color = input('<<')
+
+
+    # Verificar si se puede realizar la acción
+    # Si se seleccionó encender
+    if accion == "encender":
+        if leds[num_led][{"azul": 0, "verde": 1, "rojo": 2}[color]] == 1:
+           print('\033[91mERROR: el led', num_led + 1, 'ya está encendido en color', color, '\033[0m')
+        else:
+            leds[num_led][{"azul": 0, "verde": 1, "rojo": 2}[color]] = 1
+            print('\033[92mEl led ', num_led + 1, 'se encenderá en color', color, '\033[0m')
+              
+    # Si se seleccionó apagar
+    else:  
+        if leds[num_led][{"azul": 0, "verde": 1, "rojo": 2}[color]] == 0:
+            print('\033[91mERROR: el led', num_led + 1, 'ya está apagado en color', color, '\033[0m')
+        else:
+            leds[num_led][{"azul": 0, "verde": 1, "rojo": 2}[color]] = 0
+            print('\033[92mEl led ', num_led + 1, 'se aágará en color', color, '\033[0m')
+
+
+    # Imprimir estado actual de los LEDs
+    print("Estado actual de los LEDs:")
+    for i, estado in enumerate(leds, start=1):
+        print('LED ', i, ':', estado)
+    
+    return
+
+
+def armar_trama(opcion, leds):
+    start = 0b00000101
+
+    if(opcion.lower() == 'leds'):
+        func = 0b11111111
+        trama = [start,
+                 func]
+        for led in leds:
+            trama.extend(led)
     else:
-        ser.write(str(inputData).encode())
-        time.sleep(1)
+        func = 0b00000000
+        trama = [start,
+                 func]
+    
+    print(trama)
+
+    return trama    
+

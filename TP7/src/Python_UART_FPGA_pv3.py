@@ -57,7 +57,7 @@ def main():
             trama = armar_trama(opcion, leds)
 
             # Se envía la trama
-            ser.write(str(trama).encode())
+            transmisor(ser, trama)
             time.sleep(2)
 
             # Se recibe el estado de los switchs
@@ -104,7 +104,7 @@ def gestionar_leds(leds, ser):
             imprimir_estado_leds(leds)
             trama = armar_trama('leds', leds)
             print("\033[1;90mEncendiendo leds...\033[0m")
-            ser.write(str(trama).encode())
+            transmisor(ser, trama)
             time.sleep(1)
            
             return
@@ -120,6 +120,12 @@ def gestionar_leds(leds, ser):
 
 
 ################### FUNCIONES ###################
+def transmisor (ser, trama):
+    for byte in trama:
+        ser.write(byte.to_bytes(1, byteorder='big'))
+        time.sleep(0.1) 
+
+# Opciones para modificar LEDs
 def modificar_led(leds):
     num_led = ''
     accion  = ''
@@ -232,7 +238,7 @@ def accion_leds(color, num_led, leds, accion):
     
     return
 
-
+# Función que arma la trama a enviar
 def armar_trama(opcion, leds):
     print("Estado actual de los LEDs:")
     print('          B  G  R')

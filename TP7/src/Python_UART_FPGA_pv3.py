@@ -100,6 +100,8 @@ def gestionar_leds(leds, ser):
 
         #Se encienden los leds modificados
         elif (opcion_led == "2"):
+            # Imprime estado de leds
+            imprimir_estado_leds(leds)
             trama = armar_trama('leds', leds)
             print("\033[1;90mEncendiendo leds...\033[0m")
             ser.write(str(trama).encode())
@@ -108,11 +110,8 @@ def gestionar_leds(leds, ser):
             return
         
         elif(opcion_led == "3"):
-            # Imprimir estado actual de los LEDs
-            print("Estado actual de los LEDs:")
-            print('          B  G  R')
-            for i, estado in enumerate(leds, start = 1):
-                print('LED ', i, ':', estado)
+            imprimir_estado_leds(leds)
+
 
         else:
             print("\033[1;90mRegresando al menú principal...\033[0m")
@@ -214,6 +213,13 @@ def armar_trama(opcion, leds):
 
     print(trama)
     return trama    
+
+def imprimir_estado_leds(leds):
+    # Imprimir estado actual de los LEDs
+    print("Estado actual de los LEDs:")
+    print('          B  G  R')
+    for i, estado in enumerate(leds, start = 1):
+        print('LED ', i, ':', estado)
 
 
 main()

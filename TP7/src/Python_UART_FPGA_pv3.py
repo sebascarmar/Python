@@ -243,7 +243,7 @@ def armar_trama(opcion, leds):
     start = 0b00000101
 
     if opcion == 'leds':
-        func = 0b11111111
+        func = 0b10101010
         
         # Convierte cada fila de LEDs en un número binario
         led_1 = (int(leds[0][2]) and 0b1) << 2 | (int(leds[0][1]) and 0b1) << 1 | (int(leds[0][0]) and 0b1) 
@@ -263,7 +263,7 @@ def armar_trama(opcion, leds):
         
 
     else:        
-        func  = 0b00000000
+        func  = 0b01010101
         trama = [start,
                  func]
 

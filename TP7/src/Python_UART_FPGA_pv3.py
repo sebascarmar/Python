@@ -253,13 +253,13 @@ def armar_trama(opcion, leds):
 
 
         # Concatena los valores en una variable de 32 bits
-        data_1 = 0b00000000 | (led_1 << 4) | (led_2 >> 2) 
-        data_2 = (led_2 << 9) | (led_3 << 3) | led_4
+        byte_1 = 0b00000000 | (led_4 << 4) | (led_3 >> 2) 
+        byte_2 = (led_3 << 9) | (led_2 << 3) | led_1
 
         trama =[start,
                 func,
-                data_1,
-                data_2]
+                byte_1,
+                byte_2]
         
 
     else:        

@@ -52,7 +52,7 @@ def main():
 
         if opcion   == 'leds':
             # Se modifican los leds
-            gestionar_leds(leds, ser)
+            gestionar_leds(leds)
 
             # Se realizan los cambios
             transmisor(ser, opcion, leds)
@@ -80,7 +80,7 @@ def main():
        
 
 ################### MENÚ DE LEDS ###################
-def gestionar_leds(leds, ser):
+def gestionar_leds(leds):
     opcion_led = ''
     while True:
         print('')

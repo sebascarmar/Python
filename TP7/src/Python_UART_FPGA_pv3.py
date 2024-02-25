@@ -54,11 +54,8 @@ def main():
 
         if opcion   == 'leds':
             # Se modifican los leds
-            gestionar_leds(leds)
+            gestionar_leds(leds, ser, opcion)
 
-            # Se realizan los cambios
-            transmisor(ser, opcion, leds)
-            receptor  (ser, opcion, leds)
             print     ("\033[1;90mRegresando al menú principal...\033[0m")
             print     ('')
 
@@ -88,7 +85,7 @@ def main():
        
 
 ################### MENÚ DE LEDS ###################
-def gestionar_leds(leds):
+def gestionar_leds(leds, ser, opcion):
     # Se guarda el estado anterior de los leds
     leds_anterior = copy.deepcopy(leds)
 
@@ -115,14 +112,17 @@ def gestionar_leds(leds):
             
         # Se imprime el estado actual de los leds
         elif(opcion_led == "2"):
-            imprimir_estado_leds(leds)
+            imprimir_estado_leds(leds, leds_anterior)
 
         #Se encienden los leds modificados
         elif(opcion_led == "3"):
             # Imprime estado de leds
             imprimir_estado_leds(leds)
             print("\033[1;90mEncendiendo leds...\033[0m")
-
+            
+            # Se realizan los cambios
+            transmisor(ser, opcion, leds)
+            receptor  (ser, opcion, leds)
             return
 
        # Se regresa la menú principal
@@ -170,10 +170,12 @@ def receptor(ser, opcion, leds):
     # Para leds se espera recibir 0xAA (d170)
     elif(opcion == 'leds' and int.from_bytes(readData,byteorder='big') != 170):
             print("Error en el comunicación")
+            print('')
 
     # Cualquier otro dato recibido, será erroneo
     else:
         print ('\033[91mError en la comunicación\033[0m')
+        print('')
 
     return
 

@@ -127,6 +127,30 @@ def transmisor (ser, trama):
     for byte in trama:
         ser.write(byte.to_bytes(1, byteorder='big'))
         time.sleep(0.1) 
+# Funcion de recepción de datos
+def receptor(ser, opcion):
+    time.sleep(1)
+    readData = ser.read(1)
+
+    # Comprobación de envío de trama
+    # Para switch se espera recibir 0x55 (d85)
+    if(opcion == 'switch' and int.from_bytes(readData,byteorder='big') == 85): 
+        readData = ser.read(1)
+        out = str(int.from_bytes(readData,byteorder='big'))
+        print(ser.inWaiting())
+        if out != '':
+            print (">>" + out)
+    
+    # Para leds se espera recibir 0xAA (d170)
+    elif(opcion == 'leds' and int.from_bytes(readData,byteorder='big') != 170):
+            print("Error en el comunicación")
+
+    # Cualquier otro dato recibido, será erroneo
+    else:
+        print ('\033[91mError en la comunicación\033[0m')
+
+    return
+
 
 # Opciones para modificar LEDs
 def modificar_led(leds):

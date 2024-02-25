@@ -51,23 +51,25 @@ def main():
 
 
         if opcion   == 'leds':
+            # Se modifican los leds
             gestionar_leds(leds, ser)
+
+            # Se realizan los cambios
+            transmisor(ser, opcion, leds)
+            receptor(ser, opcion)
+            print("\033[1;90mRegresando al menú principal...\033[0m")
+            print('')
 
         elif opcion == 'switch':
             print("\033[1;90mComprobando estado de switches...\033[0m")
-            trama = armar_trama(opcion, leds)
-
+            
             # Se envía la trama
-            transmisor(ser, trama)
-            time.sleep(2)
+            transmisor(ser, opcion, leds)
+            
+            print("\033[1;90mEsperando información...\033[0m")
 
             # Se recibe el estado de los switchs
-            readData = ser.read(1)
-            estado = str(int.from_bytes(readData,byteorder='big'))
-            print(ser.inWaiting())
-            if estado != '':
-                print (">> Estado: " + estado)
-
+            receptor(ser, opcion)
 
         elif opcion == 'exit':
             print("\033[1;90mSaliendo del programa...\033[0m")

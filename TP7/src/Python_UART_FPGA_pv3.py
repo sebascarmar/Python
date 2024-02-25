@@ -84,9 +84,8 @@ def gestionar_leds(leds, ser):
         print('')
         print('\033[1;4mMenú Leds\033[0m')
         print("1. Modificar leds")
-        print("2. Enviar datos")
-        print("3. Imprimir el estado de los leds")
-        print("4. Regresar al menú principal")
+        print("2. Imprimir el estado de los leds")
+        print("3. Enviar datos y regresar al menú principal")
 
         opcion_led = input("Seleccione una opción: ")
 
@@ -101,25 +100,18 @@ def gestionar_leds(leds, ser):
         if (opcion_led == "1"):
             modificar_led(leds)
 
+        # Se imprime el estado actual de los leds
+        elif(opcion_led == "2"):
+            imprimir_estado_leds(leds)
+
         #Se encienden los leds modificados
-        elif (opcion_led == "2"):
+        elif(opcion_led == "3"):
             # Imprime estado de leds
             imprimir_estado_leds(leds)
-            trama = armar_trama('leds', leds)
             print("\033[1;90mEncendiendo leds...\033[0m")
-            transmisor(ser, trama)
-            time.sleep(1)
            
             return
         
-        elif(opcion_led == "3"):
-            imprimir_estado_leds(leds)
-
-
-        else:
-            print("\033[1;90mRegresando al menú principal...\033[0m")
-            print('')
-            return
 
 
 ################### FUNCIONES ###################

@@ -56,9 +56,9 @@ def main():
 
             # Se realizan los cambios
             transmisor(ser, opcion, leds)
-            receptor(ser, opcion)
-            print("\033[1;90mRegresando al menú principal...\033[0m")
-            print('')
+            receptor  (ser, opcion, leds)
+            print     ("\033[1;90mRegresando al menú principal...\033[0m")
+            print     ('')
 
         elif opcion == 'switch':
             print("\033[1;90mComprobando estado de switches...\033[0m")
@@ -69,7 +69,7 @@ def main():
             print("\033[1;90mEsperando información...\033[0m")
 
             # Se recibe el estado de los switchs
-            receptor(ser, opcion)
+            receptor(ser, opcion, leds)
 
         elif opcion == 'exit':
             print("\033[1;90mSaliendo del programa...\033[0m")
@@ -101,7 +101,7 @@ def gestionar_leds(leds, ser):
         #Se modifican los leds
         if (opcion_led == "1"):
             modificar_led(leds)
-
+            
         # Se imprime el estado actual de los leds
         elif(opcion_led == "2"):
             imprimir_estado_leds(leds)
@@ -130,7 +130,7 @@ def transmisor (ser, opcion, leds):
     return
 
 # Funcion de recepción de datos
-def receptor(ser, opcion):
+def receptor(ser, opcion, leds):
     time.sleep(1)
     readData = ser.read(1)
 
@@ -142,6 +142,9 @@ def receptor(ser, opcion):
         print(ser.inWaiting())
         if out != '':
             print (">>" + out)
+        
+        # Se apagan todos los leds
+        leds[:] = [[0] * len(leds[0]) for _ in range(4)]
     
     # Para leds se espera recibir 0xAA (d170)
     elif(opcion == 'leds' and int.from_bytes(readData,byteorder='big') != 170):

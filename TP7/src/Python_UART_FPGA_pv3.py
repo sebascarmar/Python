@@ -2,6 +2,7 @@ import time
 import serial
 import sys
 import copy
+from colorama import init, Fore
 
 ## Función de menú principal
 def main():
@@ -316,13 +317,17 @@ def armar_trama(opcion, leds):
     return trama    
 
 # Funcion que imrpime el estado de los LEDs
-def imprimir_estado_leds(leds):
-    print("Estado actual de los LEDs:")
-    print('          B  G  R')
-    for i, estado in enumerate(leds, start = 1):
-        print('LED ', i, ':', estado)
-
-
+def imprimir_estado_leds(leds, leds_anterior):
+    if leds == leds_anterior:
+        print(Fore.WHITE + 'Estado actual de los LEDs:')
+        print(Fore.WHITE + ' B  G  R')
+        print(Fore.WHITE + "\n".join(map(str, leds)))
+    else:
+        print(Fore.YELLOW + 'Estado actual de los LEDs:')
+        print(Fore.YELLOW + ' B  G  R')
+        print(Fore.YELLOW + "\n".join(map(str, leds)))
+        print('')
+        print('\033[93mAdvertencia: leds aún no encendidos\033[0m')
 
 
 main()

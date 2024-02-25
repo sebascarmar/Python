@@ -123,10 +123,18 @@ def gestionar_leds(leds, ser):
 
 
 ################### FUNCIONES ###################
-def transmisor (ser, trama):
+# Funcion de transmisión de datos
+def transmisor (ser, opcion, leds):
+    #Se arma la trama
+    trama = armar_trama(opcion, leds)
+
+    #Se envía la trama
     for byte in trama:
         ser.write(byte.to_bytes(1, byteorder='big'))
         time.sleep(0.1) 
+    
+    return
+
 # Funcion de recepción de datos
 def receptor(ser, opcion):
     time.sleep(1)

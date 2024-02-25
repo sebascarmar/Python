@@ -45,7 +45,7 @@ while 1 :
             if out != '':
                 print (">>" + out)
         else:
-            print("Error en el comunicación");
+            print("Error en el comunicación")
 
         
     elif(inputData == 'escribir'):
@@ -72,7 +72,7 @@ while 1 :
         time.sleep(1)
         readData = ser.read(1)
         if(int.from_bytes(readData,byteorder='big') != 170): #0xAA funcion escribir
-            print("Error en el comunicación");
+            print("Error en el comunicación")
         
     else:
         ser.write(inputData.encode())

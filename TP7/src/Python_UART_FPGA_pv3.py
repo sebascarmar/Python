@@ -61,15 +61,21 @@ def main():
             print     ('')
 
         elif opcion == 'switch':
-            print("\033[1;90mComprobando estado de switches...\033[0m")
-            
-            # Se envía la trama
-            transmisor(ser, opcion, leds)
-            
-            print("\033[1;90mEsperando información...\033[0m")
+            print('\033[93mAdvertencia: la lectura de los Switch recetea el estado de los leds\033[0m')
+            print('¿Desea continuar?')
+            verif = input('Y/N: ').lower()
 
-            # Se recibe el estado de los switchs
-            receptor(ser, opcion, leds)
+            if(verif =='y'):
+                print("\033[1;90mComprobando estado de switches...\033[0m")
+                
+                # Se envía la trama
+                transmisor(ser, opcion, leds)
+                
+                print("\033[1;90mEsperando información...\033[0m")
+
+                # Se recibe el estado de los switchs
+                receptor(ser, opcion, leds)
+            
 
         elif opcion == 'exit':
             print("\033[1;90mSaliendo del programa...\033[0m")

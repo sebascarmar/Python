@@ -1,6 +1,7 @@
 import time
 import serial
 import sys
+import copy
 
 ## Función de menú principal
 def main():
@@ -87,13 +88,16 @@ def main():
 
 ################### MENÚ DE LEDS ###################
 def gestionar_leds(leds):
-    opcion_led = ''
+    # Se guarda el estado anterior de los leds
+    leds_anterior = copy.deepcopy(leds)
+
     while True:
         print('')
         print('\033[1;4mMenú Leds\033[0m')
         print("1. Modificar leds")
         print("2. Imprimir el estado de los leds")
         print("3. Enviar datos y regresar al menú principal")
+        print('4. Regresar al menú principal')
 
         opcion_led = input("Seleccione una opción: ")
 
@@ -117,8 +121,18 @@ def gestionar_leds(leds):
             # Imprime estado de leds
             imprimir_estado_leds(leds)
             print("\033[1;90mEncendiendo leds...\033[0m")
-           
+
             return
+
+       # Se regresa la menú principal
+        else:
+            print('\033[93mAdvertencia: si regresa al menú principal, se descartarán los últimos cambios realizados\033[0m')
+            print('¿Desea continuar?')
+            verif = input('Y/N: ').lower()
+            if (verif == 'y'):
+                # Se revierten los cambios realizados
+                leds = leds_anterior
+                return
         
 
 

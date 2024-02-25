@@ -183,28 +183,28 @@ def receptor(ser, opcion, leds):
 # Opciones para modificar LEDs
 def modificar_led(leds):
     print('¿Qué led desea modificar? 1,2,3,4')
-    num_led = input('<<')
+    num_led = input('>>')
 
     # Si se ingresa una opción no válida
     while (num_led not in {'1', '2', '3', '4'}):
         print ('\033[91mERROR: número de led inválido\033[0m')
         print('¿Qué led desea modificar? 1,2,3,4')
-        num_led = input('<<')
+        num_led = input('>>')
 
     num_led = int(num_led) - 1                                          # Convertir a índice
 
     print('¿Desea encender o apagar el led?')
-    accion = input('<<')
+    accion = input('>>')
     accion = accion.lower()
 
     while (accion.lower() not in {'encender', 'apagar'}):
         print ('\033[91mAcción incorrecta. Por favor, ingrese una opción válida\033[0m')
-        accion = input('<<')
+        accion = input('>>')
         accion = accion.lower()
     
     print('¿Qué color desea' , accion, '? ¿Rojo, Verde o Azul?       ')
     print('Separe por "," si desea', accion,'encender más de un color')
-    color = input('<<').lower()
+    color = input('>>').lower()
     
 
 
@@ -231,7 +231,7 @@ def modificar_led(leds):
 
             print('¿Qué color desea' , accion, '? ¿Rojo, Verde o Azul?       ')
             print('Separe por "," si desea', accion,'encender más de un color')
-            color = input('<<').lower()
+            color = input('>>').lower()
             
 
             # Dividir la entrada por comas y eliminar los espacios en blanco
@@ -253,7 +253,7 @@ def modificar_led(leds):
     else:
         while (color not in {'rojo', 'verde', 'azul'}):
             print ('\033[91mColor incorrecto. Por favor, ingrese un color válido (solo uno)\033[0m')
-            color = input('<<')
+            color = input('>>')
             color = color.lower()
 
         accion_leds(color, num_led, leds, accion)

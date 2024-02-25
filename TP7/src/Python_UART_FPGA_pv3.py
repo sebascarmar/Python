@@ -43,11 +43,12 @@ def main():
         opcion = input('Opción ingresada: ')
         opcion = opcion.lower()
     
-
         while (opcion != 'leds' and opcion != 'switch' and opcion != 'exit'):
             print('\033[91mOpción incorrecta. Por favor, ingrese una opción válida\033[0m')
             opcion = input('Opción ingresada: ')
             opcion = opcion.lower()
+
+
 
         if opcion   == 'leds':
             gestionar_leds(leds, ser)
@@ -94,6 +95,8 @@ def gestionar_leds(leds, ser):
             print ('\033[91mOpción incorrecta. Por favor, ingrese una opción válida\033[0m')
             opcion_led = input("Seleccione una opción: ")
         
+
+
         #Se modifican los leds
         if (opcion_led == "1"):
             modificar_led(leds)
@@ -127,10 +130,6 @@ def transmisor (ser, trama):
 
 # Opciones para modificar LEDs
 def modificar_led(leds):
-    num_led = ''
-    accion  = ''
-    color   = ''
-    
     print('¿Qué led desea modificar? 1,2,3,4')
     num_led = input('<<')
 
@@ -151,8 +150,6 @@ def modificar_led(leds):
         accion = input('<<')
         accion = accion.lower()
     
-
-
     print('¿Qué color desea' , accion, '? ¿Rojo, Verde o Azul?       ')
     print('Separe por "," si desea', accion,'encender más de un color')
     color = input('<<').lower()

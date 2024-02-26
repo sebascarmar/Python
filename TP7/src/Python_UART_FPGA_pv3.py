@@ -317,8 +317,8 @@ def armar_trama(opcion, leds):
 
 
         # Concatena los valores en una variable de 32 bits
-        byte_1 = 0b00000000 | (led_4 << 4) | (led_3 >> 2) 
-        byte_2 = (led_3 << 9) | (led_2 << 3) | led_1
+        byte_1 = (0b00000000   | (led_4 << 1) | (led_3 >> 2)) & (0x00FF)
+        byte_2 = ((led_3 << 6) | (led_2 << 3) | led_1)        & (0x00FF)
 
         trama =[start,
                 func,

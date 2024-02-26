@@ -160,7 +160,10 @@ def transmisor (ser, opcion, leds):
     for byte in trama:
         ser.write(byte.to_bytes(1, byteorder='big'))
         time.sleep(0.1) 
-    
+
+    # ser.flushInput ()          # Al limpiar el buffer un ser.reed inmediato bloquea el programa
+    ser.flushOutput()
+
     return
 
 # Funcion de recepción de datos
@@ -191,6 +194,11 @@ def receptor(ser, opcion, leds):
         print('')
 
     return
+    
+    # Limpia buffer de entrada y salida
+    ser.flushInput ()
+    ser.flushOutput()
+        
 
 
 # Opciones para modificar LEDs

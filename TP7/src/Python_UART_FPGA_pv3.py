@@ -170,35 +170,39 @@ def transmisor (ser, opcion, leds):
 def receptor(ser, opcion, leds):
     time.sleep(1)
     readData = ser.read(1)
+    error_detec = 0
 
     # Comprobación de envío de trama
     # Para switch se espera recibir 0x55 (d85)
-    if(opcion == 'switch' and int.from_bytes(readData,byteorder='big') == 85): 
-        readData = ser.read(1)
-        out = str(int.from_bytes(readData,byteorder='big'))
-        print(ser.inWaiting())
-        if out != '':
-            print (">>" + out)
-        
-        # Se apagan todos los leds
-        leds[:] = [[0] * len(leds[0]) for _ in range(4)]
+    if(opcion == 'switch'):
+        if (int.from_bytes(readData,byteorder='big') == 85): 
+            readData = ser.read(1)
+            out = str(int.from_bytes(readData,byteorder='big'))
+            print(ser.inWaiting())
+            if out != '':
+                print (">>" + out)
+            
+            # Se apagan todos los leds
+            leds[:] = [[0] * len(leds[0]) for _ in range(4)]
+    
+        # Cualquier otro dato recibido, será erroneo
+        else:
+            print ('\033[91mError en la comunicación\033[0m')
+            print('')
+            error_detec = 1
     
     # Para leds se espera recibir 0xAA (d170)
-    elif(opcion == 'leds' and int.from_bytes(readData,byteorder='big') != 170):
-            print("Error en el comunicación")
-            print('')
-
-    # Cualquier otro dato recibido, será erroneo
-    else:
-        print ('\033[91mError en la comunicación\033[0m')
+    if(opcion == 'leds' and int.from_bytes(readData,byteorder='big') != 170):
+        print("Error en el comunicación")
         print('')
 
-    return
+        error_detec = 1
     
     # Limpia buffer de entrada y salida
     ser.flushInput ()
     ser.flushOutput()
         
+    return error_detec
 
 
 # Opciones para modificar LEDs

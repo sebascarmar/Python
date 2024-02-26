@@ -14,6 +14,8 @@ ser = serial.Serial(
 
 ser.isOpen()
 ser.timeout=None
+ser.flushInput()
+ser.flushOutput()
 print(ser.timeout)
 
 print ('Ingrese un comando:[0,1,2,3]\r\n')
@@ -46,7 +48,10 @@ while 1 :
                 print (">>" + out)
         else:
             print("Error en el comunicación")
-
+        
+        
+        ser.flushInput()
+        ser.flushOutput()
         
     elif(inputData == 'escribir'):
         
@@ -68,12 +73,14 @@ while 1 :
         for elemento in trama:
             ser.write(elemento.to_bytes(1, byteorder='big'))
             time.sleep(1) 
-
+    
         time.sleep(1)
         readData = ser.read(1)
         if(int.from_bytes(readData,byteorder='big') != 170): #0xAA funcion escribir
             print("Error en el comunicación")
         
+        ser.flushInput()
+        ser.flushOutput()
     else:
         ser.write(inputData.encode())
         time.sleep(1)

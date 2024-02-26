@@ -35,7 +35,7 @@ def main():
                  
     
     while True:
-        print('\033[14mMENÚ PRINCIPAL\033[0m'        )        
+        print('\033[1;4mMENÚ PRINCIPAL\033[0m'        )        
         print('¿Qué acción desea realizar?'          )
         print('   Leds  : modificar estado de leds'  )
         print('   Switch: verificar estado de switch')
@@ -48,6 +48,7 @@ def main():
         while (opcion != 'leds' and opcion != 'switch' and opcion != 'exit'):
             print('\033[91mOpción incorrecta. Por favor, ingrese una opción válida\033[0m')
             opcion = input('Opción ingresada: ')
+
             opcion = opcion.lower()
 
 
@@ -55,12 +56,11 @@ def main():
         if opcion   == 'leds':
             # Se modifican los leds
             gestionar_leds(leds, ser, opcion)
-
-            print     ("\033[1;90mRegresando al menú principal...\033[0m")
-            print     ('')
+            print("\033[1;90mRegresando al menú principal...\033[0m \n")
+           
 
         elif opcion == 'switch':
-            print('\033[93mAdvertencia: la lectura de los Switch recetea el estado de los leds\033[0m')
+            print('\033[93mAdvertencia: la lectura de los Switch resetea el estado de los leds\033[0m')
             print('¿Desea continuar?')
             verif = input('Y/N: ').lower()
 
@@ -88,7 +88,7 @@ def main():
 def gestionar_leds(leds, ser, opcion):
     # Se guarda el estado anterior de los leds
     leds_anterior = copy.deepcopy(leds)
-
+    
     while True:
         print('')
         print('\033[1;4mMenú Leds\033[0m')
@@ -143,6 +143,7 @@ def gestionar_leds(leds, ser, opcion):
             print('¿Desea continuar?')
             verif = input('Y/N: ').lower()
             if (verif == 'y'):
+                
                 # Se revierten los cambios realizados
                 for i in range(len(leds)):
                     for j in range(len(leds[i])):
@@ -155,10 +156,10 @@ def gestionar_leds(leds, ser, opcion):
 ################### FUNCIONES ###################
 # Funcion de transmisión de datos
 def transmisor (ser, opcion, leds):
-    #Se arma la trama
+    # Se arma la trama
     trama = armar_trama(opcion, leds)
 
-    #Se envía la trama
+    # Se envía la trama
     for byte in trama:
         ser.write(byte.to_bytes(1, byteorder='big'))
         time.sleep(0.1) 
@@ -339,12 +340,13 @@ def imprimir_estado_leds(leds, leds_anterior):
         print(Fore.WHITE + 'Estado actual de los LEDs:')
         print(Fore.WHITE + ' B  G  R')
         print(Fore.WHITE + "\n".join(map(str, leds)))
+
     else:
         print(Fore.YELLOW + 'Estado actual de los LEDs:')
         print(Fore.YELLOW + ' B  G  R')
         print(Fore.YELLOW + "\n".join(map(str, leds)))
         print('')
-        print('\033[93mAdvertencia: leds aún no encendidos\033[0m')
+        print('\033[93mNota: leds aún no modificados\033[0m')
 
 
 main()

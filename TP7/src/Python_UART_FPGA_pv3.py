@@ -35,7 +35,7 @@ def main():
                  
     
     while True:
-        print('\033[14mMENÚ PRINCIPAL\033[0m'        )        
+        print('\033[1;4mMENÚ PRINCIPAL\033[0m'        )        
         print('¿Qué acción desea realizar?'          )
         print('   Leds  : modificar estado de leds'  )
         print('   Switch: verificar estado de switch')
@@ -48,6 +48,7 @@ def main():
         while (opcion != 'leds' and opcion != 'switch' and opcion != 'exit'):
             print('\033[91mOpción incorrecta. Por favor, ingrese una opción válida\033[0m')
             opcion = input('Opción ingresada: ')
+
             opcion = opcion.lower()
 
 
@@ -55,12 +56,11 @@ def main():
         if opcion   == 'leds':
             # Se modifican los leds
             gestionar_leds(leds, ser, opcion)
-
-            print     ("\033[1;90mRegresando al menú principal...\033[0m")
-            print     ('')
+            print("\033[1;90mRegresando al menú principal...\033[0m \n")
+           
 
         elif opcion == 'switch':
-            print('\033[93mAdvertencia: la lectura de los Switch recetea el estado de los leds\033[0m')
+            print('\033[93mAdvertencia: la lectura de los Switch resetea el estado de los leds\033[0m')
             print('¿Desea continuar?')
             verif = input('Y/N: ').lower()
 
@@ -88,7 +88,7 @@ def main():
 def gestionar_leds(leds, ser, opcion):
     # Se guarda el estado anterior de los leds
     leds_anterior = copy.deepcopy(leds)
-
+    
     while True:
         print('')
         print('\033[1;4mMenú Leds\033[0m')
@@ -116,13 +116,22 @@ def gestionar_leds(leds, ser, opcion):
 
         #Se encienden los leds modificados
         elif(opcion_led == "3"):
-            # Imprime estado de leds
-            imprimir_estado_leds(leds, leds_anterior)
-            print("\033[1;90mEncendiendo leds...\033[0m")
-            
+            print("\033[1;90mModificando leds...\033[0m")
             # Se realizan los cambios
             transmisor(ser, opcion, leds)
-            receptor  (ser, opcion, leds)
+            valid = receptor  (ser, opcion, leds)
+            # Si receptor presenta error, no se encenderán los leds
+            if (valid == 1):
+                # Se revierten los cambios realizados
+                for i in range(len(leds)):
+                    for j in range(len(leds[i])):
+                        leds[i][j] = leds_anterior [i][j]
+            else:
+                leds_anterior = copy.deepcopy(leds)
+
+            # Imprime estado de leds
+            imprimir_estado_leds(leds, leds_anterior)
+
             return
 
        # Se regresa la menú principal
@@ -131,8 +140,12 @@ def gestionar_leds(leds, ser, opcion):
             print('¿Desea continuar?')
             verif = input('Y/N: ').lower()
             if (verif == 'y'):
+                
                 # Se revierten los cambios realizados
-                leds = leds_anterior
+                for i in range(len(leds)):
+                    for j in range(len(leds[i])):
+                        leds[i][j] = leds_anterior [i][j]
+
                 return
         
 
@@ -140,44 +153,56 @@ def gestionar_leds(leds, ser, opcion):
 ################### FUNCIONES ###################
 # Funcion de transmisión de datos
 def transmisor (ser, opcion, leds):
-    #Se arma la trama
+    # Se arma la trama
     trama = armar_trama(opcion, leds)
 
-    #Se envía la trama
+    # Se envía la trama
     for byte in trama:
         ser.write(byte.to_bytes(1, byteorder='big'))
         time.sleep(0.1) 
-    
+
+    # ser.flushInput ()          # Al limpiar el buffer un ser.reed inmediato bloquea el programa
+    ser.flushOutput()
+
     return
 
 # Funcion de recepción de datos
 def receptor(ser, opcion, leds):
     time.sleep(1)
     readData = ser.read(1)
+    error_detec = 0
 
     # Comprobación de envío de trama
     # Para switch se espera recibir 0x55 (d85)
-    if(opcion == 'switch' and int.from_bytes(readData,byteorder='big') == 85): 
-        readData = ser.read(1)
-        out = str(int.from_bytes(readData,byteorder='big'))
-        print(ser.inWaiting())
-        if out != '':
-            print (">>" + out)
-        
-        # Se apagan todos los leds
-        leds[:] = [[0] * len(leds[0]) for _ in range(4)]
+    if(opcion == 'switch'):
+        if (int.from_bytes(readData,byteorder='big') == 85): 
+            readData = ser.read(1)
+            out = str(int.from_bytes(readData,byteorder='big'))
+            print(ser.inWaiting())
+            if out != '':
+                print (">>" + out)
+            
+            # Se apagan todos los leds
+            leds[:] = [[0] * len(leds[0]) for _ in range(4)]
+    
+        # Cualquier otro dato recibido, será erroneo
+        else:
+            print ('\033[91mError en la comunicación\033[0m')
+            print('')
+            error_detec = 1
     
     # Para leds se espera recibir 0xAA (d170)
-    elif(opcion == 'leds' and int.from_bytes(readData,byteorder='big') != 170):
-            print("Error en el comunicación")
-            print('')
-
-    # Cualquier otro dato recibido, será erroneo
-    else:
-        print ('\033[91mError en la comunicación\033[0m')
+    if(opcion == 'leds' and int.from_bytes(readData,byteorder='big') != 170):
+        print("Error en el comunicación")
         print('')
 
-    return
+        error_detec = 1
+    
+    # Limpia buffer de entrada y salida
+    ser.flushInput ()
+    ser.flushOutput()
+        
+    return error_detec
 
 
 # Opciones para modificar LEDs
@@ -302,8 +327,8 @@ def armar_trama(opcion, leds):
 
 
         # Concatena los valores en una variable de 32 bits
-        byte_1 = 0b00000000 | (led_4 << 4) | (led_3 >> 2) 
-        byte_2 = (led_3 << 9) | (led_2 << 3) | led_1
+        byte_1 = (0b00000000   | (led_4 << 1) | (led_3 >> 2)) & (0x00FF)
+        byte_2 = ((led_3 << 6) | (led_2 << 3) | led_1)        & (0x00FF)
 
         trama =[start,
                 func,
@@ -324,12 +349,13 @@ def imprimir_estado_leds(leds, leds_anterior):
         print(Fore.WHITE + 'Estado actual de los LEDs:')
         print(Fore.WHITE + ' B  G  R')
         print(Fore.WHITE + "\n".join(map(str, leds)))
+
     else:
         print(Fore.YELLOW + 'Estado actual de los LEDs:')
         print(Fore.YELLOW + ' B  G  R')
         print(Fore.YELLOW + "\n".join(map(str, leds)))
         print('')
-        print('\033[93mAdvertencia: leds aún no encendidos\033[0m')
+        print('\033[93mNota: leds aún no modificados\033[0m')
 
 
 main()

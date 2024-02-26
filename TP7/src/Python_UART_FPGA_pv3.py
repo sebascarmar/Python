@@ -122,7 +122,19 @@ def gestionar_leds(leds, ser, opcion):
             
             # Se realizan los cambios
             transmisor(ser, opcion, leds)
-            receptor  (ser, opcion, leds)
+            valid = receptor  (ser, opcion, leds)
+            # Si receptor presenta error, no se encenderán los leds
+            if (valid == 1):
+                # Se revierten los cambios realizados
+                for i in range(len(leds)):
+                    for j in range(len(leds[i])):
+                        leds[i][j] = leds_anterior [i][j]
+            else:
+                leds_anterior = copy.deepcopy(leds)
+
+            # Imprime estado de leds
+            imprimir_estado_leds(leds, leds_anterior)
+
             return
 
        # Se regresa la menú principal
@@ -132,7 +144,10 @@ def gestionar_leds(leds, ser, opcion):
             verif = input('Y/N: ').lower()
             if (verif == 'y'):
                 # Se revierten los cambios realizados
-                leds = leds_anterior
+                for i in range(len(leds)):
+                    for j in range(len(leds[i])):
+                        leds[i][j] = leds_anterior [i][j]
+
                 return
         
 

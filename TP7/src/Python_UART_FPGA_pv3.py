@@ -116,10 +116,7 @@ def gestionar_leds(leds, ser, opcion):
 
         #Se encienden los leds modificados
         elif(opcion_led == "3"):
-            # Imprime estado de leds
-            imprimir_estado_leds(leds, leds_anterior)
-            print("\033[1;90mEncendiendo leds...\033[0m")
-            
+            print("\033[1;90mModificando leds...\033[0m")
             # Se realizan los cambios
             transmisor(ser, opcion, leds)
             valid = receptor  (ser, opcion, leds)

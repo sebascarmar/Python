@@ -106,7 +106,7 @@ def main():
             transmisor    (ser, opcion, leds)
 
         elif (opcion == 4):
-            print("\033[1;90mLa fase actual es", fase + ". ¿Qué fase desea colocar?\033[0m")
+            print("\033[1;90mLa fase actual es", fase, ". ¿Qué fase desea colocar?\033[0m")
             fase = int(input('>> '))
 
             while (fase < 1 and fase > 4):

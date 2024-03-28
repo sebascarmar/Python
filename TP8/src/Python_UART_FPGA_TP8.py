@@ -33,6 +33,14 @@ def main():
              [0, 0, 0],
              [0, 0, 0]]   
                  
+    reset = 0
+    fase  = 0             
+    Tx    = 1
+    Rx    = 1
+
+    leds = [[reset, Tx, Rx],                                 # Estado inicial de los LEDs
+            [0, 0, 0],
+            [0, 0, 0],
     
     while True:
         print('\033[1;4mMENÚ PRINCIPAL\033[0m')        

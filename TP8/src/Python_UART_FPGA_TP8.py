@@ -337,33 +337,40 @@ def accion_leds(color, num_led, leds, accion):
 
 # Función que arma la trama a enviar
 def armar_trama(opcion, leds):
-    start = 0b00000101
+    start = 0x01
 
-    if opcion == 'leds':
+    # Reset
+    if opcion == 1:
         func = 0xAA
+
+    # Tx
+    elif opcion == 2:
+        func = 0xBB
+    
+    # Rx
+    elif opcion == 3:
+        func = 0xCC
+
+    # Fase
+    elif opcion == 4:
+        func = 0xDD    
+
+    # Convierte cada fila de LEDs en un número binario
+    led_1 = (int(leds[0][2]) and 0b1) << 2 | (int(leds[0][1]) and 0b1) << 1 | (int(leds[0][0]) and 0b1) 
+    led_2 = (int(leds[1][2]) and 0b1) << 2 | (int(leds[1][1]) and 0b1) << 1 | (int(leds[1][0]) and 0b1)
+    led_3 = (int(leds[2][2]) and 0b1) << 2 | (int(leds[2][1]) and 0b1) << 1 | (int(leds[2][0]) and 0b1)
+    led_4 = (int(leds[3][2]) and 0b1) << 2 | (int(leds[3][1]) and 0b1) << 1 | (int(leds[3][0]) and 0b1)
+
+
+    # Concatena los valores en una variable de 32 bits
+    byte_1 = (0b00000000   | (led_4 << 1) | (led_3 >> 2)) & (0x00FF)
+    byte_2 = ((led_3 << 6) | (led_2 << 3) | led_1)        & (0x00FF)
+
+    trama =[start ,
+            func  ,
+            byte_1,
+            byte_2]
         
-        # Convierte cada fila de LEDs en un número binario
-        led_1 = (int(leds[0][2]) and 0b1) << 2 | (int(leds[0][1]) and 0b1) << 1 | (int(leds[0][0]) and 0b1) 
-        led_2 = (int(leds[1][2]) and 0b1) << 2 | (int(leds[1][1]) and 0b1) << 1 | (int(leds[1][0]) and 0b1)
-        led_3 = (int(leds[2][2]) and 0b1) << 2 | (int(leds[2][1]) and 0b1) << 1 | (int(leds[2][0]) and 0b1)
-        led_4 = (int(leds[3][2]) and 0b1) << 2 | (int(leds[3][1]) and 0b1) << 1 | (int(leds[3][0]) and 0b1)
-
-
-        # Concatena los valores en una variable de 32 bits
-        byte_1 = (0b00000000   | (led_4 << 1) | (led_3 >> 2)) & (0x00FF)
-        byte_2 = ((led_3 << 6) | (led_2 << 3) | led_1)        & (0x00FF)
-
-        trama =[start,
-                func,
-                byte_1,
-                byte_2]
-        
-
-    else:        
-        func  = 0x55
-        trama = [start,
-                 func]
-
     return trama    
 
 # Funcion que imrpime el estado de los LEDs

@@ -108,6 +108,8 @@ def main():
        
 
 ################### MENÚ DE LEDS ###################
+def gestionar_leds(fila, columna, valor, leds):
+    leds [fila][columna] = valor
 
 ################### FUNCIONES ###################
 # Funcion de transmisión de datos

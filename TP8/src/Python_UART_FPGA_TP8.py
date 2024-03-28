@@ -113,7 +113,12 @@ def main():
                 print('\033[91mOpción incorrecta. Por favor, ingrese una valor entero entre 0 y 3\033[0m')
                 fase = int(input('Opción ingresada: '))
             
+            bit1 = fase // 2
+            bit2 = fase % 2
 
+            gestionar_leds(1, 0, bit1, leds)
+            gestionar_leds(1, 1, bit2, leds)
+            transmisor    (ser, opcion, leds)
            
         else:
             print("\033[1;90mSaliendo del programa...\033[0m")

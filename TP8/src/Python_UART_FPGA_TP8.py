@@ -35,11 +35,13 @@ def main():
                  
     
     while True:
-        print('\033[1;4mMENÚ PRINCIPAL\033[0m'        )        
-        print('¿Qué acción desea realizar?'          )
-        print('   Leds  : modificar estado de leds'  )
-        print('   Switch: verificar estado de switch')
-        print('   Exit  : salir del programa'        )
+        print('\033[1;4mMENÚ PRINCIPAL\033[0m')        
+        print('¿Qué acción desea realizar?   ')
+        print('1) Reseteo del sistema        ')
+        print('2) Habilitar/Deshabilitar Tx  ')
+        print('3) Habilitar/Deshabilitar Rx  ')
+        print('4) Cambiar fase               ')
+        print('5) Salir del proframa         ')
         print('')
 
         opcion = input('Opción ingresada: ')

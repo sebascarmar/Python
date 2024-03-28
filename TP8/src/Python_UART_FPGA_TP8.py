@@ -44,41 +44,62 @@ def main():
         print('5) Salir del proframa         ')
         print('')
 
-        opcion = input('Opción ingresada: ')
-        opcion = opcion.lower()
+        opcion = int(input('Opción ingresada: '))
     
-        while (opcion != 'leds' and opcion != 'switch' and opcion != 'exit'):
+        while (opcion < 1 and opcion > 5):
             print('\033[91mOpción incorrecta. Por favor, ingrese una opción válida\033[0m')
-            opcion = input('Opción ingresada: ')
-
-            opcion = opcion.lower()
+            opcion = int(input('Opción ingresada: '))
 
 
+        if (opcion == 1):
+            print("\033[1;90mReseteando sistema...\033[0m")
 
-        if opcion   == 'leds':
-            # Se modifican los leds
-            gestionar_leds(leds, ser, opcion)
-            print("\033[1;90mRegresando al menú principal...\033[0m \n")
+
+        elif (opcion == 2):
+            if(Tx == 1):
+                print("\033[1;90mTx se encuentra habilitado. ¿Desea deshabilitarlo?\033[0m")
+                opcion_tx = input('Y/N: ').lower()
+
+                if opcion_tx == 'y':
+                    print("\033[1;90mDeshabilitando Tx\033[0m")
+                    Tx = 0
+
+            else:
+                print("\033[1;90mTx se encuentra deshabilitado. ¿Desea habilitarlo?\033[0m") 
+                opcion_tx = input('Y/N: ').lower()
+
+                if opcion_tx == 'y':
+                    print("\033[1;90mHabilitando Tx\033[0m")
+                    Tx = 1
+
+
+        elif (opcion == 3):
+            if(Rx == 1):
+                print("\033[1;90mRx se encuentra habilitado. ¿Desea deshabilitarlo?\033[0m")
+                opcion_rx = input('Y/N: ').lower()
+
+                if opcion_rx == 'y':
+                    print("\033[1;90mDeshabilitando Rx\033[0m")
+                    Rx = 0
+
+            else:
+                print("\033[1;90mRx se encuentra deshabilitado. ¿Desea habilitarlo?\033[0m") 
+                opcion_rx = input('Y/N: ').lower()
+
+                if opcion_rx == 'y':
+                    print("\033[1;90mHabilitando Rx\033[0m")
+                    Rx = 1
+        
+        elif (opcion == 4):
+            print("\033[1;90mLa fase actual es", fase + ". ¿Qué fase desea colocar?\033[0m")
+            fase = int(input('>> '))
+
+            while (fase < 1 and fase > 4):
+                print('\033[91mOpción incorrecta. Por favor, ingrese una valor entero entre 1 y 4\033[0m')
+                opcion = int(input('Opción ingresada: '))
+
            
-
-        elif opcion == 'switch':
-            print('\033[93mAdvertencia: la lectura de los Switch resetea el estado de los leds\033[0m')
-            print('¿Desea continuar?')
-            verif = input('Y/N: ').lower()
-
-            if(verif =='y'):
-                print("\033[1;90mComprobando estado de switches...\033[0m")
-                
-                # Se envía la trama
-                transmisor(ser, opcion, leds)
-                
-                print("\033[1;90mEsperando información...\033[0m")
-
-                # Se recibe el estado de los switchs
-                receptor(ser, opcion, leds)
-            
-
-        elif opcion == 'exit':
+        else:
             print("\033[1;90mSaliendo del programa...\033[0m")
             ser.close()
             exit()

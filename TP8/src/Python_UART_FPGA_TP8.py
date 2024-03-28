@@ -82,6 +82,8 @@ def main():
                     print("\033[1;90mHabilitando Tx\033[0m")
                     Tx = 1
 
+            gestionar_leds(0, 1, Tx, leds)
+            transmisor    (ser, opcion, leds)
 
         elif (opcion == 3):
             if(Rx == 1):
@@ -99,7 +101,10 @@ def main():
                 if opcion_rx == 'y':
                     print("\033[1;90mHabilitando Rx\033[0m")
                     Rx = 1
-        
+
+            gestionar_leds(0, 2, Rx, leds)
+            transmisor    (ser, opcion, leds)
+
         elif (opcion == 4):
             print("\033[1;90mLa fase actual es", fase + ". ¿Qué fase desea colocar?\033[0m")
             fase = int(input('>> '))

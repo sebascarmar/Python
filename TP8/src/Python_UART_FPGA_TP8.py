@@ -54,7 +54,7 @@ def main():
 
         opcion = int(input('Opción ingresada: '))
     
-        while (opcion < 1 and opcion > 5):
+        while (opcion < 1 or opcion > 5):
             print('\033[91mOpción incorrecta. Por favor, ingrese una opción válida\033[0m')
             opcion = int(input('Opción ingresada: '))
 

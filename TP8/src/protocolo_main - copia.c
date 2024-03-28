@@ -1,233 +1,138 @@
-import time
-import serial
-import sys
-import copy
-from colorama import init, Fore
 
-## Función de menú principal
-def main():
-    print("\033[1;90mIniciando programa...\033[0m")
-    print('')
-    
-    # Configuración del puerto real
-    portUSB = sys.argv[1]
-    ser = serial.Serial(
-       port     = '/dev/ttyUSB{}'.format(int(portUSB)),      #Cambiar el nombre del puerto por el correcto
-       baudrate = 115200,
-       parity   = serial.PARITY_NONE,
-       stopbits = serial.STOPBITS_ONE,
-       bytesize = serial.EIGHTBITS
-    )
+#include <stdio.h>
+#include <string.h>
+#include "xparameters.h"
+#include "xil_cache.h"
+#include "xgpio.h"
+#include "platform.h"
+#include "xuartlite.h"
+#include "microblaze_sleep.h"
 
-    ser.isOpen()
-    ser.timeout = None 
-    print(ser.timeout)
-   
-    # Configuración del puerto para la simulación
-    # ser = serial.serial_for_url('loop://', timeout=1)
-    # ser.flushInput ()
-    # ser.flushOutput()
+#define PORT_IN	 		XPAR_AXI_GPIO_0_DEVICE_ID //XPAR_GPIO_0_DEVICE_ID
+#define PORT_OUT 		XPAR_AXI_GPIO_0_DEVICE_ID //XPAR_GPIO_0_DEVICE_ID
 
-    reset = 0
-    fase  = 0             
-    Tx    = 1
-    Rx    = 1
+//Device_ID Operaciones
+#define def_SOFT_RST            0
+#define def_ENABLE_MODULES      1
+#define def_LOG_RUN             2
+#define def_LOG_READ            3
 
-    leds = [[reset, Tx, Rx],                                 # Estado inicial de los LEDs
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0]]   
-    
-    while True:
-        print('\033[1;4mMENÚ PRINCIPAL\033[0m')        
-        print('¿Qué acción desea realizar?   ')
-        print('1) Reseteo del sistema        ')
-        print('2) Habilitar/Deshabilitar Tx  ')
-        print('3) Habilitar/Deshabilitar Rx  ')
-        print('4) Cambiar fase               ')
-        print('5) Salir del programa         ')
-        print('')
+XGpio GpioOutput;
+XGpio GpioParameter;
+XGpio GpioInput;
+u32 GPO_Value;
+u32 GPO_Param;
+XUartLite uart_module;
 
-        opcion = int(input('Opción ingresada: '))
-    
-        while (opcion < 1 or opcion > 5):
-            print('\033[91mOpción incorrecta. Por favor, ingrese una opción válida\033[0m')
-            opcion = int(input('Opción ingresada: '))
+//Funcion para recibir 1 byte bloqueante
+//XUartLite_RecvByte((&uart_module)->RegBaseAddress)
+
+int main()
+{
+	int Status;
+	GPO_Value=0x00000000;
+	GPO_Param=0x00000000;
+	unsigned char data_in[3] = {'\0'};
+	u32           value;
+
+	init_platform();
+
+	XUartLite_Initialize(&uart_module, 0);
 
 
-        if (opcion == 1):
-            print("\033[1;90mReseteando sistema...\033[0m")
-            reset = 1
-            gestionar_leds(0, 0, reset, leds)
-            transmisor    (ser, opcion, leds)
+	Status=XGpio_Initialize(&GpioInput, PORT_IN);
+	if(Status!=XST_SUCCESS)
+        return XST_FAILURE;
 
-        elif (opcion == 2):
-            if(Tx == 1):
-                print("\033[1;90mTx se encuentra habilitado. ¿Desea deshabilitarlo?\033[0m")
-                opcion_tx = input('Y/N: ').lower()
+	Status=XGpio_Initialize(&GpioOutput, PORT_OUT);
+	if(Status!=XST_SUCCESS)
+		return XST_FAILURE;
 
-                if opcion_tx == 'y':
-                    print("\033[1;90mDeshabilitando Tx\033[0m")
-                    Tx = 0
-
-            else:
-                print("\033[1;90mTx se encuentra deshabilitado. ¿Desea habilitarlo?\033[0m") 
-                opcion_tx = input('Y/N: ').lower()
-
-                if opcion_tx == 'y':
-                    print("\033[1;90mHabilitando Tx\033[0m")
-                    Tx = 1
-
-            gestionar_leds(0, 1, Tx, leds)
-            transmisor    (ser, opcion, leds)
-
-        elif (opcion == 3):
-            if(Rx == 1):
-                print("\033[1;90mRx se encuentra habilitado. ¿Desea deshabilitarlo?\033[0m")
-                opcion_rx = input('Y/N: ').lower()
-
-                if opcion_rx == 'y':
-                    print("\033[1;90mDeshabilitando Rx\033[0m")
-                    Rx = 0
-
-            else:
-                print("\033[1;90mRx se encuentra deshabilitado. ¿Desea habilitarlo?\033[0m") 
-                opcion_rx = input('Y/N: ').lower()
-
-                if opcion_rx == 'y':
-                    print("\033[1;90mHabilitando Rx\033[0m")
-                    Rx = 1
-
-            gestionar_leds(0, 2, Rx, leds)
-            transmisor    (ser, opcion, leds)
-
-        elif (opcion == 4):
-            print("\033[1;90mLa fase actual es", fase, ". ¿Qué fase desea colocar?\033[0m")
-            fase = int(input('>> '))
-
-            while (fase < 0 or fase > 3):
-                print('\033[91mOpción incorrecta. Por favor, ingrese una valor entero entre 0 y 3\033[0m')
-                fase = int(input('Opción ingresada: '))
-            
-            bit1 = fase // 2
-            bit2 = fase % 2
-
-            gestionar_leds(1, 0, bit1, leds)
-            gestionar_leds(1, 1, bit2, leds)
-            transmisor    (ser, opcion, leds)
-           
-        else:
-            print("\033[1;90mSaliendo del programa...\033[0m")
-            ser.close()
-            exit()
-            
-        imprimir_estado_leds(leds)    
-       
-
-################### MENÚ DE LEDS ###################
-def gestionar_leds(fila, columna, valor, leds):
-    leds [fila][columna] = valor
-
-################### FUNCIONES ###################
-# Funcion de transmisión de datos
-def transmisor (ser, opcion, leds):
-    # Se arma la trama
-    trama = armar_trama(opcion, leds)
-
-    # Se envía la trama
-    for byte in trama:
-        ser.write(byte.to_bytes(1, byteorder='big'))
-        time.sleep(0.1) 
-
-    # ser.flushInput ()          # Al limpiar el buffer un ser.reed inmediato bloquea el programa
-    ser.flushOutput()
-
-    return
-
-# Funcion de recepción de datos
-def receptor(ser, opcion, leds):
-    time.sleep(1)
-    readData = ser.read(1)
-    error_detec = 0
-
-    # Comprobación de envío de trama
-    # Para switch se espera recibir 0x55 (d85)
-    if(opcion == 'switch'):
-        if (int.from_bytes(readData,byteorder='big') == 85): 
-            readData = ser.read(1)
-            out = str(int.from_bytes(readData,byteorder='big'))
-            print(ser.inWaiting())
-            if out != '':
-                print (">>" + out)
-            
-            # Se apagan todos los leds
-            leds[:] = [[0] * len(leds[0]) for _ in range(4)]
-    
-        # Cualquier otro dato recibido, será erroneo
-        else:
-            print ('\033[91mError en la comunicación\033[0m')
-            print('')
-            error_detec = 1
-    
-    # Para leds se espera recibir 0xAA (d170)
-    if(opcion == 'leds' and int.from_bytes(readData,byteorder='big') != 170):
-        print("Error en el comunicación")
-        print('')
-
-        error_detec = 1
-    
-    # Limpia buffer de entrada y salida
-    ser.flushInput ()
-    ser.flushOutput()
-        
-    return error_detec
+	XGpio_SetDataDirection(&GpioOutput, 1, 0x00000000);
+	XGpio_SetDataDirection(&GpioInput, 1, 0xFFFFFFFF);
 
 
-# Función que arma la trama a enviar
-def armar_trama(opcion, leds):
-    start = 0x01
+	while(1)
+	{
+		if(data_in[0] != 0x05)												// Si data_in [0] no es correcta
+		{
+			read(stdin,&data_in[0],1);
+		}
+		else
+		{
+			read(stdin,&data_in[1],1);										// Se recibe data_in [1] 
+			switch(data_in[1])
+			{
+				// Reset
+		   	   	case 0xAA:
+		   			read(stdin,&data_in[1],1);									// Son leds en 0, no se usan 
+		   		   	read(stdin,&data_in[2],1);
 
-    # Reset
-    if opcion == 1:
-        func = 0xAA
+					data_in[1] = 0x0A;
 
-    # Tx
-    elif opcion == 2:
-        func = 0xBB
-    
-    # Rx
-    elif opcion == 3:
-        func = 0xCC
+		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;	// Arma trama solo con leds 
+		            XGpio_DiscreteWrite(&GpioOutput, 1, value);					// Enciende leds
 
-    # Fase
-    elif opcion == 4:
-        func = 0xDD    
+		            data_in[1] = 0xAA;											// Actualiza valor
+		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
+		            XUartLite_Send(&uart_module, &(data_in[1]),1);
 
-    # Convierte cada fila de LEDs en un número binario
-    led_1 = (int(leds[0][2]) and 0b1) << 2 | (int(leds[0][1]) and 0b1) << 1 | (int(leds[0][0]) and 0b1) 
-    led_2 = (int(leds[1][2]) and 0b1) << 2 | (int(leds[1][1]) and 0b1) << 1 | (int(leds[1][0]) and 0b1)
-    led_3 = (int(leds[2][2]) and 0b1) << 2 | (int(leds[2][1]) and 0b1) << 1 | (int(leds[2][0]) and 0b1)
-    led_4 = (int(leds[3][2]) and 0b1) << 2 | (int(leds[3][1]) and 0b1) << 1 | (int(leds[3][0]) and 0b1)
+				// Tx
+		   	   	case 0xBB:
+		   			read(stdin,&data_in[1],1);									// Son leds en 0, no se usan 
+		   		   	read(stdin,&data_in[2],1);
 
+					data_in[1] = 0x0B;
 
-    # Concatena los valores en una variable de 32 bits
-    byte_1 = (0b00000000   | (led_4 << 1) | (led_3 >> 2)) & (0x00FF)
-    byte_2 = ((led_3 << 6) | (led_2 << 3) | led_1)        & (0x00FF)
+		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;	// Arma trama solo con leds 
+		            XGpio_DiscreteWrite(&GpioOutput, 1, value);					// Enciende leds
 
-    trama =[start ,
-            func  ,
-            byte_1,
-            byte_2]
-        
-    return trama    
+		            data_in[1] = 0xBB;											// Actualiza valor
+		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
+		            XUartLite_Send(&uart_module, &(data_in[1]),1);
 
-# Funcion que imrpime el estado de los LEDs
-def imprimir_estado_leds(leds):
-    print(Fore.WHITE + 'Estado actual de los LEDs:')
-    print(Fore.WHITE + ' B  G  R')
-    print(Fore.WHITE + "\n".join(map(str, leds)))
+				// Rx
+		   	   	case 0xCC:
+		   			read(stdin,&data_in[1],1);									// Son leds en 0, no se usan 
+		   		   	read(stdin,&data_in[2],1);
+
+					data_in[1] = 0x0C;
+
+		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;	// Arma trama solo con leds 
+		            XGpio_DiscreteWrite(&GpioOutput, 1, value);					// Enciende leds
+
+		            data_in[1] = 0xCC;											// Actualiza valor
+		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
+		            XUartLite_Send(&uart_module, &(data_in[1]),1);
+				
+				// Fase
+		   	   	case 0xDD:
+		   			read(stdin,&data_in[1],1);									// Son leds en 0, no se usan 
+		   		   	read(stdin,&data_in[2],1);
+
+					data_in[1] = 0x0D;
+
+		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;	// Arma trama solo con leds 
+		            XGpio_DiscreteWrite(&GpioOutput, 1, value);					// Enciende leds
+
+		            data_in[1] = 0xDD;											// Actualiza valor
+		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
+		            XUartLite_Send(&uart_module, &(data_in[1]),1);
 
 
 
+		   	   default:
+		   		   while(XUartLite_IsSending(&uart_module)){}
+		   		   XUartLite_Send(&uart_module, &(data_in[1]),1);
+			} // fin switch funcion
+		   data_in[0]=!'\0';
 
-main()
+
+		}// fin del else
+
+	}// find del while
+	
+	cleanup_platform();
+	return 0;
+}
+

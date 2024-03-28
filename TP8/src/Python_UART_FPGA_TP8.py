@@ -125,7 +125,7 @@ def main():
             ser.close()
             exit()
             
-        
+        imprimir_estado_leds(leds)    
        
 
 ################### MENÚ DE LEDS ###################

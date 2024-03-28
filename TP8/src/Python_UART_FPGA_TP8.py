@@ -41,7 +41,7 @@ def main():
         print('2) Habilitar/Deshabilitar Tx  ')
         print('3) Habilitar/Deshabilitar Rx  ')
         print('4) Cambiar fase               ')
-        print('5) Salir del proframa         ')
+        print('5) Salir del programa         ')
         print('')
 
         opcion = int(input('Opción ingresada: '))

@@ -61,7 +61,9 @@ def main():
 
         if (opcion == 1):
             print("\033[1;90mReseteando sistema...\033[0m")
-
+            reset = 1
+            gestionar_leds(0, 0, reset, leds)
+            transmisor    (ser, opcion, leds)
 
         elif (opcion == 2):
             if(Tx == 1):

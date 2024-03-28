@@ -109,9 +109,10 @@ def main():
             print("\033[1;90mLa fase actual es", fase, ". ¿Qué fase desea colocar?\033[0m")
             fase = int(input('>> '))
 
-            while (fase < 1 and fase > 4):
-                print('\033[91mOpción incorrecta. Por favor, ingrese una valor entero entre 1 y 4\033[0m')
-                opcion = int(input('Opción ingresada: '))
+            while (fase < 0 or fase > 3):
+                print('\033[91mOpción incorrecta. Por favor, ingrese una valor entero entre 0 y 3\033[0m')
+                fase = int(input('Opción ingresada: '))
+            
 
            
         else:

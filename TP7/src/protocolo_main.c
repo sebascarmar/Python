@@ -63,26 +63,54 @@ int main()
 			read(stdin,&data_in[1],1);
 			switch(data_in[1])
 			{
-		   	   case 0x55:
-				   XGpio_DiscreteWrite(&GpioOutput,1, (u32) 0x00000000);
-				   value = XGpio_DiscreteRead(&GpioInput, 1);
-				   data_in[2]=(char)(value&(0x0000000F));
-
-				   while(XUartLite_IsSending(&uart_module)){}
-				   XUartLite_Send(&uart_module, &(data_in[1]),1);
-
-				   while(XUartLite_IsSending(&uart_module)){}
-				   XUartLite_Send(&uart_module, &(data_in[2]),1);
-				   break;
-
 		   	   case 0xAA:
-		   		   read(stdin,&data_in[1],1);
-		   		   read(stdin,&data_in[2],1);
+		   		   	read(stdin,&data_in[1],1);	// Llega pero se sobreescribe, son leds en 0
+		   		   	read(stdin,&data_in[2],1);
+					data_in[1] = 0x0A;
 
 		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;
 		            XGpio_DiscreteWrite(&GpioOutput, 1, value);
 
 		            data_in[1] = 0xAA;
+		            while(XUartLite_IsSending(&uart_module)){}
+		            XUartLite_Send(&uart_module, &(data_in[1]),1);
+			
+
+				case 0xBB:
+		   		   	read(stdin,&data_in[1],1);	// Llega pero se sobreescribe, son leds en 0
+		   		   	read(stdin,&data_in[2],1);
+					data_in[1] = 0x0B;
+
+		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;
+		            XGpio_DiscreteWrite(&GpioOutput, 1, value);
+
+		            data_in[1] = 0xBB;
+		            while(XUartLite_IsSending(&uart_module)){}
+		            XUartLite_Send(&uart_module, &(data_in[1]),1);
+
+
+				case 0xCC:
+		   		   	read(stdin,&data_in[1],1);	// Llega pero se sobreescribe, son leds en 0
+		   		   	read(stdin,&data_in[2],1);
+					data_in[1] = 0x0C;
+
+		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;
+		            XGpio_DiscreteWrite(&GpioOutput, 1, value);
+
+		            data_in[1] = 0xCC;
+		            while(XUartLite_IsSending(&uart_module)){}
+		            XUartLite_Send(&uart_module, &(data_in[1]),1);
+
+
+				case 0xDD:
+		   		   	read(stdin,&data_in[1],1);	// Llega pero se sobreescribe, son leds en 0
+		   		   	read(stdin,&data_in[2],1);
+					data_in[1] = 0x0D;
+
+		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;
+		            XGpio_DiscreteWrite(&GpioOutput, 1, value);
+
+		            data_in[1] = 0xDD;
 		            while(XUartLite_IsSending(&uart_module)){}
 		            XUartLite_Send(&uart_module, &(data_in[1]),1);
 

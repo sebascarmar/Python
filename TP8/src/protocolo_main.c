@@ -54,36 +54,38 @@ int main()
 
 	while(1)
 	{
-		if(data_in[0] != 0x05)
+		if(data_in[0] != 0x05)												// Si data_in [0] no es correcta
 		{
 			read(stdin,&data_in[0],1);
 		}
 		else
 		{
-			read(stdin,&data_in[1],1);
+			read(stdin,&data_in[1],1);										// Se recibe data_in [1] 
 			switch(data_in[1])
 			{
-		   	   case 0x55:
-				   XGpio_DiscreteWrite(&GpioOutput,1, (u32) 0x00000000);
-				   value = XGpio_DiscreteRead(&GpioInput, 1);
-				   data_in[2]=(char)(value&(0x0000000F));
+				// Leer
+		   	   	case 0x55:
+				   XGpio_DiscreteWrite(&GpioOutput,1, (u32) 0x00000000);	// Todas las salidas en 0
+				   value = XGpio_DiscreteRead(&GpioInput, 1);				// Guarda todas las entradas en value
+				   data_in[2]=(char)(value&(0x0000000F));					// Se queda solo con los últimos 4 bits
 
-				   while(XUartLite_IsSending(&uart_module)){}
+				   while(XUartLite_IsSending(&uart_module)){}				// Envía data_in [1]: opcion
 				   XUartLite_Send(&uart_module, &(data_in[1]),1);
 
-				   while(XUartLite_IsSending(&uart_module)){}
+				   while(XUartLite_IsSending(&uart_module)){}				// Envía data_in [2]: estado switch
 				   XUartLite_Send(&uart_module, &(data_in[2]),1);
 				   break;
 
-		   	   case 0xAA:
-		   		   read(stdin,&data_in[1],1);
+				// Escrubir
+		   	   	case 0xAA:
+		   		   read(stdin,&data_in[1],1);									// Recibe data_in [1] y data_in [2] 
 		   		   read(stdin,&data_in[2],1);
 
-		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;
-		            XGpio_DiscreteWrite(&GpioOutput, 1, value);
+		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;	// Arma trama solo con leds 
+		            XGpio_DiscreteWrite(&GpioOutput, 1, value);					// Enciende leds
 
-		            data_in[1] = 0xAA;
-		            while(XUartLite_IsSending(&uart_module)){}
+		            data_in[1] = 0xAA;											// Actualiza valor
+		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
 		            XUartLite_Send(&uart_module, &(data_in[1]),1);
 
 		   	   default:

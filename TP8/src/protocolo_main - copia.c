@@ -58,68 +58,62 @@ int main()
 		{
 			read(stdin,&data_in[0],1);										// Espera hasta comenzar en 0x01
 		}
-		else
-		{
-			read(stdin,&data_in[1],1);										// Se recibe data_in [1] 
+		else																// Se recibe data_in [1] = 0x01
+		{												
+			read(stdin,&data_in[1],1);										// Guarda el segundo byte recibido
 			switch(data_in[1])
 			{
 				// Reset
 		   	   	case 0xAA:
-		   			read(stdin,&data_in[1],1);									// Son leds en 0, no se usan 
-		   		   	read(stdin,&data_in[2],1);
-
-					data_in[1] = 0x0A;
+		   			read(stdin,&data_in[1],1);									// Sobreesbribe, lee el tercer 
+		   		   	read(stdin,&data_in[2],1);									// y cuarto byte
 
 		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;	// Arma trama solo con leds 
 		            XGpio_DiscreteWrite(&GpioOutput, 1, value);					// Enciende leds
 
 		            data_in[1] = 0xAA;											// Actualiza valor
-		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-		            XUartLite_Send(&uart_module, &(data_in[1]),1);
+		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion 
+		            XUartLite_Send(&uart_module, &(data_in[1]),1);				// para comprobacion
 
 				// Tx
 		   	   	case 0xBB:
-		   			read(stdin,&data_in[1],1);									// Son leds en 0, no se usan 
-		   		   	read(stdin,&data_in[2],1);
-
-					data_in[1] = 0x0B;
+		   			read(stdin,&data_in[1],1);									// Sobreesbribe, lee el tercer
+		   		   	read(stdin,&data_in[2],1);									// y cuarto byte
 
 		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;	// Arma trama solo con leds 
 		            XGpio_DiscreteWrite(&GpioOutput, 1, value);					// Enciende leds
 
 		            data_in[1] = 0xBB;											// Actualiza valor
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-		            XUartLite_Send(&uart_module, &(data_in[1]),1);
+		            XUartLite_Send(&uart_module, &(data_in[1]),1);				// para comprobacion
 
 				// Rx
 		   	   	case 0xCC:
-		   			read(stdin,&data_in[1],1);									// Son leds en 0, no se usan 
-		   		   	read(stdin,&data_in[2],1);
-
-					data_in[1] = 0x0C;
+		   			read(stdin,&data_in[1],1);									// Sobreesbribe, lee el tercer
+		   		   	read(stdin,&data_in[2],1);									// y cuarto byte
 
 		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;	// Arma trama solo con leds 
 		            XGpio_DiscreteWrite(&GpioOutput, 1, value);					// Enciende leds
 
 		            data_in[1] = 0xCC;											// Actualiza valor
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-		            XUartLite_Send(&uart_module, &(data_in[1]),1);
+		            XUartLite_Send(&uart_module, &(data_in[1]),1);				// para comprobacion
 				
 				// Fase
 		   	   	case 0xDD:
-		   			read(stdin,&data_in[1],1);									// Son leds en 0, no se usan 
-		   		   	read(stdin,&data_in[2],1);
-
-					data_in[1] = 0x0D;
+		   			read(stdin,&data_in[1],1);									// Sobreesbribe, lee el tercer
+		   		   	read(stdin,&data_in[2],1);									// y cuarto byte
 
 		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;	// Arma trama solo con leds 
 		            XGpio_DiscreteWrite(&GpioOutput, 1, value);					// Enciende leds
 
 		            data_in[1] = 0xDD;											// Actualiza valor
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-		            XUartLite_Send(&uart_module, &(data_in[1]),1);
+		            XUartLite_Send(&uart_module, &(data_in[1]),1);				// para comprobacion
 
 
+				// Guardar datos en memoria
+				// Mostrar resultados
 
 		   	   default:
 		   		   while(XUartLite_IsSending(&uart_module)){}

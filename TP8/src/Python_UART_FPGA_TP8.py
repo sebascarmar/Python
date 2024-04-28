@@ -28,19 +28,22 @@ def main():
     # ser.flushInput ()
     # ser.flushOutput()
 
+    # Estado ninicial de los leds
     leds  = [[0, 0, 0],                                 # Estado inicial de los LEDs
              [0, 0, 0],
              [0, 0, 0],
-             [0, 0, 0]]   
-                 
+             [0, 0, 0]] 
+    
+    # Estado inicial de las variables
     reset = 0
     fase  = 0             
     Tx    = 1
     Rx    = 1
-
-    leds = [[reset, Tx, Rx],                                 # Estado inicial de los LEDs
-            [0, 0, 0],
-            [0, 0, 0],
+    
+    # Asignas los valores de reset, Tx y Rx a las posiciones correspondientes de la lista leds
+    leds[0][0] = reset
+    leds[0][1] = Tx
+    leds[0][2] = Rx
     
     while True:
         print('\033[1;4mMENÚ PRINCIPAL\033[0m')        

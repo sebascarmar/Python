@@ -54,9 +54,9 @@ int main()
 
 	while(1)
 	{
-		if(data_in[0] != 0x05)												// Si data_in [0] no es correcta
+		if(data_in[0] != 0x01)												// Si data_in [0] no comienza con 0x01
 		{
-			read(stdin,&data_in[0],1);
+			read(stdin,&data_in[0],1);										// Espera hasta comenzar en 0x01
 		}
 		else
 		{
@@ -135,4 +135,3 @@ int main()
 	cleanup_platform();
 	return 0;
 }
-

@@ -55,20 +55,21 @@ def main():
         print('5) Salir del programa         ')
         print('')
 
-        opcion = int(input('Opción ingresada: '))
-    
-        while (opcion < 1 or opcion > 5):
+        opcion = input('Opción ingresada: ')
+
+        # Verifica que no se ingrese una letra o numero fuera de rango
+        while (opcion.isalpha() or int(opcion) < 1 or int(opcion) > 5):
             print('\033[91mOpción incorrecta. Por favor, ingrese una opción válida\033[0m')
-            opcion = int(input('Opción ingresada: '))
-
-
-        if (opcion == 1):
+            opcion = input('Opción ingresada: ')
+            
+ 
+        if (int(opcion) == 1):
             print("\033[1;90mReseteando sistema...\033[0m")
             reset = 1
             gestionar_leds(0, 0, reset, leds)
             transmisor    (ser, opcion, leds)
 
-        elif (opcion == 2):
+        elif (int(opcion) == 2):
             if(Tx == 1):
                 print("\033[1;90mTx se encuentra habilitado. ¿Desea deshabilitarlo?\033[0m")
                 opcion_tx = input('Y/N: ').lower()
@@ -88,7 +89,7 @@ def main():
             gestionar_leds(0, 1, Tx, leds)
             transmisor    (ser, opcion, leds)
 
-        elif (opcion == 3):
+        elif (int(opcion) == 3):
             if(Rx == 1):
                 print("\033[1;90mRx se encuentra habilitado. ¿Desea deshabilitarlo?\033[0m")
                 opcion_rx = input('Y/N: ').lower()
@@ -108,14 +109,15 @@ def main():
             gestionar_leds(0, 2, Rx, leds)
             transmisor    (ser, opcion, leds)
 
-        elif (opcion == 4):
+        elif (int(opcion) == 4):
             print("\033[1;90mLa fase actual es", fase, ". ¿Qué fase desea colocar?\033[0m")
-            fase = int(input('>> '))
+            fase = input('>> ')
 
-            while (fase < 0 or fase > 3):
+            while (opcion.isalpha() or int(fase) < 0 or int(fase) > 3):
                 print('\033[91mOpción incorrecta. Por favor, ingrese una valor entero entre 0 y 3\033[0m')
-                fase = int(input('Opción ingresada: '))
-            
+                fase = input('Opción ingresada: ')
+
+            fase = int(fase)
             bit1 = fase // 2
             bit2 = fase % 2
 
@@ -123,7 +125,7 @@ def main():
             gestionar_leds(1, 1, bit2, leds)
             transmisor    (ser, opcion, leds)
            
-        else:
+        elif (int(opcion) == 5):
             print("\033[1;90mSaliendo del programa...\033[0m")
             ser.close()
             exit()

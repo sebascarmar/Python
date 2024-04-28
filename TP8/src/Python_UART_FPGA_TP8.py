@@ -195,7 +195,7 @@ def receptor(ser, opcion, leds):
 # Función que arma la trama a enviar
 def armar_trama(opcion, leds):
     start = 0x01
-
+    func  = 0x00
     # Reset
     if opcion == 1:
         func = 0xAA

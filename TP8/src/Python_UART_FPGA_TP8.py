@@ -160,26 +160,29 @@ def receptor(ser, opcion, leds):
     error_detec = 0
 
     # Comprobación de envío de trama
-    # Para switch se espera recibir 0x55 (d85)
-    if(opcion == 'switch'):
-        if (int.from_bytes(readData,byteorder='big') == 85): 
-            readData = ser.read(1)
-            out = str(int.from_bytes(readData,byteorder='big'))
-            print(ser.inWaiting())
-            if out != '':
-                print (">>" + out)
-            
-            # Se apagan todos los leds
-            leds[:] = [[0] * len(leds[0]) for _ in range(4)]
+    # Para resetear se espera recibir 0xAA (d170)
+    if(int(opcion) == 1 and int.from_bytes(readData,byteorder='big') != 170):
+        print("Error en el comunicación")
+        print('')
+
+        error_detec = 1
+
+    # Para Tx se espera recibir 0xBB (d187)
+    elif(int(opcion) == 2 and int.from_bytes(readData,byteorder='big') != 187):
+        print("Error en el comunicación")
+        print('')
+
+        error_detec = 1
     
-        # Cualquier otro dato recibido, será erroneo
-        else:
-            print ('\033[91mError en la comunicación\033[0m')
-            print('')
-            error_detec = 1
-    
-    # Para leds se espera recibir 0xAA (d170)
-    if(opcion == 'leds' and int.from_bytes(readData,byteorder='big') != 170):
+    # Para Rx se espera recibir 0xCC (d204)
+    elif(int(opcion) == 3 and int.from_bytes(readData,byteorder='big') != 204):
+        print("Error en el comunicación")
+        print('')
+
+        error_detec = 1
+
+    # Para Rx se espera recibir 0xDD (d221)
+    elif(int(opcion) == 4 and int.from_bytes(readData,byteorder='big') != 221):
         print("Error en el comunicación")
         print('')
 

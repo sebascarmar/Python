@@ -238,6 +238,7 @@ def imprimir_estado_leds(leds):
     print(Fore.WHITE + 'Estado actual de los LEDs:')
     print(Fore.WHITE + ' B  G  R')
     print(Fore.WHITE + "\n".join(map(str, leds)))
+    print()
 
 
 

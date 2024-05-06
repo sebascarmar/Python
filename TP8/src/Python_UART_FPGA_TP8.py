@@ -126,44 +126,26 @@ def transmisor (ser, opcion, i_data = None):
 
     # ser.flushInput ()          # Al limpiar el buffer un ser.reed inmediato bloquea el programa
     ser.flushOutput()
-
     return
 
 # Funcion de recepción de datos
 def receptor(ser, opcion):
     time.sleep(1)
     readData = ser.read(1)
-    error_detec = 0
+    error_detec = 0                         # Verificación de comunicación
 
     # Comprobación de envío de trama
-    # Para resetear se espera recibir 0xAA (d170)
-    if(int(opcion) == 1 and int.from_bytes(readData,byteorder='big') != 170):
-        print("Error en el comunicación")
-        print('')
-
-        error_detec = 1
-
-    # Para Tx se espera recibir 0xBB (d187)
-    elif(int(opcion) == 2 and int.from_bytes(readData,byteorder='big') != 187):
-        print("Error en el comunicación")
+    if (int.from_bytes(readData,byteorder='big') != int(opcion)):
+        print("\033[91mError en la comunicación. Llegó\033[0m", int.from_bytes(readData,byteorder='big'))
         print('')
 
         error_detec = 1
     
-    # Para Rx se espera recibir 0xCC (d204)
-    elif(int(opcion) == 3 and int.from_bytes(readData,byteorder='big') != 204):
-        print("Error en el comunicación")
-        print('')
+    else:
+        print("Conexion exitosa. Llego ", int.from_bytes(readData,byteorder='big'))
+        error_detec = 0
+               
 
-        error_detec = 1
-
-    # Para Rx se espera recibir 0xDD (d221)
-    elif(int(opcion) == 4 and int.from_bytes(readData,byteorder='big') != 221):
-        print("Error en el comunicación")
-        print('')
-
-        error_detec = 1
-    
     # Limpia buffer de entrada y salida
     ser.flushInput ()
     ser.flushOutput()

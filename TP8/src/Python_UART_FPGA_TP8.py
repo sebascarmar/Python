@@ -2,7 +2,6 @@ import time
 import serial
 import sys
 import copy
-from colorama import init, Fore
 
 ## Función de menú principal
 def main():
@@ -27,23 +26,12 @@ def main():
     # ser = serial.serial_for_url('loop://', timeout=1)
     # ser.flushInput ()
     # ser.flushOutput()
-
-    # Estado ninicial de los leds
-    leds  = [[0, 0, 0],                                 # Estado inicial de los LEDs
-             [0, 0, 0],
-             [0, 0, 0],
-             [0, 0, 0]] 
-    
+   
     # Estado inicial de las variables
-    reset = 0
     fase  = 0             
     Tx    = 1
     Rx    = 1
-    
-    # Asignas los valores de reset, Tx y Rx a las posiciones correspondientes de la lista leds
-    leds[0][0] = reset
-    leds[0][1] = Tx
-    leds[0][2] = Rx
+
     
     while True:
         print('\033[1;4mMENÚ PRINCIPAL\033[0m')        
@@ -86,9 +74,6 @@ def main():
                     print("\033[1;90mHabilitando Tx\033[0m")
                     Tx = 1
 
-            gestionar_leds(0, 1, Tx, leds)
-            transmisor    (ser, opcion, leds)
-
         elif (int(opcion) == 3):
             if(Rx == 1):
                 print("\033[1;90mRx se encuentra habilitado. ¿Desea deshabilitarlo?\033[0m")
@@ -106,8 +91,6 @@ def main():
                     print("\033[1;90mHabilitando Rx\033[0m")
                     Rx = 1
 
-            gestionar_leds(0, 2, Rx, leds)
-            transmisor    (ser, opcion, leds)
 
         elif (int(opcion) == 4):
             print("\033[1;90mLa fase actual es", fase, ". ¿Qué fase desea colocar?\033[0m")
@@ -117,32 +100,21 @@ def main():
                 print('\033[91mOpción incorrecta. Por favor, ingrese una valor entero entre 0 y 3\033[0m')
                 fase = input('Opción ingresada: ')
 
-            fase = int(fase)
-            bit1 = fase // 2
-            bit2 = fase % 2
 
-            gestionar_leds(1, 0, bit1, leds)
-            gestionar_leds(1, 1, bit2, leds)
-            transmisor    (ser, opcion, leds)
            
         elif (int(opcion) == 5):
             print("\033[1;90mSaliendo del programa...\033[0m")
             ser.close()
             exit()
             
-        imprimir_estado_leds(leds)    
        
-
-################### MENÚ DE LEDS ###################
-def gestionar_leds(fila, columna, valor, leds):
-    leds [fila][columna] = valor
 
 ################### FUNCIONES ###################
 # Funcion de transmisión de datos
-def transmisor (ser, opcion, leds):
+def transmisor (ser, opcion, i_data = None):
     # Se arma la trama
-    trama = armar_trama(opcion, leds)
-
+    trama = armar_trama(opcion, i_data)
+    
     # Se envía la trama
     for byte in trama:
         ser.write(byte.to_bytes(1, byteorder='big'))
@@ -154,7 +126,7 @@ def transmisor (ser, opcion, leds):
     return
 
 # Funcion de recepción de datos
-def receptor(ser, opcion, leds):
+def receptor(ser, opcion):
     time.sleep(1)
     readData = ser.read(1)
     error_detec = 0

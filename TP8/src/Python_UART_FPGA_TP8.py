@@ -35,22 +35,26 @@ def main():
     
     while True:
         print('\033[1;4mMENÚ PRINCIPAL\033[0m')        
-        print('¿Qué acción desea realizar?   ')
-        print('1) Reseteo del sistema        ')
-        print('2) Habilitar/Deshabilitar Tx  ')
-        print('3) Habilitar/Deshabilitar Rx  ')
-        print('4) Cambiar fase               ')
-        print('5) Salir del programa         ')
+        print('¿Qué acción desea realizar?   ') #cantidad bits i_data
+        print('1) Reseteo del sistema        ') #0
+        print('2) Habilitar/Deshabilitar Tx  ') #1      
+        print('3) Habilitar/Deshabilitar Rx  ') #1
+        print('4) Cambiar fase               ') #2
+        print('5) Loguear memoria            ') #0    case: 6 + delay (verifica llenado)
+        print('6) Verificar estado de memoria') #0    case: 7 (avisa que se lleno)
+        print('7) Leer memoria               ') #0
+        print('8) Graficar datos             ') #0
+        print('9) Salir del programa         ')
         print('')
 
         opcion = input('Opción ingresada: ')
 
         # Verifica que no se ingrese una letra o numero fuera de rango
-        while (opcion.isalpha() or int(opcion) < 1 or int(opcion) > 5):
+        while (opcion.isalpha() or int(opcion) < 1 or int(opcion) > 9):
             print('\033[91mOpción incorrecta. Por favor, ingrese una opción válida\033[0m')
             opcion = input('Opción ingresada: ')
             
- 
+        ########## Reset ##########
         if (int(opcion) == 1):
             print("\033[1;90mReseteando sistema...\033[0m")
             reset = 1

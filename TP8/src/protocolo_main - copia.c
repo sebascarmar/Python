@@ -176,10 +176,26 @@ int main()
 		            XUartLite_Send(&uart_module, &(i_func),2);
 
 
+				// Lee memoria
+				case 0x08:
+					i_func = data_in[1];
+
+					// Comprobación de transmisión
+		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
+		            XUartLite_Send(&uart_module, &(i_func),2);
 
 
-				// Guardar datos en memoria
-				// Mostrar resultados
+					i_data = 0x00 & 0x7FFFFF;
+
+					get_data(32769,  i_func);							// Hace un bucle de 32769 veces para obtener la memoria
+																				// Dentro del buche, las envía
+
+
+					write_GPIO(0x00, i_data);									// Campo función puesto a 0
+
+					// Comprobación de transmisión
+					while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
+					XUartLite_Send(&uart_module, &(i_func),2);
 
 		   	   default:
 		   		   while(XUartLite_IsSending(&uart_module)){}

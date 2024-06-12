@@ -35,17 +35,17 @@ def main():
 
     
     while True:
-        print('\033[1;4mMENÚ PRINCIPAL\033[0m')        
-        print('¿Qué acción desea realizar?   ') #cantidad bits i_data
-        print('1) Reseteo del sistema        ') #0
-        print('2) Habilitar/Deshabilitar Tx  ') #1      
-        print('3) Habilitar/Deshabilitar Rx  ') #1
-        print('4) Cambiar fase               ') #2
-        print('5) Loguear memoria            ') #0    case: 6 + delay (verifica llenado)
-        print('6) Verificar estado de memoria') #0    case: 7 (avisa que se lleno)
-        print('7) Leer memoria               ') #0
-        print('8) Graficar datos             ') #0
-        print('9) Salir del programa         ')
+        print('\033[1;4mMENÚ PRINCIPAL\033[0m     ')        
+        print('¿Qué acción desea realizar?        ') #cantidad bits i_data     recibe datos?
+        print('1) Reseteo del sistema             ') #0                        no
+        print('2) Habilitar/Deshabilitar Tx       ') #1                        no      
+        print('3) Habilitar/Deshabilitar Rx       ') #1                        no
+        print('4) Cambiar fase                    ') #2                        no
+        print('5) Capturar y graficar BER         ') #0    
+        print('6) Logueo de memoria               ') #0    
+        print('7) Comprobación estado de memoria  ') #0
+        print('8) Leer y graficar datos de memoria') #0
+        print('9) Salir del programa              ')
         print('')
 
         opcion = input('Opción ingresada: ')

@@ -138,6 +138,21 @@ int main()
 	cleanup_platform();
 	return 0;
 }
+// Función que envia los impulsos necesarios para leer la memoria y luego enviarla
+void get_data(unsigned short int i, unsigned char i_func)
+{
+	uint32_t data_mem = 0;								
+
+	for (unsigned short int j = 0; j < i; ++j)
+	{
+		write_GPIO(i_func, j);										// Impulos para obtener 32 bits
+		data_mem = (uint32_t)(XGpio_DiscreteRead(&GpioInput, 1));	// Leo los bits
+
+		send_data(data_mem)						        			// Envio 32 bits
+	}
+}
+
+
 // Función que separa de a 1 byte y los envía
 void send_data(uint32_t data_ber)
 {

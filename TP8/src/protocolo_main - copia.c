@@ -64,9 +64,9 @@ int main()
 
 	while(1)
 	{
-		if(data_in[0] != 0x01)												// Si data_in [0] no comienza con 0x01
+		if(data_in[0] != 0xBB)								// Si data_in [0] no comienza con 0xBB (da error con 0x01)
 		{
-			read(stdin,&data_in[0],1);										// Espera hasta comenzar en 0x01
+			read(stdin,&data_in[0],1);						// Espera hasta comenzar en 0xBB
 		}
 		else																// Se recibe data_in [1] = 0x01
 		{												

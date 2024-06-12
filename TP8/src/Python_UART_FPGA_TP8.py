@@ -137,7 +137,26 @@ def main():
             else:
                 print("\033[91mNo fue posible modificar la fase\033[0m")
            
+        ########## Captura y grafica BER ##########
         elif (int(opcion) == 5):
+            print("\033[1;90mCapturando BER...\033[0m")                    
+            transmisor (ser, opcion)
+            error = receptor_test (ser, opcion)
+
+            if(error == 0):
+                print("\033[1;90mRecibiendo datos para graficar\033[0m")
+                BER_data = get_data (ser, opcion)
+                error = receptor_test (ser, opcion)
+
+                if(error == 0):
+                    graficar_data(BER_data)
+
+                else:
+                    print("\033[91mError al recibir los datos\033[0m")                   
+            
+            else:
+                print("\033[91mNo fue posible loguear la memoria\033[0m")
+
             print("\033[1;90mSaliendo del programa...\033[0m")
             ser.close()
             exit()

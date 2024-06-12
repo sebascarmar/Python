@@ -86,7 +86,7 @@ int main()
 
 					write_GPIO(0x00, i_data);									// Campo función puesto a 0
 				
-					// Comprobación de transmición
+					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
 		            XUartLite_Send(&uart_module, &(i_func),2);
 
@@ -104,10 +104,11 @@ int main()
 
 					write_GPIO(0x00, i_data);									// Campo función puesto a 0
 
-					// Comprobación de transmición
+					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
 		            XUartLite_Send(&uart_module, &(i_func),2);
 
+				// Captura y envia BER
 				case 0x05:
 					i_func = data_in[1];
 
@@ -118,8 +119,10 @@ int main()
 
 					i_data = 0x01 & 0x7FFFFF;
 					write_GPIO(i_func, i_data);
+
 					i_data = 0x00 & 0x7FFFFF;				  					// i_data para bajar bit capturar BER
 					// Obtiene las BER
+					get_BER(8, i_func, i_data)									// Hace un bucle de 8 veces para obtener la BER
 																				// Dentro del buche, las envía
 
 
@@ -198,10 +201,13 @@ int main()
 					XUartLite_Send(&uart_module, &(i_func),2);
 
 		   	   default:
-		   		   while(XUartLite_IsSending(&uart_module)){}
-		   		   XUartLite_Send(&uart_module, &(data_in[1]),1);
+			   		data_in[1] = 0xAA;
+					while(XUartLite_IsSending(&uart_module)){}
+					XUartLite_Send(&uart_module, &(data_in[1]),2);
+
 			} // fin switch funcion
 		   data_in[0]=!'\0';
+		   data_in[1]=!'\0';
 
 
 		}// fin del else
@@ -236,7 +242,7 @@ void write_GPIO(unsigned char i_func, u32 i_data)
 	value_test[2] = (value >> 8)&0xFF;
 	value_test[3] = (value)&0xFF;
 
-	// Comprobación de transmición al ciircuito DSP
+	// Comprobación de transmisión al ciircuito DSP
 	while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
 	XUartLite_Send(&uart_module, &(value_test[1]),1);
 */

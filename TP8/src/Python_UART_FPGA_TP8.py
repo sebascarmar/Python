@@ -118,6 +118,7 @@ def main():
             else:
                 print("\033[91mNo fue posible modificar Rx\033[0m")
 
+        ########## Fase ##########
         elif (int(opcion) == 4):
             print("\033[1;90mLa fase actual es", fase, ". ¿Qué fase desea colocar?\033[0m")
             fase = input('>> ')
@@ -126,7 +127,15 @@ def main():
                 print('\033[91mOpción incorrecta. Por favor, ingrese una valor entero entre 0 y 3\033[0m')
                 fase = input('Opción ingresada: ')
 
+            fase   = int(fase)
 
+            transmisor (ser, opcion, fase)
+            error = receptor_test (ser, opcion)
+            if(error == 0):
+                print("\033[1;90mLa fase fue modificada\033[0m")
+            
+            else:
+                print("\033[91mNo fue posible modificar la fase\033[0m")
            
         elif (int(opcion) == 5):
             print("\033[1;90mSaliendo del programa...\033[0m")

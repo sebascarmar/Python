@@ -2,6 +2,7 @@ import time
 import serial
 import sys
 import copy
+import matplotlib.pyplot as plt
 
 ## Función de menú principal
 def main():
@@ -175,6 +176,18 @@ def armar_trama(opcion, i_data):
     print(trama)
     return trama    
 
+def graficar_data(datos):
+    for i, dato in enumerate(datos):
+        plt.plot(dato, label=f'Dato {i+1}')
+
+    # Añadir etiquetas y leyenda
+    plt.xlabel('Tiempo')
+    plt.ylabel('Valor')
+    plt.title('Gráfico de Datos')
+    plt.legend()
+
+    # Mostrar el gráfico
+    plt.show()
 
 
 main()

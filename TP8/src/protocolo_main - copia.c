@@ -138,6 +138,34 @@ int main()
 	cleanup_platform();
 	return 0;
 }
+void write_GPIO(unsigned char i_func, u32 i_data)
+{
+
+	u32           value;
+	unsigned char i_enable;
+
+	for (int i = 0; i < 3; ++i) {
+
+		i_enable = (i == 1) ? 0x01 : 0x00;
+
+		value = (u32) (i_func << 24) | (i_enable) << 23 | (i_data);
+		XGpio_DiscreteWrite(&GpioOutput, 1, value);
+	}
+
+/*
+	BLOQUE QUE ENVIA UNO DE LOS BYTES (106) ESCRITOS EN GPIO A LA UART
+	value = (u32) (i_func << 24) | (i_enable) << 23 | (i_data);
+	value_test[0] = (value >> 24)&0xFF;
+	value_test[1] = (value >> 16)&0xFF;
+	value_test[2] = (value >> 8)&0xFF;
+	value_test[3] = (value)&0xFF;
+
+	// Comprobación de transmición al ciircuito DSP
+	while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
+	XUartLite_Send(&uart_module, &(value_test[1]),1);
+*/
+}
+
 // Función que envia los impulsos necesarios para obtener la BER y luego enviarla
 void get_BER(int i, unsigned char i_func, u32 i_data)
 {

@@ -157,6 +157,19 @@ def main():
             else:
                 print("\033[91mNo fue posible loguear la memoria\033[0m")
 
+        ########## Logueo de memoria ##########
+        elif (int(opcion) == 6):                 
+            transmisor (ser, opcion)
+            print("\033[91mLlenando memoria...\033[0m")
+            error = receptor_test (ser, opcion)
+
+            if(error == 0):   
+                print("\033[91mLogueo de memoria finalizado\033[0m")
+
+            else:
+                print("\033[91mNo fue posible el logueo de la memoria\033[0m")
+
+
             print("\033[1;90mSaliendo del programa...\033[0m")
             ser.close()
             exit()

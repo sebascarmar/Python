@@ -90,18 +90,24 @@ int main()
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
 		            XUartLite_Send(&uart_module, &(i_func),2);
 
+				// Tx, Rx, Fase
+		   	   	case 0x02:
+		   	   	case 0x03:
+		   	   	case 0x04:
+		   			read(stdin,&data_in[2],1);									// Recibe el tercer byte
 
-		            data_in[1] = 0xAA;											// Actualiza valor
-		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion 
-		            XUartLite_Send(&uart_module, &(data_in[1]),1);				// para comprobacion
+		   			i_func = data_in[1];
 
-				// Tx
-		   	   	case 0xBB:
-		   			read(stdin,&data_in[1],1);									// Sobreesbribe, lee el tercer
-		   		   	read(stdin,&data_in[2],1);									// y cuarto byte
+					i_data = data_in[2]& 0x7FFFFF;
+					write_GPIO(i_func, i_data);
 
-		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;	// Arma trama solo con leds 
-		            XGpio_DiscreteWrite(&GpioOutput, 1, value);					// Enciende leds
+
+					write_GPIO(0x00, i_data);									// Campo función puesto a 0
+
+					// Comprobación de transmición
+		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
+		            XUartLite_Send(&uart_module, &(i_func),2);
+
 
 		            data_in[1] = 0xBB;											// Actualiza valor
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion

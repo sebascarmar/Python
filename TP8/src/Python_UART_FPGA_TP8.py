@@ -237,23 +237,22 @@ def transmisor (ser, opcion, i_data = None, return_data = None):
     ser.flushOutput()
     return
 
-# Funcion de recepción de datos
-def receptor(ser, opcion):
+# Funcion de verificación de recepción de datos
+def receptor_test(ser, opcion):
     time.sleep(1)
     readData = ser.read(1)
     error_detec = 0                         # Verificación de comunicación
 
     # Comprobación de envío de trama
     if (int.from_bytes(readData,byteorder='big') != int(opcion)):
-        print("\033[91mError en la comunicación. Llegó\033[0m", int.from_bytes(readData,byteorder='big'))
-        print('')
+        # print("\033[91mError en la comunicación. Llegó\033[0m", int.from_bytes(readData,byteorder='big'))
+        # print('')
 
         error_detec = 1
     
     else:
-        print("Conexion exitosa. Llego ", int.from_bytes(readData,byteorder='big'))
+        # print("Conexion exitosa. Llego ", int.from_bytes(readData,byteorder='big'))
         error_detec = 0
-               
 
     # Limpia buffer de entrada y salida
     ser.flushInput ()

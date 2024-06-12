@@ -149,6 +149,33 @@ int main()
 		            XUartLite_Send(&uart_module, &(i_func),2);
 
 
+				//Chequeo memoria
+				case 0x07:
+		   		
+		   			i_func = data_in[1];
+
+					// Comprobación de transmisión
+		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
+		            XUartLite_Send(&uart_module, &(i_func),2);
+
+
+					i_data = 0x00 & 0x7FFFFF;
+					write_GPIO(i_func, i_data);
+					
+					// Se sobreescribe i_data
+					i_data = (uint32_t)(XGpio_DiscreteRead(&GpioInput, 1));		// Compruebo si se lleno la memoria
+
+					while(XUartLite_IsSending(&uart_module)){}
+					XUartLite_Send(&uart_module, &(i_data),2);					// Envio bit
+
+
+					write_GPIO(0x00, i_data);									// Campo función puesto a 0
+
+					// Comprobación de transmisión
+		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
+		            XUartLite_Send(&uart_module, &(i_func),2);
+
+
 
 
 				// Guardar datos en memoria

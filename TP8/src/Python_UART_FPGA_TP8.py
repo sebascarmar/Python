@@ -193,6 +193,26 @@ def main():
                 print("\033[91mError al verificar estado de memoria\033[0m")
                      
 
+        ########## Leer y graficar datos de memoria ##########
+        elif (int(opcion) == 8):                 
+            transmisor (ser, opcion)
+            error = receptor_test (ser, opcion)
+            
+            if(error == 0):
+                print("\033[1;90mRecibiendo datos para graficar...\033[0m")
+                data_mem = get_data(ser, opcion)
+                error = receptor_test (ser, opcion)
+
+                if(error == 0):
+                    graficar_data(data_mem)
+
+                else:
+                    print("\033[91mError al recibir los datos\033[0m")                   
+            
+            else:
+                print("\033[91mNo fue posible leer los datos de la memoria\033[0m")
+
+
             print("\033[1;90mSaliendo del programa...\033[0m")
             ser.close()
             exit()

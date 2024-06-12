@@ -74,11 +74,22 @@ int main()
 			switch(data_in[1])
 			{
 				// Reset
-		   			read(stdin,&data_in[1],1);									// Sobreesbribe, lee el tercer 
-		   		   	read(stdin,&data_in[2],1);									// y cuarto byte
+		   	   	case 0x01:
+		   	   		i_func = data_in[1];
 
-		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;	// Arma trama solo con leds 
-		            XGpio_DiscreteWrite(&GpioOutput, 1, value);					// Enciende leds
+					i_data = 0x00 & 0x7FFFFF;
+					write_GPIO(i_func, i_data);
+				
+					i_data = 0x01 & 0x7FFFFF;				// i_data para levantar nuevamente reset
+					write_GPIO(i_func, i_data);
+
+
+					write_GPIO(0x00, i_data);									// Campo función puesto a 0
+				
+					// Comprobación de transmición
+		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
+		            XUartLite_Send(&uart_module, &(i_func),2);
+
 
 		            data_in[1] = 0xAA;											// Actualiza valor
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion 
@@ -134,10 +145,13 @@ int main()
 		}// fin del else
 
 	}// find del while
-	
+
 	cleanup_platform();
 	return 0;
 }
+
+
+
 void write_GPIO(unsigned char i_func, u32 i_data)
 {
 

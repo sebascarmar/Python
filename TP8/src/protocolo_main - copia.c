@@ -32,8 +32,18 @@ int main()
 	int Status;
 	GPO_Value=0x00000000;
 	GPO_Param=0x00000000;
-	unsigned char data_in[3] = {'\0'};
-	u32           value;
+	unsigned char data_in[3]  = {'\0'};
+	unsigned char data_mem[4] = {'\0'};
+	u32			  i_data    ;
+	unsigned char i_func    ;
+	u64           i_bit_err_I = 0x1111222233334444;
+    u64           i_bit_err_Q = 0x5555666677778888;
+	u64           i_bit_tot_I = 0xAAAABBBBCCCCDDDD;
+    u64           i_bit_tot_Q = 0xEEEEFFFFFFFFEEEE;
+	u32           i_read_data_from_mem = 0xF0F0F0F0;
+
+
+
 
 	init_platform();
 

@@ -224,7 +224,7 @@ def main():
 
 ################### FUNCIONES ###################
 # Funcion de transmisión de datos
-def transmisor (ser, opcion, i_data = None):
+def transmisor (ser, opcion, i_data = None, return_data = None):
     # Se arma la trama
     trama = armar_trama(opcion, i_data)
     
@@ -232,8 +232,8 @@ def transmisor (ser, opcion, i_data = None):
     for byte in trama:
         ser.write(byte.to_bytes(1, byteorder='big'))
         time.sleep(0.1) 
-
-    # ser.flushInput ()          # Al limpiar el buffer un ser.reed inmediato bloquea el programa
+        
+    #ser.flushInput ()          # Al limpiar el buffer un ser.reed inmediato bloquea el programa
     ser.flushOutput()
     return
 

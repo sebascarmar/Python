@@ -130,13 +130,25 @@ int main()
 		            XUartLite_Send(&uart_module, &(i_func),2);
 
 
+				// Logueo memoria 
+				case 0x06:
+		   	   		i_func = data_in[1];
 
-		            value = (u32) ((data_in[1]<<8) | data_in[2])&0x0000FFFF;	// Arma trama solo con leds 
-		            XGpio_DiscreteWrite(&GpioOutput, 1, value);					// Enciende leds
 
-		            data_in[1] = 0xDD;											// Actualiza valor
+					i_data = 0x01 & 0x7FFFFF;
+					write_GPIO(i_func, i_data);
+
+					i_data = 0x00 & 0x7FFFFF;									// i_data para bajar bit capturar y loguear memoria
+					write_GPIO(i_func, i_data);
+
+
+					write_GPIO(0x00, i_data);									// Campo función puesto a 0
+
+					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-		            XUartLite_Send(&uart_module, &(data_in[1]),1);				// para comprobacion
+		            XUartLite_Send(&uart_module, &(i_func),2);
+
+
 
 
 				// Guardar datos en memoria

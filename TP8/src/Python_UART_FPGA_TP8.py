@@ -66,6 +66,7 @@ def main():
             else:
                 print("\033[91mNo fue posible resetear el sistema\033[0m")
 
+        ########## Tx ##########
         elif (int(opcion) == 2):
             if(Tx == 1):
                 print("\033[1;90mTx se encuentra habilitado. ¿Desea deshabilitarlo?\033[0m")
@@ -82,6 +83,14 @@ def main():
                 if opcion_tx == 'y':
                     print("\033[1;90mHabilitando Tx\033[0m")
                     Tx = 1
+            
+            transmisor (ser, opcion)
+            error = receptor_test (ser, opcion)
+            if(error == 0):
+                print("\033[1;90mTx modificado\033[0m")
+            
+            else:
+                print("\033[91mNo fue posible modificar Tx\033[0m")
 
         elif (int(opcion) == 3):
             if(Rx == 1):

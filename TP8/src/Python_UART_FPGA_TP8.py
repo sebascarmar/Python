@@ -170,6 +170,29 @@ def main():
                 print("\033[91mNo fue posible el logueo de la memoria\033[0m")
 
 
+        ########## Comprobación estado de memoria ##########
+        elif (int(opcion) == 7):
+            print("\033[1;90mComprobando estado de memoria..\033[0m")                    
+            transmisor (ser, opcion)
+            error = receptor_test (ser, opcion)
+
+            if(error == 0):
+                estado_mem = get_data(ser, opcion)
+                error = receptor_test (ser, opcion)
+
+                if(error == 0 and estado_mem == 0):
+                    print("\033[1;34mMemoria vacía\033[0m")
+
+                elif(error == 0 and estado_mem == 1):
+                    print("\033[1;34mMemoria llena\033[0m") 
+
+                else:
+                    print("\033[91mError al verificar estado de memoria\033[0m")
+            
+            else:
+                print("\033[91mError al verificar estado de memoria\033[0m")
+                     
+
             print("\033[1;90mSaliendo del programa...\033[0m")
             ser.close()
             exit()

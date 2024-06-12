@@ -57,10 +57,14 @@ def main():
             
         ########## Reset ##########
         if (int(opcion) == 1):
-            print("\033[1;90mReseteando sistema...\033[0m")
-            reset = 1
-            gestionar_leds(0, 0, reset, leds)
-            transmisor    (ser, opcion, leds)
+            print("\033[1;90mReseteando sistema...\033[0m")                    
+            transmisor (ser, opcion)
+            error = receptor_test(ser, opcion)
+            if(error == 0):
+                print("\033[1;90mEl sistema fue reseteado exitosamente\033[0m")
+            
+            else:
+                print("\033[91mNo fue posible resetear el sistema\033[0m")
 
         elif (int(opcion) == 2):
             if(Tx == 1):

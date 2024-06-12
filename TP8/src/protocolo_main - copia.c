@@ -68,13 +68,12 @@ int main()
 		{
 			read(stdin,&data_in[0],1);						// Espera hasta comenzar en 0xBB
 		}
-		else																// Se recibe data_in [1] = 0x01
-		{												
-			read(stdin,&data_in[1],1);										// Guarda el segundo byte recibido
+		else												 
+		{
+			read(stdin,&data_in[1],1);						// Se lee el segundo byte recibido
 			switch(data_in[1])
 			{
 				// Reset
-		   	   	case 0xAA:
 		   			read(stdin,&data_in[1],1);									// Sobreesbribe, lee el tercer 
 		   		   	read(stdin,&data_in[2],1);									// y cuarto byte
 
@@ -138,4 +137,21 @@ int main()
 	
 	cleanup_platform();
 	return 0;
+}
+// Función que separa de a 1 byte y los envía
+void send_data(uint32_t data_ber)
+{
+	uint32_t byte_ber [4] = {'\0'};
+
+	byte_ber[0] = (data_ber >> 24)&0xFF;							// Separo en bytes
+	byte_ber[1] = (data_ber >> 16)&0xFF;
+	byte_ber[2] = (data_ber >> 8 )&0xFF;
+	byte_ber[3] = (data_ber      )&0xFF;
+
+	for(int i = 0; i < 4; ++i)
+	{
+		while(XUartLite_IsSending(&uart_module)){}					// Envía 1 byte
+		XUartLite_Send(&uart_module, &(byte_ber[i]),2);
+	}
+
 }

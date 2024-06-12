@@ -213,10 +213,13 @@ def main():
                 print("\033[91mNo fue posible leer los datos de la memoria\033[0m")
 
 
+        ########## Salida ##########
+        elif (int(opcion) == 9):
             print("\033[1;90mSaliendo del programa...\033[0m")
             ser.close()
             exit()
             
+ 
        
 
 ################### FUNCIONES ###################

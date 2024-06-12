@@ -154,6 +154,43 @@ def receptor(ser, opcion):
     return error_detec
 
 
+# Funcion de recepción de datos
+def get_data (ser, opcion):
+    time.sleep(1)
+    return_data = []                        # Variable con los datos 
+
+    ## Recibe la BER
+    if (int(opcion) == 5):
+        for i in range(4):
+            I_Q_data = []
+            for j in range(8):
+                byte = ser.read(1)
+                I_Q_data.append(byte)
+
+            palabra = b''.join(I_Q_data)
+            return_data.append(palabra)
+
+    # Se recibe bit de llenado de memoria
+    elif (int(opcion) == 7):
+        return_data = ser.read(1)
+        
+    # Se recibe datos de memoria
+    else:
+        for i in range(32769):
+            mem_data = []
+            for j in range(4):
+                byte = ser.read(1)
+                mem_data.append(byte)
+            palabra = b''.join(mem_data)
+            return_data.append(palabra)               
+
+    # Limpia buffer de entrada y salida
+    ser.flushInput ()
+    ser.flushOutput()
+        
+    return return_data
+
+
 # Función que arma la trama a enviar
 def armar_trama(opcion, i_data):
     start = 0xBB

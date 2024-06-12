@@ -92,6 +92,7 @@ def main():
             else:
                 print("\033[91mNo fue posible modificar Tx\033[0m")
 
+        ########## Rx ##########
         elif (int(opcion) == 3):
             if(Rx == 1):
                 print("\033[1;90mRx se encuentra habilitado. ¿Desea deshabilitarlo?\033[0m")
@@ -109,6 +110,13 @@ def main():
                     print("\033[1;90mHabilitando Rx\033[0m")
                     Rx = 1
 
+            transmisor (ser, opcion)
+            error = receptor_test (ser, opcion)
+            if(error == 0):
+                print("\033[1;90mRx modificado\033[0m")
+            
+            else:
+                print("\033[91mNo fue posible modificar Rx\033[0m")
 
         elif (int(opcion) == 4):
             print("\033[1;90mLa fase actual es", fase, ". ¿Qué fase desea colocar?\033[0m")

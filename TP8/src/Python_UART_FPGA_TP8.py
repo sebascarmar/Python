@@ -321,17 +321,7 @@ def armar_trama(opcion, i_data):
     return trama    
 
 def graficar_data(datos):
-    for i, dato in enumerate(datos):
-        plt.plot(dato, label=f'Dato {i+1}')
-
-    # Añadir etiquetas y leyenda
-    plt.xlabel('Tiempo')
-    plt.ylabel('Valor')
-    plt.title('Gráfico de Datos')
-    plt.legend()
-
-    # Mostrar el gráfico
-    plt.show()
+    print("Graficando...")
 
 
 main()

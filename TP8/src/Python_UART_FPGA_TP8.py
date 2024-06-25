@@ -149,7 +149,8 @@ def main():
                 error = receptor_test (ser, opcion)
 
                 if(error == 0):
-                    graficar_data(BER_data)
+                    save_data(BER_data, opcion)
+                    print("Datos recibidos con éxito")
 
                 else:
                     print("\033[91mError al recibir los datos\033[0m")                   
@@ -204,7 +205,8 @@ def main():
                 error = receptor_test (ser, opcion)
 
                 if(error == 0):
-                    graficar_data(data_mem)
+                    save_data(data_mem, opcion)
+                    print("Datos recibidos con éxito")
 
                 else:
                     print("\033[91mError al recibir los datos\033[0m")                   
@@ -320,8 +322,23 @@ def armar_trama(opcion, i_data):
     print(trama)
     return trama    
 
-def graficar_data(datos):
-    print("Graficando...")
+def save_data(datos, opcion):
+    print("Guardando datos...")
 
-
+    # if int(opcion) == 5:    
+    #     archivos = ["ber_I.txt", "ber_Q.txt", "ber_tot_I.txt", "ber_tot_Q.txt"]
+        
+    #     # Iterar sobre cada archivo y dato correspondiente
+    #     for archivo, fila in zip(archivos, datos):
+    #         # Abrir el archivo en modo de escritura
+    #         with open(archivo, "w") as f:
+    #             # Escribir la fila en el archivo
+    #             for valor in fila:
+    #                 f.write(str(valor) + '\n')
+    
+    # else:
+    #     with open("mem_data.txt", "w") as f:
+    #         for dato in datos:
+    #             f.write(str(dato) + '\n')
+    
 main()

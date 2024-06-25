@@ -270,9 +270,9 @@ def get_data (ser, opcion):
 
     ## Recibe la BER
     if (int(opcion) == 5):
-        for i in range(4):
+        for i in range(4):                  # Guarda 4 filas de 64 bits
             I_Q_data = []
-            for j in range(8):
+            for j in range(8):              # Recibe 8 veces 8 bits => 64 bits
                 byte = ser.read(1)
                 I_Q_data.append(byte)
 
@@ -285,9 +285,9 @@ def get_data (ser, opcion):
         
     # Se recibe datos de memoria
     else:
-        for i in range(32769):
+        for i in range(32769):              # Guarda 32769 filas de 32 bits
             mem_data = []
-            for j in range(4):
+            for j in range(4):              # Recibe 4 veces 8 bits => 32 bits
                 byte = ser.read(1)
                 mem_data.append(byte)
             palabra = b''.join(mem_data)

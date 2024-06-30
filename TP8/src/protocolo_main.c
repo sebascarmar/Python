@@ -36,11 +36,11 @@ int main()
 	unsigned char data_mem[4] = {'\0'};
 	u32			  i_data    ;
 	unsigned char i_func    ;
-	u64           i_bit_err_I = 0x1111222233334444;
-    u64           i_bit_err_Q = 0x5555666677778888;
-	u64           i_bit_tot_I = 0xAAAABBBBCCCCDDDD;
-    u64           i_bit_tot_Q = 0xEEEEFFFFFFFFEEEE;
-	u32           i_read_data_from_mem = 0xF0F0F0F0;
+	// u64           i_bit_err_I = 0x1111222233334444;
+    // u64           i_bit_err_Q = 0x5555666677778888;
+	// u64           i_bit_tot_I = 0xAAAABBBBCCCCDDDD;
+    // u64           i_bit_tot_Q = 0xEEEEFFFFFFFFEEEE;
+	// u32           i_read_data_from_mem = 0xF0F0F0F0;
 
 
 
@@ -75,16 +75,16 @@ int main()
 			{
 				// Reset
 		   	   	case 0x01:
-		   	   		i_func = data_in[1];
+		   	   		// i_func = data_in[1];
 
-					i_data = 0x00 & 0x7FFFFF;
-					write_GPIO(i_func, i_data);
+					// i_data = 0x00 & 0x7FFFFF;
+					// write_GPIO(i_func, i_data);
 				
-					i_data = 0x01 & 0x7FFFFF;				// i_data para levantar nuevamente reset
-					write_GPIO(i_func, i_data);
+					// i_data = 0x01 & 0x7FFFFF;				// i_data para levantar nuevamente reset
+					// write_GPIO(i_func, i_data);
 
 
-					write_GPIO(0x00, i_data);									// Campo función puesto a 0
+					// write_GPIO(0x00, i_data);									// Campo función puesto a 0
 				
 					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
@@ -96,13 +96,13 @@ int main()
 		   	   	case 0x04:
 		   			read(stdin,&data_in[2],1);									// Recibe el tercer byte
 
-		   			i_func = data_in[1];
+		   			// i_func = data_in[1];
 
-					i_data = data_in[2]& 0x7FFFFF;
-					write_GPIO(i_func, i_data);
+					// i_data = data_in[2]& 0x7FFFFF;
+					// write_GPIO(i_func, i_data);
 
 
-					write_GPIO(0x00, i_data);									// Campo función puesto a 0
+					// write_GPIO(0x00, i_data);									// Campo función puesto a 0
 
 					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
@@ -135,17 +135,17 @@ int main()
 
 				// Logueo memoria 
 				case 0x06:
-		   	   		i_func = data_in[1];
+		   	   		// i_func = data_in[1];
 
 
-					i_data = 0x01 & 0x7FFFFF;
-					write_GPIO(i_func, i_data);
+					// i_data = 0x01 & 0x7FFFFF;
+					// write_GPIO(i_func, i_data);
 
-					i_data = 0x00 & 0x7FFFFF;									// i_data para bajar bit capturar y loguear memoria
-					write_GPIO(i_func, i_data);
+					// i_data = 0x00 & 0x7FFFFF;									// i_data para bajar bit capturar y loguear memoria
+					// write_GPIO(i_func, i_data);
 
 
-					write_GPIO(0x00, i_data);									// Campo función puesto a 0
+					// write_GPIO(0x00, i_data);									// Campo función puesto a 0
 
 					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
@@ -196,7 +196,6 @@ int main()
 
 					write_GPIO(0x00, i_data);									// Campo función puesto a 0
 
-					// Comprobación de transmisión
 					while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
 					XUartLite_Send(&uart_module, &(i_func),1);
 
@@ -258,7 +257,6 @@ void get_BER(int i, unsigned char i_func, u32 i_data)
 		write_GPIO(i_func, i_data);									// Impulos para obtener 32 bits
 		data_mem = (uint32_t)(XGpio_DiscreteRead(&GpioInput, 1));	// Leo los bits
 
-		send_data(data_mem)						        			// Envio 32 bits
 		send_data(data_mem);						        			// Envio 32 bits
 	}
 }

@@ -134,22 +134,26 @@ def main():
         ########## Fase ##########
         elif (int(opcion) == 4):
             print("\033[1;90mLa fase actual es", fase, ". ¿Qué fase desea colocar?\033[0m")
-            fase = input('>> ')
+            fase1 = input('>> ')
 
-            while (opcion.isalpha() or int(fase) < 0 or int(fase) > 3):
+            while (opcion.isalpha() or int(fase1) < 0 or int(fase1) > 3):
                 print('\033[91mOpción incorrecta. Por favor, ingrese una valor entero entre 0 y 3\033[0m')
-                fase = input('Opción ingresada: ')
+                fase1 = input('Opción ingresada: ')
 
-            fase   = int(fase)
+            fase1   = int(fase1)
 
-            transmisor (ser, opcion, fase)
-            error = receptor_test (ser, opcion)
-            if(error == 0):
-                print("\033[1;90mLa fase fue modificada\033[0m")
+            if fase1 != fase:
+                transmisor (ser, opcion, fase)
+                error = receptor_test (ser, opcion)
+                if(error == 0):
+                    print("\033[1;90mLa fase fue modificada\033[0m")
+                    fase = fase1
+                
+                else:
+                    print("\033[91mNo fue posible modificar la fase\033[0m")
             
             else:
-                print("\033[91mNo fue posible modificar la fase\033[0m")
-           
+                print("\033[1;90mFase sin cambios\033[0m")
         ########## Captura y grafica BER ##########
         elif (int(opcion) == 5):
             print("\033[1;90mCapturando BER...\033[0m")                    

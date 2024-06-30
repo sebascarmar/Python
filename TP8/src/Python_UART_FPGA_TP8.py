@@ -2,7 +2,7 @@ import time
 import serial
 import sys
 import copy
-import matplotlib.pyplot as plt
+
 
 ## Función de menú principal
 def main():

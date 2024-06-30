@@ -74,7 +74,7 @@ def main():
 
                 if opcion_tx == 'y':
                     print("\033[1;90mDeshabilitando Tx\033[0m")
-                    Tx = 0
+                    Tx1 = 0
 
             else:
                 print("\033[1;90mTx se encuentra deshabilitado. ¿Desea habilitarlo?\033[0m") 
@@ -82,15 +82,22 @@ def main():
 
                 if opcion_tx == 'y':
                     print("\033[1;90mHabilitando Tx\033[0m")
-                    Tx = 1
+                    Tx1 = 1
+
             
-            transmisor (ser, opcion)
-            error = receptor_test (ser, opcion)
-            if(error == 0):
-                print("\033[1;90mTx modificado\033[0m")
-            
+            # Solo se transmite si se desea hacer modificaciones
+            if opcion_tx == 'y':
+                transmisor (ser, opcion, Tx1)
+                error = receptor_test (ser, opcion)
+                if(error == 0):
+                    print("\033[1;90mTx modificado\033[0m")
+                    Tx = Tx1
+                
+                else:
+                    print("\033[91mNo fue posible modificar Tx\033[0m")
+                    
             else:
-                print("\033[91mNo fue posible modificar Tx\033[0m")
+                print("\033[1;90mTx sin cambios\033[0m")
 
         ########## Rx ##########
         elif (int(opcion) == 3):

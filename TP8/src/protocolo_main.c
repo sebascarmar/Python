@@ -122,7 +122,7 @@ int main()
 
 					i_data = 0x00 & 0x7FFFFF;				  					// i_data para bajar bit capturar BER
 					// Obtiene las BER
-					get_BER(8, i_func, i_data)									// Hace un bucle de 8 veces para obtener la BER
+					get_BER(8, i_func, i_data);									// Hace un bucle de 8 veces para obtener la BER
 																				// Dentro del buche, las envía
 
 
@@ -259,6 +259,7 @@ void get_BER(int i, unsigned char i_func, u32 i_data)
 		data_mem = (uint32_t)(XGpio_DiscreteRead(&GpioInput, 1));	// Leo los bits
 
 		send_data(data_mem)						        			// Envio 32 bits
+		send_data(data_mem);						        			// Envio 32 bits
 	}
 }
 
@@ -274,6 +275,7 @@ void get_data(unsigned short int i, unsigned char i_func)
 		data_mem = (uint32_t)(XGpio_DiscreteRead(&GpioInput, 1));	// Leo los bits
 
 		send_data(data_mem)						        			// Envio 32 bits
+		send_data(data_mem);						        			// Envio 32 bits
 	}
 }
 

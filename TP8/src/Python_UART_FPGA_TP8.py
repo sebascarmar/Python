@@ -107,7 +107,7 @@ def main():
 
                 if opcion_rx == 'y':
                     print("\033[1;90mDeshabilitando Rx\033[0m")
-                    Rx = 0
+                    Rx1 = 0
 
             else:
                 print("\033[1;90mRx se encuentra deshabilitado. ¿Desea habilitarlo?\033[0m") 
@@ -115,15 +115,21 @@ def main():
 
                 if opcion_rx == 'y':
                     print("\033[1;90mHabilitando Rx\033[0m")
-                    Rx = 1
+                    Rx1 = 1
 
-            transmisor (ser, opcion)
-            error = receptor_test (ser, opcion)
-            if(error == 0):
-                print("\033[1;90mRx modificado\033[0m")
+            # Solo se transmite si se desea hacer modificaciones
+            if opcion_rx == 'y':
+                transmisor (ser, opcion, Rx1)
+                error = receptor_test (ser, opcion)
+                if(error == 0):
+                    print("\033[1;90mRx modificado\033[0m")
+                    Rx = Rx1
+                
+                else:
+                    print("\033[91mNo fue posible modificar Rx\033[0m")
             
             else:
-                print("\033[91mNo fue posible modificar Rx\033[0m")
+                print("\033[1;90mRx sin cambios\033[0m")
 
         ########## Fase ##########
         elif (int(opcion) == 4):

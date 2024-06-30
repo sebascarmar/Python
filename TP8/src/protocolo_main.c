@@ -88,7 +88,7 @@ int main()
 				
 					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-		            XUartLite_Send(&uart_module, &(i_func),2);
+		            XUartLite_Send(&uart_module, &(i_func),1);
 
 				// Tx, Rx, Fase
 		   	   	case 0x02:
@@ -106,7 +106,7 @@ int main()
 
 					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-		            XUartLite_Send(&uart_module, &(i_func),2);
+		            XUartLite_Send(&uart_module, &(i_func),1);
 
 				// Captura y envia BER
 				case 0x05:
@@ -114,7 +114,7 @@ int main()
 
 					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-		            XUartLite_Send(&uart_module, &(i_func),2);
+		            XUartLite_Send(&uart_module, &(i_func),1);
 
 
 					i_data = 0x01 & 0x7FFFFF;
@@ -130,7 +130,7 @@ int main()
 
 					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-		            XUartLite_Send(&uart_module, &(i_func),2);
+		            XUartLite_Send(&uart_module, &(i_func),1);
 
 
 				// Logueo memoria 
@@ -149,7 +149,7 @@ int main()
 
 					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-		            XUartLite_Send(&uart_module, &(i_func),2);
+		            XUartLite_Send(&uart_module, &(i_func),1);
 
 
 				//Chequeo memoria
@@ -159,7 +159,7 @@ int main()
 
 					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-		            XUartLite_Send(&uart_module, &(i_func),2);
+		            XUartLite_Send(&uart_module, &(i_func),1);
 
 
 					i_data = 0x00 & 0x7FFFFF;
@@ -169,14 +169,14 @@ int main()
 					i_data = (uint32_t)(XGpio_DiscreteRead(&GpioInput, 1));		// Compruebo si se lleno la memoria
 
 					while(XUartLite_IsSending(&uart_module)){}
-					XUartLite_Send(&uart_module, &(i_data),2);					// Envio bit
+					XUartLite_Send(&uart_module, &(i_data),1);					// Envio bit
 
 
 					write_GPIO(0x00, i_data);									// Campo función puesto a 0
 
 					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-		            XUartLite_Send(&uart_module, &(i_func),2);
+		            XUartLite_Send(&uart_module, &(i_func),1);
 
 
 				// Lee memoria
@@ -185,7 +185,7 @@ int main()
 
 					// Comprobación de transmisión
 		            while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-		            XUartLite_Send(&uart_module, &(i_func),2);
+		            XUartLite_Send(&uart_module, &(i_func),1);
 
 
 					i_data = 0x00 & 0x7FFFFF;
@@ -198,12 +198,12 @@ int main()
 
 					// Comprobación de transmisión
 					while(XUartLite_IsSending(&uart_module)){}					// Envía data_in [1]: opcion
-					XUartLite_Send(&uart_module, &(i_func),2);
+					XUartLite_Send(&uart_module, &(i_func),1);
 
 		   	   default:
 			   		data_in[1] = 0xAA;
 					while(XUartLite_IsSending(&uart_module)){}
-					XUartLite_Send(&uart_module, &(data_in[1]),2);
+					XUartLite_Send(&uart_module, &(data_in[1]),1);
 
 			} // fin switch funcion
 		   data_in[0]=!'\0';
@@ -291,7 +291,7 @@ void send_data(uint32_t data_ber)
 	for(int i = 0; i < 4; ++i)
 	{
 		while(XUartLite_IsSending(&uart_module)){}					// Envía 1 byte
-		XUartLite_Send(&uart_module, &(byte_ber[i]),2);
+		XUartLite_Send(&uart_module, &(byte_ber[i]),1);
 	}
 
 }
